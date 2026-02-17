@@ -47,6 +47,7 @@ if(FFDEC_CLI)
 		"${CMAKE_CURRENT_SOURCE_DIR}/data/interface/*.swf")
 
 	set(SWF_OUTPUTS "")
+	set(AS_TARGETS "")
 	foreach(SWF_REL ${SWF_FILES})
 		get_filename_component(SWF_NAME_WE "${SWF_REL}" NAME_WE)
 		get_filename_component(SWF_DIR "${SWF_REL}" DIRECTORY)
@@ -78,8 +79,7 @@ if(FFDEC_CLI)
 			list(JOIN ${VAR_PREFIX}_SOURCES "\n" SOURCES_CONTENT)
 			file(WRITE "${SOURCES_FILE}" "${SOURCES_CONTENT}")
 
-			add_custom_command(
-				OUTPUT "${SWF_OUT}"
+			add_custom_target("AS_${VAR_PREFIX}"
 				COMMAND "${CMAKE_COMMAND}" -E make_directory "${SWF_OUT_DIR}"
 				COMMAND "${CMAKE_COMMAND}"
 					"-DSTAGING_DIR=${AS_STAGING}"
@@ -87,9 +87,9 @@ if(FFDEC_CLI)
 					"-DAS_SOURCE_DIR=${AS_SOURCE_DIR}"
 					-P "${ASSEMBLE_SCRIPT}"
 				COMMAND "${FFDEC_CLI}" -importScript "${SWF_INPUT}" "${SWF_OUT}" "${AS_STAGING}"
-				DEPENDS "${SWF_INPUT}" ${${VAR_PREFIX}_SOURCES}
 				COMMENT "Compiling ActionScript into ${SWF_REL}"
 			)
+			list(APPEND AS_TARGETS "AS_${VAR_PREFIX}")
 		else()
 			# No AS sources for this SWF, just copy it
 			add_custom_command(
@@ -104,7 +104,7 @@ if(FFDEC_CLI)
 		list(APPEND SWF_OUTPUTS "${SWF_OUT}")
 	endforeach()
 
-	add_custom_target("ActionScript" DEPENDS ${SWF_OUTPUTS})
+	add_custom_target("ActionScript" DEPENDS ${SWF_OUTPUTS} ${AS_TARGETS})
 
 	# Copy non-SWF interface files to the staging directory
 	file(GLOB_RECURSE NON_SWF_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data"
