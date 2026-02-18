@@ -5,6 +5,7 @@ class SystemPage extends MovieClip
    var CategoryList_mc;
    var ConfirmPanel;
    var ConfirmTextField;
+   var DearDiaryText;
    var ErrorText;
    var HelpButtonHolder;
    var HelpList;
@@ -68,8 +69,14 @@ class SystemPage extends MovieClip
    static var TRANSITIONING = 13;
    static var CHARACTER_LOAD_STATE = 14;
    static var CHARACTER_SELECTION_STATE = 15;
-   static var MOD_MANAGER_BUTTON_INDEX = 3;
+   static var MOD_MANAGER_BUTTON_INDEX = 2;
    static var CONTROLLER_ORBIS = 3;
+   static var MOD_VERSION = " ";
+   static var INSTANT_QUIT = "false";
+   static var BG_ALPHA = 100;
+   static var ENABLE_QUICKSAVE = "false";
+   static var MCM_NAME = "$MOD CONFIGURATION";
+   static var PAPER_SOUNDS = "false";
    function SystemPage()
    {
       super();
@@ -93,6 +100,22 @@ class SystemPage extends MovieClip
       this.iPlatform = 0;
       this.bDefaultButtonVisible = false;
       this._showModMenu = false;
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         SystemPage.MOD_VERSION = SystemPage.ParseConfig(str,"sVersion");
+         SystemPage.BG_ALPHA = parseFloat(SystemPage.ParseConfig(str,"fJournalAlpha"));
+         SystemPage.INSTANT_QUIT = SystemPage.ParseConfig(str,"bInstantQuit");
+         SystemPage.ENABLE_QUICKSAVE = SystemPage.ParseConfig(str,"bQuickSaveButton");
+         SystemPage.MCM_NAME = SystemPage.ParseConfig(str,"sMCMButtonName");
+      };
+      var _loc4_ = new LoadVars();
+      _loc4_.load("deardiary/sounds.txt");
+      _loc4_.onData = function(str)
+      {
+         SystemPage.PAPER_SOUNDS = SystemPage.ParseConfig(str,"PaperUISounds");
+      };
    }
    function GetIsRemoteDevice()
    {
@@ -100,11 +123,9 @@ class SystemPage extends MovieClip
    }
    function onLoad()
    {
-      this.CategoryList.entryList.push({text:"$QUICKSAVE"});
       this.CategoryList.entryList.push({text:"$SAVE"});
       this.CategoryList.entryList.push({text:"$LOAD"});
       this.CategoryList.entryList.push({text:"$SETTINGS"});
-      this.CategoryList.entryList.push({text:"$MOD CONFIGURATION"});
       this.CategoryList.entryList.push({text:"$CONTROLS"});
       this.CategoryList.entryList.push({text:"$HELP"});
       this.CategoryList.entryList.push({text:"$QUIT"});
@@ -151,10 +172,17 @@ class SystemPage extends MovieClip
    }
    function SetShowMod(bshow)
    {
+      this.CategoryList.entryList.splice(3,0,{text:SystemPage.MCM_NAME});
+      this.CategoryList.InvalidateData();
       this._showModMenu = bshow;
       if(this._showModMenu && this.CategoryList.entryList && this.CategoryList.entryList.length > 0)
       {
          this.CategoryList.entryList.splice(SystemPage.MOD_MANAGER_BUTTON_INDEX,0,{text:"$MOD MANAGER"});
+         this.CategoryList.InvalidateData();
+      }
+      if(SystemPage.ENABLE_QUICKSAVE == "true" && this.CategoryList.entryList && this.CategoryList.entryList.length > 0)
+      {
+         this.CategoryList.entryList.splice(0,0,{text:"$QUICKSAVE"});
          this.CategoryList.InvalidateData();
       }
    }
@@ -171,6 +199,8 @@ class SystemPage extends MovieClip
          this._skyrimVersionMinor = _loc2_[1];
          this._skyrimVersionBuild = _loc2_[2];
          gfx.io.GameDelegate.call("ShouldShowKinectTunerOption",[],this,"SetShouldShowKinectTunerOption");
+         this.DearDiaryText.SetText(SystemPage.MOD_VERSION);
+         QuestJournalBase.Background._alpha = SystemPage.BG_ALPHA;
          this.UpdatePermissions();
          this.bUpdated = true;
       }
@@ -234,10 +264,10 @@ class SystemPage extends MovieClip
    }
    function handleInput(details, pathToFocus)
    {
-      var _loc4_ = false;
+      var _loc3_ = false;
       if(this.bRemapMode || this.bMenuClosing || this.bSavingSettings || this.iCurrentState == SystemPage.TRANSITIONING)
       {
-         _loc4_ = true;
+         _loc3_ = true;
       }
       else if(Shared.GlobalFunc.IsKeyPressed(details,this.iCurrentState != SystemPage.INPUT_MAPPING_STATE))
       {
@@ -254,7 +284,7 @@ class SystemPage extends MovieClip
          }
          if((details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_L2 || details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_R2) && this.isConfirming())
          {
-            _loc4_ = true;
+            _loc3_ = true;
          }
          else if((details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_X || details.code == 88) && this.iCurrentState == SystemPage.SAVE_LOAD_STATE)
          {
@@ -266,37 +296,81 @@ class SystemPage extends MovieClip
             {
                this.ConfirmDeleteSave();
             }
-            _loc4_ = true;
+            _loc3_ = true;
          }
          else if((details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_Y || details.code == 84) && this.iCurrentState == SystemPage.SAVE_LOAD_STATE && !this.SaveLoadListHolder.isSaving)
          {
             this.StartState(SystemPage.CHARACTER_LOAD_STATE);
-            _loc4_ = true;
+            _loc3_ = true;
          }
          else if((details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_Y || details.code == 84) && (this.iCurrentState == SystemPage.OPTIONS_LISTS_STATE || this.iCurrentState == SystemPage.INPUT_MAPPING_STATE))
          {
             this.ConfirmTextField.SetText("$Reset settings to default values?");
             this.StartState(SystemPage.DEFAULT_SETTINGS_CONFIRM_STATE);
-            _loc4_ = true;
+            _loc3_ = true;
          }
          else if(this.bShowKinectTunerButton && details.navEquivalent == gfx.ui.NavigationCode.GAMEPAD_R1 && this.iCurrentState == SystemPage.OPTIONS_LISTS_STATE)
          {
             gfx.io.GameDelegate.call("OpenKinectTuner",[]);
-            _loc4_ = true;
+            _loc3_ = true;
          }
          else if(!pathToFocus[0].handleInput(details,pathToFocus.slice(1)))
          {
             if(details.navEquivalent == gfx.ui.NavigationCode.ENTER)
             {
-               _loc4_ = this.onAcceptPress();
+               _loc3_ = this.onAcceptPress();
             }
             else if(details.navEquivalent == gfx.ui.NavigationCode.TAB)
             {
-               _loc4_ = this.onCancelPress();
+               _loc3_ = this.onCancelPress();
             }
          }
       }
-      return _loc4_;
+      return _loc3_;
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = SystemPage.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = SystemPage.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = SystemPage.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return SystemPage.trim(_loc12_);
    }
    function onAcceptPress()
    {
@@ -440,7 +514,7 @@ class SystemPage extends MovieClip
          default:
             _loc2_ = false;
       }
-      return _loc2_;
+      return _root;
    }
    function isConfirming()
    {
@@ -467,15 +541,27 @@ class SystemPage extends MovieClip
          gfx.io.GameDelegate.call("PlaySound",["UIMenuCancel"]);
          return undefined;
       }
-      var _loc4_;
+      var _loc3_;
       if(this.iCurrentState == SystemPage.MAIN_STATE)
       {
-         _loc4_ = event.index;
-         if(!this._showModMenu && _loc4_ >= SystemPage.MOD_MANAGER_BUTTON_INDEX)
+         _loc3_ = event.index;
+         if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE == "true" && _loc3_ >= SystemPage.MOD_MANAGER_BUTTON_INDEX + 1)
          {
-            _loc4_ += 1;
+            _loc3_ += 1;
          }
-         switch(_loc4_)
+         if(this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true")
+         {
+            _loc3_ += 1;
+         }
+         if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true" && _loc3_ >= SystemPage.MOD_MANAGER_BUTTON_INDEX)
+         {
+            _loc3_ += 2;
+         }
+         if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true" && _loc3_ < SystemPage.MOD_MANAGER_BUTTON_INDEX)
+         {
+            _loc3_ = _loc3_ + 1;
+         }
+         switch(_loc3_)
          {
             case 0:
                gfx.io.GameDelegate.call("PlaySound",["UIMenuOK"]);
@@ -510,10 +596,12 @@ class SystemPage extends MovieClip
                if(this.MappingList.entryList.length == 0)
                {
                   this.requestInputMappings();
+                  this.StartState(SystemPage.INPUT_MAPPING_STATE);
+                  gfx.io.GameDelegate.call("PlaySound",["UIMenuOK"]);
+                  return;
                }
-               this.StartState(SystemPage.INPUT_MAPPING_STATE);
-               gfx.io.GameDelegate.call("PlaySound",["UIMenuOK"]);
-               return;
+               return _root;
+               break;
             case 7:
                if(this.HelpList.entryList.length == 0)
                {
@@ -531,9 +619,15 @@ class SystemPage extends MovieClip
                return;
                break;
             case 8:
+               if(SystemPage.INSTANT_QUIT == "true")
+               {
+                  gfx.io.GameDelegate.call("QuitToDesktop",[]);
+                  return;
+               }
                gfx.io.GameDelegate.call("PlaySound",["UIMenuOK"]);
                gfx.io.GameDelegate.call("RequestIsOnPC",[],this,"populateQuitList");
                return;
+               break;
             default:
                gfx.io.GameDelegate.call("PlaySound",["UIMenuCancel"]);
                return;
@@ -689,23 +783,10 @@ class SystemPage extends MovieClip
    function onSettingsCategoryPress()
    {
       var _loc2_ = this.OptionsListsPanel.OptionsLists.List_mc;
-      var _loc3_;
-      var _loc4_;
-      var _loc5_;
       switch(this.SettingsList.selectedIndex)
       {
          case 0:
-            _loc3_ = parseInt(this._skyrimVersion);
-            _loc4_ = parseInt(this._skyrimVersionMinor);
-            _loc5_ = parseInt(this._skyrimVersionBuild);
-            if(_loc3_ > 1 || _loc3_ == 1 && _loc4_ > 6 || _loc3_ == 1 && _loc4_ == 6 && _loc5_ > 659)
-            {
-               _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$SaveGameMissingCreationsCheck",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
-            }
-            else
-            {
-               _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
-            }
+            _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
             gfx.io.GameDelegate.call("RequestGameplayOptions",[_loc2_.entryList]);
             break;
          case 1:
@@ -713,15 +794,14 @@ class SystemPage extends MovieClip
             gfx.io.GameDelegate.call("RequestDisplayOptions",[_loc2_.entryList]);
             break;
          case 2:
-            _loc4_ = 0;
             _loc2_.entryList = [{text:"$Master",movieType:0}];
             gfx.io.GameDelegate.call("RequestAudioOptions",[_loc2_.entryList]);
-            for(_loc4_ in _loc2_.entryList)
+            for(var _loc3_ in _loc2_.entryList)
             {
-               _loc2_.entryList[_loc4_].movieType = 0;
+               _loc2_.entryList[_loc3_].movieType = 0;
             }
       }
-      _loc3_ = 0;
+      var _loc3_ = 0;
       while(_loc3_ < _loc2_.entryList.length)
       {
          if(_loc2_.entryList[_loc3_].ID == undefined)
@@ -730,7 +810,7 @@ class SystemPage extends MovieClip
          }
          else
          {
-            _loc3_ += 1;
+            _loc3_ = _loc3_ + 1;
          }
       }
       if(this.iPlatform != 0)
@@ -892,13 +972,21 @@ class SystemPage extends MovieClip
    }
    function RefreshSystemButtons()
    {
-      if(this._showModMenu)
+      if(this._showModMenu && SystemPage.ENABLE_QUICKSAVE == "true")
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[4],this.CategoryList.entryList[6],this.CategoryList.entryList[8],true]);
       }
-      else
+      if(this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true")
+      {
+         gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[3],this.CategoryList.entryList[5],this.CategoryList.entryList[7],true]);
+      }
+      if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE == "true")
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[3],this.CategoryList.entryList[5],this.CategoryList.entryList[7],true]);
+      }
+      if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true")
+      {
+         gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[4],this.CategoryList.entryList[6],true]);
       }
       this.CategoryList.UpdateList();
    }
@@ -1139,14 +1227,24 @@ class SystemPage extends MovieClip
    }
    function UpdatePermissions()
    {
-      if(this._showModMenu)
+      if(this._showModMenu && SystemPage.ENABLE_QUICKSAVE == "true")
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[4],this.CategoryList.entryList[6],this.CategoryList.entryList[8],false]);
          this.CategoryList.entryList[7].disabled = false;
       }
-      else
+      if(this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true")
+      {
+         gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[3],this.CategoryList.entryList[5],this.CategoryList.entryList[7],false]);
+         this.CategoryList.entryList[7].disabled = false;
+      }
+      if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE == "true")
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[3],this.CategoryList.entryList[5],this.CategoryList.entryList[7],false]);
+         this.CategoryList.entryList[6].disabled = false;
+      }
+      if(!this._showModMenu && SystemPage.ENABLE_QUICKSAVE != "true")
+      {
+         gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[4],this.CategoryList.entryList[6],false]);
          this.CategoryList.entryList[6].disabled = false;
       }
       this.CategoryList.UpdateList();

@@ -20,19 +20,9 @@ class Map.LocationListEntry extends skyui.components.list.BasicListEntry
    function setEntry(a_entryObject, a_state)
    {
       var _loc4_ = this.background._width;
-      var _loc3_ = a_entryObject == a_state.list.selectedEntry;
-      this.selectIndicator._visible = _loc3_;
+      var _loc5_ = a_entryObject == a_state.list.selectedEntry;
+      this.selectIndicator._visible = _loc5_;
       this.icon.gotoAndStop(a_entryObject.iconFrame);
-      if(this.icon._width > this.icon._height)
-      {
-         this.icon._height *= 30 / this.icon._width;
-         this.icon._width = 30;
-      }
-      else
-      {
-         this.icon._width *= 30 / this.icon._height;
-         this.icon._height = 30;
-      }
       this.textField.SetText(a_entryObject.label);
    }
 }

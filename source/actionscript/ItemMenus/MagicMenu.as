@@ -20,6 +20,10 @@ class MagicMenu extends ItemMenu
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
    static var SKYUI_VERSION_MINOR = 2;
+   static var TIMER_A = 0;
+   static var TIMER_B = 9;
+   static var BOTTOM_SHOW = true;
+   static var FS_ENABLED = 0;
    static var SKYUI_VERSION_STRING = MagicMenu.SKYUI_VERSION_MAJOR + "." + MagicMenu.SKYUI_VERSION_MINOR + " SE";
    var _hideButtonFlag = 0;
    var _bMenuClosing = false;
@@ -28,15 +32,23 @@ class MagicMenu extends ItemMenu
    {
       super();
       this._categoryListIconArt = ["cat_favorites","mag_all","mag_alteration","mag_illusion","mag_destruction","mag_conjuration","mag_restoration","mag_shouts","mag_powers","mag_activeeffects"];
+      var _loc3_ = new LoadVars();
+      _loc3_.load("../SKSE/Plugins/ForgetSpell.ini");
+      _loc3_.onData = function(str)
+      {
+         MagicMenu.FS_ENABLED = str.length;
+      };
    }
    function InitExtensions()
    {
+      this.bottomBar._visible = false;
       super.InitExtensions();
       gfx.io.GameDelegate.addCallBack("DragonSoulSpent",this,"DragonSoulSpent");
       gfx.io.GameDelegate.addCallBack("AttemptEquip",this,"AttemptEquip");
       this.bottomBar.updatePerItemInfo({type:skyui.defines.Inventory.ICT_SPELL_DEFAULT});
       var _loc3_ = this.inventoryLists.categoryList;
       _loc3_.iconArt = this._categoryListIconArt;
+      1;
    }
    function setConfig(a_config)
    {
@@ -179,6 +191,10 @@ class MagicMenu extends ItemMenu
          {
             this.navPanel.addButton({text:"$Unlock",controls:skyui.defines.Input.XButton});
          }
+         else if(this.itemCard.itemInfo.type == skyui.defines.Inventory.ICT_SPELL && MagicMenu.FS_ENABLED != 0)
+         {
+            this.navPanel.addButton({text:"$FSForget",controls:skyui.defines.Input.XButton});
+         }
       }
       else
       {
@@ -195,9 +211,12 @@ class MagicMenu extends ItemMenu
    }
    function startMenuFade()
    {
+      MagicMenu.BOTTOM_SHOW = false;
+      this.bottomBar._visible = false;
       this.inventoryLists.hidePanel();
       this.ToggleMenuFade();
       this.saveIndices();
       this._bMenuClosing = true;
+      1;
    }
 }

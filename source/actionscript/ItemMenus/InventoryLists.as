@@ -27,6 +27,8 @@ class InventoryLists extends MovieClip
    static var SHOW_PANEL = 1;
    static var TRANSITIONING_TO_HIDE_PANEL = 2;
    static var TRANSITIONING_TO_SHOW_PANEL = 3;
+   static var BG_ALPHA = 100;
+   static var PAPER_SOUNDS = "false";
    var _savedSelectionIndex = -1;
    var _searchKey = -1;
    var _switchTabKey = -1;
@@ -51,6 +53,18 @@ class InventoryLists extends MovieClip
       this.columnSelectButton = this.panelContainer.columnSelectButton;
       skyui.util.ConfigManager.registerLoadCallback(this,"onConfigLoad");
       skyui.util.ConfigManager.registerUpdateCallback(this,"onConfigUpdate");
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         InventoryLists.BG_ALPHA = parseFloat(InventoryLists.ParseConfig(str,"fInventoryAlpha"));
+      };
+      var _loc4_ = new LoadVars();
+      _loc4_.load("deardiary/sounds.txt");
+      _loc4_.onData = function(str)
+      {
+         InventoryLists.PAPER_SOUNDS = InventoryLists.ParseConfig(str,"PaperUISounds");
+      };
    }
    function get currentState()
    {
@@ -104,6 +118,50 @@ class InventoryLists extends MovieClip
       this.categoryList.suspended = true;
       this.itemList.suspended = true;
    }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = InventoryLists.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = InventoryLists.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = InventoryLists.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return InventoryLists.trim(_loc12_);
+   }
    function showPanel(a_bPlayBladeSound)
    {
       this.categoryList.suspended = false;
@@ -126,7 +184,7 @@ class InventoryLists extends MovieClip
    {
       this._bTabbed = true;
       this.panelContainer.gotoAndPlay("tabbed");
-      this.itemList.listHeight = 480;
+      this.itemList.listHeight = 432;
    }
    function setPlatform(a_platform, a_bPS3Switch)
    {
@@ -225,6 +283,7 @@ class InventoryLists extends MovieClip
    }
    function SetCategoriesList()
    {
+      this.panelContainer.ListBackground._alpha = InventoryLists.BG_ALPHA;
       var _loc14_ = 0;
       var _loc13_ = 1;
       var _loc6_ = 2;
@@ -383,7 +442,14 @@ class InventoryLists extends MovieClip
       this.dispatchEvent({type:"categoryChange",index:event.index});
       if(event.index != -1)
       {
-         gfx.io.GameDelegate.call("PlaySound",["UIMenuFocus"]);
+         if(InventoryLists.PAPER_SOUNDS == "true")
+         {
+            gfx.io.GameDelegate.call("PlaySound",["UIJournalTabs_DD"]);
+         }
+         else
+         {
+            gfx.io.GameDelegate.call("PlaySound",["UIJournalTabsSD"]);
+         }
       }
    }
    function onItemsListSelectionChange(event)

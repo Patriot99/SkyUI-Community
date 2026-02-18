@@ -1,5 +1,6 @@
 class Map.LocationFinder extends MovieClip
 {
+   var Background;
    var _foundMarker;
    var _nameFilter;
    var _sortFilter;
@@ -51,6 +52,7 @@ class Map.LocationFinder extends MovieClip
    }
    function show()
    {
+      this.Background._alpha = Map.LocalMap.BG_ALPHA;
       gfx.managers.FocusHandler.instance.setFocus(this.list,0);
       this._bShown = true;
       this._parent.gotoAndPlay("fadeIn");

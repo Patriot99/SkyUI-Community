@@ -1,5 +1,6 @@
 class Map.MapMarker extends gfx.controls.Button
 {
+   var Cross;
    var HitArea;
    var IconClip;
    var __set__disableFocus;
@@ -17,9 +18,13 @@ class Map.MapMarker extends gfx.controls.Button
    var swapDepths;
    static var ICON_MAP = ["EmptyMarker","CityMarker","TownMarker","SettlementMarker","CaveMarker","CampMarker","FortMarker","NordicRuinMarker","DwemerMarker","ShipwreckMarker","GroveMarker","LandmarkMarker","DragonlairMarker","FarmMarker","WoodMillMarker","MineMarker","ImperialCampMarker","StormcloakCampMarker","DoomstoneMarker","WheatMillMarker","SmelterMarker","StableMarker","ImperialTowerMarker","ClearingMarker","PassMarker","AltarMarker","RockMarker","LighthouseMarker","OrcStrongholdMarker","GiantCampMarker","ShackMarker","NordicTowerMarker","NordicDwellingMarker","DocksMarker","ShrineMarker","RiftenCastleMarker","RiftenCapitolMarker","WindhelmCastleMarker","WindhelmCapitolMarker","WhiterunCastleMarker","WhiterunCapitolMarker","SolitudeCastleMarker","SolitudeCapitolMarker","MarkarthCastleMarker","MarkarthCapitolMarker","WinterholdCastleMarker","WinterholdCapitolMarker","MorthalCastleMarker","MorthalCapitolMarker","FalkreathCastleMarker","FalkreathCapitolMarker","DawnstarCastleMarker","DawnstarCapitolMarker","DLC02MiraakTempleMarker","DLC02RavenRockMarker","DLC02StandingStonesMarker","DLC02TelvanniTowerMarker","DLC02ToSkyrimMarker","DLC02ToSolstheimMarker","DLC02CastleKarstaagMarker","","DoorMarker","QuestTargetMarker","QuestTargetDoorMarker","MultipleQuestTargetMarker","PlayerSetMarker","YouAreHereMarker"];
    static var UNDISCOVERED_OFFSET = 80;
-   static var MARKER_BASE_SIZE = 30;
+   static var MARKER_BASE_SIZE = 20;
    static var MARKER_SCALE_MAX = 150;
    static var MARKER_ALPHA_MIN = 60;
+   static var DIRECTIONLESS = "false";
+   static var REDCROSS = "false";
+   static var NOPLAYERMARKER = "false";
+   static var REMOVEMARKERS = "false";
    static var TWEEN_TIME = 0.2;
    static var topDepth = 0;
    var index = -1;
@@ -34,7 +39,21 @@ class Map.MapMarker extends gfx.controls.Button
       this.disableFocus = true;
       this._markerSize = Map.MapMarker.MARKER_BASE_SIZE;
       this._iconName = Map.MapMarker.ICON_MAP[this.markerType];
-      this.iconFrame = this._iconName != null ? this.markerType : 0;
+      if(this._iconName != null)
+      {
+         if(this._iconName == "YouAreHereMarker")
+         {
+            this.iconFrame = Map.MapMarker.DIRECTIONLESS == "true" ? 0 : this.markerType;
+         }
+         else
+         {
+            this.iconFrame = this.markerType;
+         }
+      }
+      else
+      {
+         this.iconFrame = 0;
+      }
       this.iconFrame += (this.isUndiscovered != true ? 0 : Map.MapMarker.UNDISCOVERED_OFFSET) + 1;
    }
    function get FadingIn()
@@ -77,11 +96,12 @@ class Map.MapMarker extends gfx.controls.Button
       this.onRollOut = function()
       {
       };
-      var _loc4_ = this.IconClip.iconHolder;
-      var _loc3_ = _loc4_.icon;
-      _loc4_.background._visible = false;
-      _loc3_.gotoAndStop(this.iconFrame);
+      var _loc3_ = this.IconClip.iconHolder;
+      var _loc4_ = _loc3_.icon;
+      _loc3_.background._visible = false;
+      _loc4_.gotoAndStop(this.iconFrame);
       this.IconClip._alpha = Map.MapMarker.MARKER_ALPHA_MIN;
+      this.Cross._visible = false;
       switch(this._iconName)
       {
          case "MineMarker":
@@ -105,6 +125,11 @@ class Map.MapMarker extends gfx.controls.Button
             this.IconClip._alpha = 100;
             break;
          case "YouAreHereMarker":
+            this.IconClip.gotoAndPlay("StartBlink");
+            if(Map.MapMarker.DIRECTIONLESS == "true")
+            {
+               this._markerSize *= 0.7;
+            }
          case "QuestTargetMarker":
          case "MultipleQuestTargetMarker":
             this.IconClip.gotoAndPlay("StartBlink");
@@ -119,7 +144,14 @@ class Map.MapMarker extends gfx.controls.Button
          case "MorthalCapitolMarker":
          case "FalkreathCapitolMarker":
          case "DawnstarCapitolMarker":
+            this._markerSize += this._markerSize / 3;
+            break;
          case "PlayerSetMarker":
+            if(Map.MapMarker.REDCROSS == "true")
+            {
+               this.Cross._visible = true;
+               this.IconClip._visible = false;
+            }
             this._markerSize += this._markerSize / 3;
             break;
          case "QuestTargetDoorMarker":
@@ -129,15 +161,15 @@ class Map.MapMarker extends gfx.controls.Button
          case "EmptyMarker":
             this.IconClip._alpha = 0;
       }
-      if(_loc3_._width > _loc3_._height)
+      if(_loc4_._width > _loc4_._height)
       {
-         _loc3_._height *= this._markerSize / _loc3_._width;
-         _loc3_._width = this._markerSize;
+         _loc4_._height *= this._markerSize / _loc4_._width;
+         _loc4_._width = this._markerSize;
       }
       else
       {
-         _loc3_._width *= this._markerSize / _loc3_._height;
-         _loc3_._height = this._markerSize;
+         _loc4_._width *= this._markerSize / _loc4_._height;
+         _loc4_._height = this._markerSize;
       }
    }
    function setState(a_state)

@@ -43,19 +43,24 @@ class MagicIconSetter implements skyui.components.list.IListProcessor
       {
          case skyui.defines.Actor.AV_ALTERATION:
             a_entryObject.iconLabel = "default_alteration";
+            a_entryObject.iconColor = 9399110;
             break;
          case skyui.defines.Actor.AV_CONJURATION:
             a_entryObject.iconLabel = "default_conjuration";
+            a_entryObject.iconColor = 10041497;
             break;
          case skyui.defines.Actor.AV_DESTRUCTION:
             a_entryObject.iconLabel = "default_destruction";
+            a_entryObject.iconColor = 13055542;
             this.processResist(a_entryObject);
             break;
          case skyui.defines.Actor.AV_ILLUSION:
             a_entryObject.iconLabel = "default_illusion";
+            a_entryObject.iconColor = 5021348;
             break;
          case skyui.defines.Actor.AV_RESTORATION:
             a_entryObject.iconLabel = "default_restoration";
+            a_entryObject.iconColor = 44032;
          default:
             return;
       }

@@ -29,6 +29,8 @@ class ContainerMenu extends ItemMenu
    static var NULL_HAND = -1;
    static var RIGHT_HAND = 0;
    static var LEFT_HAND = 1;
+   static var TIMER_A = 0;
+   static var TIMER_B = 9;
    var _bEquipMode = false;
    var bNPCMode = false;
    var bEnableTabs = true;
@@ -40,6 +42,7 @@ class ContainerMenu extends ItemMenu
    }
    function InitExtensions()
    {
+      this.bottomBar._visible = false;
       super.InitExtensions();
       this.inventoryLists.tabBarIconArt = this._tabBarIconArt;
       var _loc3_ = this.inventoryLists.categoryList;
@@ -47,6 +50,7 @@ class ContainerMenu extends ItemMenu
       gfx.io.GameDelegate.addCallBack("AttemptEquip",this,"AttemptEquip");
       gfx.io.GameDelegate.addCallBack("XButtonPress",this,"onXButtonPress");
       this.itemCardFadeHolder.StealTextInstance._visible = false;
+      1;
    }
    function setConfig(a_config)
    {

@@ -6,19 +6,19 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
    }
    function processList(a_list)
    {
-      var _loc4_ = a_list.entryList;
-      var _loc3_ = 0;
-      var _loc2_;
-      while(_loc3_ < _loc4_.length)
+      var _loc3_ = a_list.entryList;
+      var _loc4_ = 0;
+      var _loc5_;
+      while(_loc4_ < _loc3_.length)
       {
-         _loc2_ = _loc4_[_loc3_];
-         if(!_loc2_.skyui_itemDataProcessed)
+         _loc5_ = _loc3_[_loc4_];
+         if(!_loc5_.skyui_itemDataProcessed)
          {
-            _loc2_.skyui_itemDataProcessed = true;
-            this.fixSKSEExtendedObject(_loc2_);
-            this.processEntry(_loc2_);
+            _loc5_.skyui_itemDataProcessed = true;
+            this.fixSKSEExtendedObject(_loc5_);
+            this.processEntry(_loc5_);
          }
-         _loc3_ = _loc3_ + 1;
+         _loc4_ += 1;
       }
    }
    function processEntry(a_entryObject)
@@ -37,6 +37,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Form.TYPE_ARMOR:
             a_entryObject.infoArmor = a_entryObject.armor <= 0 ? null : Math.round(a_entryObject.armor * 100) / 100;
+            a_entryObject.infoWarmth = a_entryObject.warmth <= 0 ? null : Math.round(a_entryObject.warmth * 100) / 100;
             this.processArmorClass(a_entryObject);
             this.processArmorPartMask(a_entryObject);
             this.processMaterialKeywords(a_entryObject);
@@ -58,6 +59,10 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Form.TYPE_WEAPON:
             a_entryObject.infoDamage = a_entryObject.damage <= 0 ? null : Math.round(a_entryObject.damage * 100) / 100;
+            a_entryObject.infoBaseDamage = a_entryObject.baseDamage <= 0 ? null : Math.round(a_entryObject.baseDamage * 100) / 100;
+            a_entryObject.infoReach = a_entryObject.reach <= 0 ? null : Math.round(a_entryObject.reach * 100) / 100;
+            a_entryObject.infoSpeed = a_entryObject.speed <= 0 ? null : Math.round(a_entryObject.speed * 100) / 100;
+            a_entryObject.infoStagger = a_entryObject.stagger <= 0 ? null : Math.round(a_entryObject.stagger * 100) / 100;
             this.processWeaponType(a_entryObject);
             this.processMaterialKeywords(a_entryObject);
             this.processWeaponBaseId(a_entryObject);
@@ -320,6 +325,72 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
    }
    function processWeaponType(a_entryObject)
    {
+      if(a_entryObject.keywords.WeapTypeSpear != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SPEAR;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Spear");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeJavelin != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_JAVELIN;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Javelin");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypePike != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_PIKE;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Pike");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeHalberd != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_HALBERD;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Halberd");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeRapier != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_RAPIER;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Rapier");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeQuarterstaff != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_QUARTERSTAFF;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Quarterstaff");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeClaw != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_CLAW;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Claw");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeWhip != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_WHIP;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Whip");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeKatana != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_KATANA;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Katana");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeScythe != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SCYTHE;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Scythe");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeGun != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_GUN;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gun");
+         return undefined;
+      }
       a_entryObject.subType = null;
       a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Weapon");
       switch(a_entryObject.weaponType)
@@ -414,7 +485,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             a_entryObject.mainPartMask = skyui.defines.Armor.PARTMASK_PRECEDENCE[_loc2_];
             break;
          }
-         _loc2_ = _loc2_ + 1;
+         _loc2_ += 1;
       }
       if(a_entryObject.mainPartMask == undefined)
       {
@@ -485,6 +556,19 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
    }
    function processArmorOther(a_entryObject)
    {
+      var _loc2_ = [];
+      var _loc3_ = 0;
+      var _loc4_ = skyui.defines.Armor.PARTMASK_PRECEDENCE;
+      while(_loc3_ < _loc4_.length)
+      {
+         if(a_entryObject.partMask & _loc4_[_loc3_])
+         {
+            _loc2_.push(Math.log(_loc4_[_loc3_]) / 0.6931471805599453 + 30);
+         }
+         _loc3_ += 1;
+      }
+      a_entryObject.bipedSlots = a_entryObject.mainPartMask;
+      a_entryObject.bipedSlotsDisplay = _loc2_.join(",");
       if(a_entryObject.weightClass != null)
       {
          return undefined;
@@ -753,7 +837,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          switch(a_entryObject.soulSize)
          {
             case skyui.defines.Item.SOULGEM_NONE:
-               a_entryObject.soulSizeDisplay = null;
+               a_entryObject.soulSizeDisplay = "$Empty";
                break;
             case skyui.defines.Item.SOULGEM_PETTY:
                a_entryObject.soulSizeDisplay = "$Petty";

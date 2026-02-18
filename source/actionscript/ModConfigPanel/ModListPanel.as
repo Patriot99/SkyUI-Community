@@ -184,7 +184,7 @@ class ModListPanel extends MovieClip
       switch(a_animID)
       {
          case this.ANIM_DECORTITLE_FADE_IN:
-            _loc2_ = new mx.transitions.Tween(this.decorTitle,"_y",mx.transitions.easing.Strong.easeOut,this.decorTitle._y,this._modList._x + this._modList.topBorder,0.75,true);
+            _loc2_ = new mx.transitions.Tween(this.decorTitle,"_y",mx.transitions.easing.Strong.easeOut,this.decorTitle._y,this._modList._x + this._modList.topBorder,0.3,true);
             _loc2_.FPS = 60;
             _loc2_.onMotionFinished = mx.utils.Delegate.create(this,this.decorMotionFinishedFunc);
             _loc2_.onMotionChanged = mx.utils.Delegate.create(this,this.decorMotionUpdateFunc);

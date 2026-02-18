@@ -24,6 +24,9 @@ class InventoryMenu extends ItemMenu
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
    static var SKYUI_VERSION_MINOR = 2;
+   static var TIMER_A = 0;
+   static var TIMER_B = 9;
+   static var BOTTOM_SHOW = true;
    static var SKYUI_VERSION_STRING = InventoryMenu.SKYUI_VERSION_MAJOR + "." + InventoryMenu.SKYUI_VERSION_MINOR + " SE";
    var _bMenuClosing = false;
    var _bSwitchMenus = false;
@@ -39,12 +42,14 @@ class InventoryMenu extends ItemMenu
    }
    function InitExtensions()
    {
+      this.bottomBar._visible = false;
       super.InitExtensions();
       Shared.GlobalFunc.AddReverseFunctions();
       this.inventoryLists.zoomButtonHolder.gotoAndStop(1);
       var _loc3_ = this.inventoryLists.categoryList;
       _loc3_.iconArt = this._categoryListIconArt;
       this.itemCard.addEventListener("itemPress",this,"onItemCardListPress");
+      1;
    }
    function setConfig(a_config)
    {
@@ -231,10 +236,13 @@ class InventoryMenu extends ItemMenu
    }
    function startMenuFade()
    {
+      InventoryMenu.BOTTOM_SHOW = false;
+      this.bottomBar._visible = false;
       this.inventoryLists.hidePanel();
       this.ToggleMenuFade();
       this.saveIndices();
       this._bMenuClosing = true;
+      1;
    }
    function updateBottomBar(a_bSelected)
    {

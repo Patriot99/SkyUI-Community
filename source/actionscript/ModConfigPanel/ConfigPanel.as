@@ -6,12 +6,14 @@ class ConfigPanel extends MovieClip
    var _buttonPanelR;
    var _cancelControls;
    var _customContent;
+   var _customContentBG;
    var _defaultControls;
    var _focus;
    var _highlightIntervalID;
    var _menuDialogOptions;
    var _modList;
    var _modListPanel;
+   var _nameFilter;
    var _optionFlagsBuffer;
    var _optionNumValueBuffer;
    var _optionStrValueBuffer;
@@ -25,6 +27,7 @@ class ConfigPanel extends MovieClip
    var _unmapControls;
    var bottomBar;
    var contentHolder;
+   var searchWidget;
    var titlebar;
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
@@ -41,6 +44,8 @@ class ConfigPanel extends MovieClip
    static var DIALOG = 8;
    static var FOCUS_MODLIST = 0;
    static var FOCUS_OPTIONS = 1;
+   static var MCM_IMAGES = "false";
+   static var BG_ALPHA = 100;
    var _customContentX = 0;
    var _customContentY = 0;
    var _titleText = "";
@@ -53,6 +58,7 @@ class ConfigPanel extends MovieClip
    var _bDefaultEnabled = false;
    var _bRequestPageReset = false;
    var selectedKeyCode = -1;
+   var _searchKey = 57;
    var optionCursorIndex = -1;
    function ConfigPanel()
    {
@@ -61,6 +67,7 @@ class ConfigPanel extends MovieClip
       this._modListPanel = this.contentHolder.modListPanel;
       this._modList = this._modListPanel.modListFader.list;
       this._subList = this._modListPanel.subListFader.list;
+      this._nameFilter = new skyui.filter.NameFilter();
       this._optionsList = this.contentHolder.optionsPanel.optionsList;
       this._buttonPanelL = this.bottomBar.buttonPanelL;
       this._buttonPanelR = this.bottomBar.buttonPanelR;
@@ -70,14 +77,27 @@ class ConfigPanel extends MovieClip
       this._optionStrValueBuffer = [];
       this._optionNumValueBuffer = [];
       this._menuDialogOptions = [];
-      this.contentHolder.infoPanel.textField.verticalAutoSize = "top";
+      skyui.util.ConfigManager.registerLoadCallback(this,"onConfigLoad");
+      Object.registerClass("SearchWidget",skyui.components.SearchWidget);
+      this.searchWidget = this.contentHolder.modListPanel.searchWidget;
+      this.contentHolder.infoPanel.textField.verticalAutoSize = "center";
+      var _loc5_ = new LoadVars();
+      _loc5_.load("deardiary_dm/config.txt");
+      _loc5_.onData = function(str)
+      {
+         ConfigPanel.MCM_IMAGES = ConfigPanel.ParseConfig(str,"bMCMImages");
+         ConfigPanel.BG_ALPHA = parseFloat(ConfigPanel.ParseConfig(str,"fMCMAlpha"));
+      };
    }
    function onLoad()
    {
       super.onLoad();
-      this._modList.listEnumeration = new skyui.components.list.BasicEnumeration(this._modList.entryList);
+      var _loc3_ = new skyui.components.list.FilteredEnumeration(this._modList.entryList);
+      _loc3_.addFilter(this._nameFilter);
+      this._modList.listEnumeration = _loc3_;
       this._subList.listEnumeration = new skyui.components.list.BasicEnumeration(this._subList.entryList);
       this._optionsList.listEnumeration = new skyui.components.list.BasicEnumeration(this._optionsList.entryList);
+      this._nameFilter.addEventListener("filterChange",this,"onFilterChange");
       this._modList.addEventListener("itemPress",this,"onModListPress");
       this._modList.addEventListener("selectionChange",this,"onModListChange");
       this._subList.addEventListener("itemPress",this,"onSubListPress");
@@ -88,6 +108,9 @@ class ConfigPanel extends MovieClip
       this._modListPanel.addEventListener("modListExit",this,"onModListExit");
       this._modListPanel.addEventListener("subListEnter",this,"onSubListEnter");
       this._modListPanel.addEventListener("subListExit",this,"onSubListExit");
+      this.searchWidget.addEventListener("inputStart",this,"onSearchInputStart");
+      this.searchWidget.addEventListener("inputEnd",this,"onSearchInputEnd");
+      this.searchWidget.addEventListener("inputChange",this,"onSearchInputChange");
       this._optionsList._visible = false;
    }
    function unlock()
@@ -108,17 +131,31 @@ class ConfigPanel extends MovieClip
       this._modList.listState.savedIndex = null;
       var _loc3_ = 0;
       var _loc4_;
+      var _loc5_;
       while(_loc3_ < arguments.length)
       {
          _loc4_ = arguments[_loc3_];
          if(_loc4_ != "")
          {
-            this._modList.entryList.push({modIndex:_loc3_,modName:_loc4_,text:skyui.util.Translator.translate(_loc4_),align:"right",enabled:true});
+            _loc5_ = skyui.util.Translator.translate(_loc4_);
+            if(_loc5_.length > 40)
+            {
+               _loc5_ = _loc5_.substr(0,37) + "...";
+            }
+            this._modList.entryList.push({modIndex:_loc3_,modName:_loc4_,text:_loc5_,align:"left",enabled:true});
          }
          _loc3_ = _loc3_ + 1;
       }
       this._modList.entryList.sortOn("text",Array.CASEINSENSITIVE);
       this._modList.InvalidateData();
+      if(this._modList.entryList.length < arguments.length)
+      {
+         this._modListPanel.modsNumberText.htmlText = skyui.util.Translator.translate("$TotalMCM") + " <font color=\'#FFCC99\'>" + this._modList.entryList.length + "</font>";
+      }
+      else
+      {
+         this._modListPanel.modsNumberText.htmlText = skyui.util.Translator.translate("$TotalMCM") + " <font color=\'#FF0000\'>" + this._modList.entryList.length + "</font>";
+      }
    }
    function setPageNames()
    {
@@ -126,30 +163,107 @@ class ConfigPanel extends MovieClip
       this._subList.listState.savedIndex = null;
       var _loc3_ = 0;
       var _loc4_;
+      var _loc5_;
       while(_loc3_ < arguments.length)
       {
          _loc4_ = arguments[_loc3_];
          if(_loc4_.toLowerCase() != "none")
          {
-            this._subList.entryList.push({pageIndex:_loc3_,pageName:_loc4_,text:skyui.util.Translator.translate(_loc4_),align:"right",enabled:true});
+            _loc5_ = skyui.util.Translator.translate(_loc4_);
+            if(_loc5_.length > 35)
+            {
+               _loc5_ = _loc5_.substr(0,32) + "...";
+            }
+            this._subList.entryList.push({pageIndex:_loc3_,pageName:_loc4_,text:_loc5_,align:"left",enabled:true});
          }
          _loc3_ = _loc3_ + 1;
       }
       this._subList.InvalidateData();
    }
+   function onSearchInputStart(event)
+   {
+      this._modList.disableSelection = this._modList.disableInput = true;
+      this._nameFilter.filterText = "";
+   }
+   function onSearchInputChange(event)
+   {
+      this._nameFilter.filterText = event.data;
+   }
+   function onSearchInputEnd(event)
+   {
+      this._modList.disableSelection = this._modList.disableInput = false;
+      this._nameFilter.filterText = event.data;
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = ConfigPanel.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = ConfigPanel.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = ConfigPanel.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return ConfigPanel.trim(_loc12_);
+   }
    function setCustomContentParams(a_x, a_y)
    {
-      this._customContentX = a_x;
-      this._customContentY = a_y;
+      this._customContentX = a_x + 30;
+      this._customContentY = a_y + 55;
    }
    function loadCustomContent(a_source)
    {
       this.unloadCustomContent();
-      var _loc2_ = this.contentHolder.optionsPanel;
-      this._customContent = _loc2_.createEmptyMovieClip("customContent",_loc2_.getNextHighestDepth());
+      var _loc3_ = this.contentHolder.optionsPanel;
+      this._customContentBG = _loc3_.createEmptyMovieClip("customContentBG",_loc3_.getNextHighestDepth());
+      this._customContent = _loc3_.createEmptyMovieClip("customContent",_loc3_.getNextHighestDepth() + 1);
+      this._customContentBG._x = -40;
+      this._customContentBG._y = -10;
       this._customContent._x = this._customContentX;
       this._customContent._y = this._customContentY;
-      this._customContent.loadMovie(a_source);
+      this.contentHolder.background._alpha = ConfigPanel.BG_ALPHA;
+      this.contentHolder.infoPanel.background._alpha = ConfigPanel.BG_ALPHA;
+      if(ConfigPanel.MCM_IMAGES == "true" & a_source != "skyui/mcm_splash.swf")
+      {
+         this._customContent.loadMovie(a_source);
+         this._customContentBG.loadMovie("deardiary_dm/configpanel/customcontent_BG.swf");
+      }
+      else
+      {
+         this._customContent.loadMovie();
+      }
       this._optionsList._visible = false;
    }
    function unloadCustomContent()
@@ -160,6 +274,8 @@ class ConfigPanel extends MovieClip
       }
       this._customContent.removeMovieClip();
       this._customContent = undefined;
+      this._customContentBG.removeMovieClip();
+      this._customContentBG = undefined;
       this._optionsList._visible = true;
    }
    function setTitleText(a_text)
@@ -213,6 +329,10 @@ class ConfigPanel extends MovieClip
          this._optionNumValueBuffer[_loc3_] = arguments[_loc3_];
          _loc3_ = _loc3_ + 1;
       }
+   }
+   function onFilterChange()
+   {
+      this._modList.requestInvalidate();
    }
    function setSliderDialogParams(a_value, a_default, a_min, a_max, a_interval)
    {
@@ -328,7 +448,6 @@ class ConfigPanel extends MovieClip
    }
    function initExtensions()
    {
-      this.bottomBar.Lock("B");
       this._bottomBarStartY = this.bottomBar._y;
       this.showWelcomeScreen();
    }
@@ -371,39 +490,44 @@ class ConfigPanel extends MovieClip
       {
          return true;
       }
-      var _loc5_;
       var _loc4_;
+      var _loc5_;
       if(Shared.GlobalFunc.IsKeyPressed(details))
       {
+         if(details.skseKeycode == this._searchKey && !this._optionsList._visible)
+         {
+            this.searchWidget.startInput();
+            return true;
+         }
          if(this._focus == ConfigPanel.FOCUS_OPTIONS)
          {
-            _loc5_ = !this._optionsList.disableInput && this._optionsList.selectedIndex % 2 == 0 && this._subList.entryList.length > 0 && this._subList._visible;
-            if(_loc5_ && details.navEquivalent == gfx.ui.NavigationCode.LEFT)
+            _loc4_ = !this._optionsList.disableInput && this._optionsList.selectedIndex % 2 == 0 && this._subList.entryList.length > 0 && this._subList._visible;
+            if(_loc4_ && details.navEquivalent == gfx.ui.NavigationCode.LEFT)
             {
                this.changeFocus(ConfigPanel.FOCUS_MODLIST);
                this._optionsList.listState.savedIndex = this._optionsList.selectedIndex;
                this._optionsList.selectedIndex = -1;
-               _loc4_ = this._subList.listState.savedIndex;
-               this._subList.selectedIndex = _loc4_ <= -1 ? (this._subList.listState.activeEntry.itemIndex <= -1 ? 0 : this._subList.listState.activeEntry.itemIndex) : _loc4_;
+               _loc5_ = this._subList.listState.savedIndex;
+               this._subList.selectedIndex = _loc5_ <= -1 ? (this._subList.listState.activeEntry.itemIndex <= -1 ? 0 : this._subList.listState.activeEntry.itemIndex) : _loc5_;
                return true;
             }
          }
          else if(this._focus == ConfigPanel.FOCUS_MODLIST)
          {
-            _loc5_ = !this._subList.disableInput && this._optionsList.entryList.length > 0 && this._optionsList._visible;
-            if(_loc5_ && details.navEquivalent == gfx.ui.NavigationCode.RIGHT)
+            _loc4_ = !this._subList.disableInput && this._optionsList.entryList.length > 0 && this._optionsList._visible;
+            if(_loc4_ && details.navEquivalent == gfx.ui.NavigationCode.RIGHT)
             {
                this.changeFocus(ConfigPanel.FOCUS_OPTIONS);
                this._subList.listState.savedIndex = this._subList.selectedIndex;
                this._subList.selectedIndex = -1;
-               _loc4_ = this._optionsList.listState.savedIndex;
-               this._optionsList.selectedIndex = _loc4_ <= -1 ? 0 : _loc4_;
+               _loc5_ = this._optionsList.listState.savedIndex;
+               this._optionsList.selectedIndex = _loc5_ <= -1 ? 0 : _loc5_;
                return true;
             }
          }
       }
-      var _loc3_ = pathToFocus.shift();
-      if(_loc3_ && _loc3_.handleInput(details,pathToFocus))
+      var _loc6_ = pathToFocus.shift();
+      if(_loc6_ && _loc6_.handleInput(details,pathToFocus))
       {
          return true;
       }
@@ -476,6 +600,10 @@ class ConfigPanel extends MovieClip
       this._state = ConfigPanel.WAIT_FOR_SELECT;
       skse.SendModEvent("SKICP_keymapChanged",null,_loc2_);
    }
+   function onConfigLoad(event)
+   {
+      this._searchKey = event.config.Input.controls.pc.search;
+   }
    function onModListEnter(event)
    {
       this.showWelcomeScreen();
@@ -498,7 +626,7 @@ class ConfigPanel extends MovieClip
    }
    function onModListChange(a_event)
    {
-      if(a_event.index != -1)
+      if(a_event.index != -1 && this._focus == ConfigPanel)
       {
          this.changeFocus(ConfigPanel.FOCUS_MODLIST);
       }
@@ -677,10 +805,11 @@ class ConfigPanel extends MovieClip
    function applyTitleText()
    {
       this.titlebar.textField.text = this._titleText;
-      var _loc2_ = this.titlebar.textField.textWidth + 100;
+      this.titlebar.textField.textAutoSize = "shrink";
+      var _loc2_ = this.titlebar.textField.textWidth * 0;
       if(_loc2_ < 300)
       {
-         _loc2_ = 300;
+         _loc2_ = 716;
       }
       this.titlebar.background._width = _loc2_;
    }
@@ -692,11 +821,11 @@ class ConfigPanel extends MovieClip
       if(this._infoText != "")
       {
          _loc3_ = _loc2_.textField.textHeight + 22;
-         _loc2_.background._height = _loc3_;
+         _loc2_.background._height = 242;
       }
       else
       {
-         _loc2_.background._height = 32;
+         _loc2_.background._height = 0;
       }
    }
    function changeFocus(a_focus)
@@ -710,8 +839,7 @@ class ConfigPanel extends MovieClip
       this._optionsList.disableSelection = this._optionsList.disableInput = true;
       this._modListPanel.isDisabled = true;
       skyui.util.Tween.LinearTween(this.bottomBar,"_alpha",100,0,0.5,null);
-      skyui.util.Tween.LinearTween(this.bottomBar,"_y",this._bottomBarStartY,this._bottomBarStartY + 50,0.5,null);
-      skyui.util.Tween.LinearTween(this.contentHolder,"_alpha",100,75,0.5,null);
+      skyui.util.Tween.LinearTween(this.bottomBar,"_y",this._bottomBarStartY,this._bottomBarStartY + 0,0.5,null);
    }
    function dimIn()
    {
@@ -720,7 +848,6 @@ class ConfigPanel extends MovieClip
       this._modListPanel.isDisabled = false;
       skyui.util.Tween.LinearTween(this.bottomBar,"_alpha",0,100,0.5,null);
       skyui.util.Tween.LinearTween(this.bottomBar,"_y",this._bottomBarStartY + 50,this._bottomBarStartY,0.5,null);
-      skyui.util.Tween.LinearTween(this.contentHolder,"_alpha",75,100,0.5,null);
    }
    function showWelcomeScreen()
    {

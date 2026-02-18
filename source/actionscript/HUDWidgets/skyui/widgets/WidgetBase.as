@@ -4,8 +4,8 @@ class skyui.widgets.WidgetBase extends MovieClip
    var _hudMetrics;
    var _widgetHolder;
    var _widgetID;
-   static var MODES = ["All","Favor","MovementDisabled","Swimming","WarHorseMode","HorseMode","InventoryMode","BookMode","DialogueMode","StealthMode","SleepWaitMode","BarterMode","TweenMode","WorldMapMode","JournalMode","CartMode","VATSPlayback"];
-   static var MODEMAP = {all:"All",favor:"Favor",movementdisabled:"MovementDisabled",swimming:"Swimming",warhorsemode:"WarHorseMode",horsemode:"HorseMode",inventorymode:"InventoryMode",bookmode:"BookMode",dialoguemode:"DialogueMode",stealthmode:"StealthMode",sleepwaitmode:"SleepWaitMode",bartermode:"BarterMode",tweenmode:"TweenMode",worldmapmode:"WorldMapMode",journalmode:"JournalMode",cartmode:"CartMode",vatsplayback:"VATSPlayback"};
+   static var MODES = ["All","Favor","MovementDisabled","Swimming","WarhorseMode","HorseMode","InventoryMode","BookMode","DialogueMode","StealthMode","SleepWaitMode","BarterMode","TweenMode","WorldMapMode","JournalMode","CartMode","VATSPlayback"];
+   static var MODEMAP = {all:"All",favor:"Favor",movementdisabled:"MovementDisabled",swimming:"Swimming",warhorsemode:"WarhorseMode",horsemode:"HorseMode",inventorymode:"InventoryMode",bookmode:"BookMode",dialoguemode:"DialogueMode",stealthmode:"StealthMode",sleepwaitmode:"SleepWaitMode",bartermode:"BarterMode",tweenmode:"TweenMode",worldmapmode:"WorldMapMode",journalmode:"JournalMode",cartmode:"CartMode",vatsplayback:"VATSPlayback"};
    static var ANCHOR_LEFT = "left";
    static var ANCHOR_RIGHT = "right";
    static var ANCHOR_CENTER = "center";
@@ -120,13 +120,12 @@ class skyui.widgets.WidgetBase extends MovieClip
       var _loc4_ = Shared.GlobalFunc.Lerp(- this._hudMetrics.hMin,this._hudMetrics.hMax,0,1280,a_newX);
       var _loc3_ = Shared.GlobalFunc.Lerp(- this._hudMetrics.vMin,this._hudMetrics.vMax,0,720,a_newY);
       var _loc2_ = Math.max(0,a_duration || 0);
-      skyui.util.Tween.LinearTween(this,"_x",this._x,_loc4_,_loc2_,null);
-      skyui.util.Tween.LinearTween(this,"_y",this._y,_loc3_,_loc2_,null);
+      com.greensock.TweenLite.to(this,_loc2_,{_x:_loc4_,_y:_loc3_,overwrite:0,easing:com.greensock.easing.Linear.easeNone});
    }
    function fadeTo(a_alpha, a_duration)
    {
       var _loc2_ = Math.max(0,a_duration || 0);
-      skyui.util.Tween.LinearTween(this,"_alpha",this._alpha,a_alpha,_loc2_,null);
+      com.greensock.TweenLite.to(this,_loc2_,{_alpha:a_alpha,overwrite:0,easing:com.greensock.easing.Linear.easeNone});
    }
    function getWidth()
    {

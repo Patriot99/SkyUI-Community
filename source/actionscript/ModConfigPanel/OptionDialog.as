@@ -1,5 +1,6 @@
 class OptionDialog extends skyui.components.dialog.BasicDialog
 {
+   var background;
    var leftButtonPanel;
    var platform;
    var rightButtonPanel;
@@ -11,6 +12,7 @@ class OptionDialog extends skyui.components.dialog.BasicDialog
    }
    function onLoad()
    {
+      this.background.loadMovie("deardiary_dm/configpanel/configpanel_window_BG.swf");
       this.leftButtonPanel.setPlatform(this.platform,false);
       this.rightButtonPanel.setPlatform(this.platform,false);
       this.initButtons();

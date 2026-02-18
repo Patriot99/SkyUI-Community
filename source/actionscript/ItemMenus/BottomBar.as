@@ -1,7 +1,11 @@
 class BottomBar extends MovieClip
 {
+   var _currentTotalCoverage;
+   var _currentTotalWarmth;
    var _healthMeter;
+   var _lastCoverageDelta;
    var _lastItemType;
+   var _lastWarmthDelta;
    var _levelMeter;
    var _magickaMeter;
    var _playerInfoObj;
@@ -11,6 +15,7 @@ class BottomBar extends MovieClip
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
    static var SKYUI_VERSION_MINOR = 2;
+   static var DISABLE_SM = "false";
    static var SKYUI_VERSION_STRING = BottomBar.SKYUI_VERSION_MAJOR + "." + BottomBar.SKYUI_VERSION_MINOR + " SE";
    function BottomBar()
    {
@@ -20,12 +25,18 @@ class BottomBar extends MovieClip
       this._magickaMeter = new Components.Meter(this.playerInfoCard.MagickaRect.MeterInstance.Meter_mc);
       this._staminaMeter = new Components.Meter(this.playerInfoCard.StaminaRect.MeterInstance.Meter_mc);
       this._levelMeter = new Components.Meter(this.playerInfoCard.LevelMeterInstance.Meter_mc);
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         BottomBar.DISABLE_SM = BottomBar.ParseConfig(str,"bDisableSM");
+      };
    }
    function positionElements(a_leftOffset, a_rightOffset)
    {
-      this.buttonPanel._x = a_leftOffset;
+      this.buttonPanel._x = a_leftOffset + 10;
       this.buttonPanel.updateButtons(true);
-      this.playerInfoCard._x = a_rightOffset - this.playerInfoCard._width;
+      this.playerInfoCard._x = a_leftOffset - 90;
    }
    function showPlayerInfo()
    {
@@ -78,31 +89,32 @@ class BottomBar extends MovieClip
                   _loc10_ = Math.round(a_itemUpdateObj.armorChange);
                   if(_loc10_ > 0)
                   {
-                     _loc7_ = _loc7_ + " <font color=\'#189515\'>(+" + _loc10_.toString() + ")</font>";
+                     _loc7_ = _loc7_ + " <font color=\'#00db00\'>(+" + _loc10_.toString() + ")</font>";
                   }
                   else if(_loc10_ < 0)
                   {
-                     _loc7_ = _loc7_ + " <font color=\'#FF0000\'>(" + _loc10_.toString() + ")</font>";
+                     _loc7_ = _loc7_ + " <font color=\'#ee0000\'>(" + _loc10_.toString() + ")</font>";
                   }
                }
                _loc2_.ArmorRatingValue.textAutoSize = "shrink";
                _loc2_.ArmorRatingValue.html = true;
                _loc2_.ArmorRatingValue.SetText(_loc7_,true);
+               this.updateFrostfallValues(a_itemUpdateObj);
                _loc6_ = this._playerInfoObj.warmth != undefined ? Math.floor(this._playerInfoObj.warmth).toString() : "0";
                if(a_itemUpdateObj.warmthChange != undefined)
                {
                   _loc9_ = Math.round(a_itemUpdateObj.warmthChange);
                   if(_loc9_ > 0)
                   {
-                     _loc6_ = _loc6_ + " <font color=\'#189515\'>(+" + _loc9_.toString() + ")</font>";
+                     _loc6_ = _loc6_ + " <font color=\'#00db00\'>(+" + _loc9_.toString() + ")</font>";
                   }
                   else if(_loc9_ < 0)
                   {
-                     _loc6_ = _loc6_ + " <font color=\'#FF0000\'>(" + _loc9_.toString() + ")</font>";
+                     _loc6_ = _loc6_ + " <font color=\'#ee0000\'>(" + _loc9_.toString() + ")</font>";
                   }
                }
-               _loc2_.WarmthRatingLabel._visible = this._playerInfoObj.warmth != undefined;
-               _loc2_.WarmthRatingValue._visible = this._playerInfoObj.warmth != undefined;
+               _loc2_.WarmthRatingLabel._visible = this._playerInfoObj.warmth != undefined && this._playerInfoObj.coverage == undefined && BottomBar.DISABLE_SM != "true";
+               _loc2_.WarmthRatingValue._visible = this._playerInfoObj.warmth != undefined && this._playerInfoObj.coverage == undefined && BottomBar.DISABLE_SM != "true";
                _loc2_.WarmthRatingValue.textAutoSize = "shrink";
                _loc2_.WarmthRatingValue.html = true;
                _loc2_.WarmthRatingValue.SetText(_loc6_,true);
@@ -115,11 +127,11 @@ class BottomBar extends MovieClip
                   _loc8_ = Math.round(a_itemUpdateObj.damageChange);
                   if(_loc8_ > 0)
                   {
-                     _loc5_ = _loc5_ + " <font color=\'#189515\'>(+" + _loc8_.toString() + ")</font>";
+                     _loc5_ = _loc5_ + " <font color=\'#00db00\'>(+" + _loc8_.toString() + ")</font>";
                   }
                   else if(_loc8_ < 0)
                   {
-                     _loc5_ = _loc5_ + " <font color=\'#FF0000\'>(" + _loc8_.toString() + ")</font>";
+                     _loc5_ = _loc5_ + " <font color=\'#ee0000\'>(" + _loc8_.toString() + ")</font>";
                   }
                }
                _loc2_.DamageValue.textAutoSize = "shrink";
@@ -178,7 +190,7 @@ class BottomBar extends MovieClip
             _loc2_.PlayerGoldValue.textAutoSize = "shrink";
             _loc2_.PlayerGoldValue.SetText(this._playerInfoObj.gold.toString());
             _loc2_.PlayerGoldLabel._x = _loc2_.PlayerGoldValue._x + _loc2_.PlayerGoldValue.getLineMetrics(0).x - _loc2_.PlayerGoldLabel._width;
-            _loc2_.CarryWeightValue._x = _loc2_.PlayerGoldLabel._x + _loc2_.PlayerGoldLabel.getLineMetrics(0).x - _loc2_.CarryWeightValue._width - 5;
+            _loc2_.CarryWeightValue._x = 634 - _loc2_.CarryWeightValue._width;
             _loc2_.CarryWeightLabel._x = _loc2_.CarryWeightValue._x + _loc2_.CarryWeightValue.getLineMetrics(0).x - _loc2_.CarryWeightLabel._width;
             if(_loc4_ === skyui.defines.Inventory.ICT_ARMOR)
             {
@@ -186,6 +198,7 @@ class BottomBar extends MovieClip
                _loc2_.ArmorRatingLabel._x = _loc2_.ArmorRatingValue._x + _loc2_.ArmorRatingValue.getLineMetrics(0).x - _loc2_.ArmorRatingLabel._width;
                _loc2_.WarmthRatingValue._x = _loc2_.ArmorRatingLabel._x + _loc2_.ArmorRatingLabel.getLineMetrics(0).x - _loc2_.WarmthRatingValue._width - 5;
                _loc2_.WarmthRatingLabel._x = _loc2_.WarmthRatingValue._x + _loc2_.WarmthRatingValue.getLineMetrics(0).x - _loc2_.WarmthRatingLabel._width;
+               this.updateFrostfallElementPositions();
             }
             else if(_loc4_ === skyui.defines.Inventory.ICT_WEAPON)
             {
@@ -228,18 +241,18 @@ class BottomBar extends MovieClip
       }
       else if(a_goldDelta >= 0)
       {
-         _loc2_.PlayerGoldValue.SetText(a_playerGold.toString() + " <font color=\'#189515\'>(+" + a_goldDelta.toString() + ")</font>",true);
+         _loc2_.PlayerGoldValue.SetText(a_playerGold.toString() + " <font color=\'#00db00\'>(+" + a_goldDelta.toString() + ")</font>",true);
       }
       else
       {
-         _loc2_.PlayerGoldValue.SetText(a_playerGold.toString() + " <font color=\'#FF0000\'>(" + a_goldDelta.toString() + ")</font>",true);
+         _loc2_.PlayerGoldValue.SetText(a_playerGold.toString() + " <font color=\'#ee0000\'>(" + a_goldDelta.toString() + ")</font>",true);
       }
       _loc2_.VendorGoldValue.textAutoSize = "shrink";
       _loc2_.VendorGoldValue.SetText(a_vendorGold.toString());
       _loc2_.VendorGoldLabel._x = _loc2_.VendorGoldValue._x + _loc2_.VendorGoldValue.getLineMetrics(0).x - _loc2_.VendorGoldLabel._width;
       _loc2_.PlayerGoldValue._x = _loc2_.VendorGoldLabel._x + _loc2_.VendorGoldLabel.getLineMetrics(0).x - _loc2_.PlayerGoldValue._width - 10;
       _loc2_.PlayerGoldLabel._x = _loc2_.PlayerGoldValue._x + _loc2_.PlayerGoldValue.getLineMetrics(0).x - _loc2_.PlayerGoldLabel._width;
-      _loc2_.CarryWeightValue._x = _loc2_.PlayerGoldLabel._x + _loc2_.PlayerGoldLabel.getLineMetrics(0).x - _loc2_.CarryWeightValue._width - 5;
+      _loc2_.CarryWeightValue._x = 634 - _loc2_.CarryWeightValue._width;
       _loc2_.CarryWeightLabel._x = _loc2_.CarryWeightValue._x + _loc2_.CarryWeightValue.getLineMetrics(0).x - _loc2_.CarryWeightLabel._width;
       this.updateBarterPerItemInfo(a_itemUpdateObj);
    }
@@ -278,11 +291,11 @@ class BottomBar extends MovieClip
                   _loc9_ = Math.round(a_itemUpdateObj.armorChange);
                   if(_loc9_ > 0)
                   {
-                     _loc6_ = _loc6_ + " <font color=\'#189515\'>(+" + _loc9_.toString() + ")</font>";
+                     _loc6_ = _loc6_ + " <font color=\'#00db00\'>(+" + _loc9_.toString() + ")</font>";
                   }
                   else if(_loc9_ < 0)
                   {
-                     _loc6_ = _loc6_ + " <font color=\'#FF0000\'>(" + _loc9_.toString() + ")</font>";
+                     _loc6_ = _loc6_ + " <font color=\'#ee0000\'>(" + _loc9_.toString() + ")</font>";
                   }
                }
                _loc2_.ArmorRatingValue.textAutoSize = "shrink";
@@ -290,17 +303,19 @@ class BottomBar extends MovieClip
                _loc2_.ArmorRatingValue.SetText(_loc6_,true);
                _loc2_.ArmorRatingValue._x = _loc2_.CarryWeightLabel._x + _loc2_.CarryWeightLabel.getLineMetrics(0).x - _loc2_.ArmorRatingValue._width - 5;
                _loc2_.ArmorRatingLabel._x = _loc2_.ArmorRatingValue._x + _loc2_.ArmorRatingValue.getLineMetrics(0).x - _loc2_.ArmorRatingLabel._width;
+               this.updateFrostfallValues(a_itemUpdateObj);
+               this.updateFrostfallElementPositions();
                _loc5_ = Math.floor(this._playerInfoObj.warmth).toString();
                if(a_itemUpdateObj.warmthChange != undefined)
                {
                   _loc8_ = Math.round(a_itemUpdateObj.warmthChange);
                   if(_loc8_ > 0)
                   {
-                     _loc5_ = _loc5_ + " <font color=\'#189515\'>(+" + _loc8_.toString() + ")</font>";
+                     _loc5_ = _loc5_ + " <font color=\'#00db00\'>(+" + _loc8_.toString() + ")</font>";
                   }
                   else if(_loc8_ < 0)
                   {
-                     _loc5_ = _loc5_ + " <font color=\'#FF0000\'>(" + _loc8_.toString() + ")</font>";
+                     _loc5_ = _loc5_ + " <font color=\'#ee0000\'>(" + _loc8_.toString() + ")</font>";
                   }
                }
                _loc2_.WarmthRatingLabel._visible = this._playerInfoObj.warmth != undefined;
@@ -319,11 +334,11 @@ class BottomBar extends MovieClip
                   _loc7_ = Math.round(a_itemUpdateObj.damageChange);
                   if(_loc7_ > 0)
                   {
-                     _loc4_ = _loc4_ + " <font color=\'#189515\'>(+" + _loc7_.toString() + ")</font>";
+                     _loc4_ = _loc4_ + " <font color=\'#00db00\'>(+" + _loc7_.toString() + ")</font>";
                   }
                   else if(_loc7_ < 0)
                   {
-                     _loc4_ = _loc4_ + " <font color=\'#FF0000\'>(" + _loc7_.toString() + ")</font>";
+                     _loc4_ = _loc4_ + " <font color=\'#ee0000\'>(" + _loc7_.toString() + ")</font>";
                   }
                }
                _loc2_.DamageValue.textAutoSize = "shrink";
@@ -372,5 +387,141 @@ class BottomBar extends MovieClip
       _loc2_.SkillLevelNext.SetText(a_levelStart + 1);
       _loc2_.LevelMeterInstance.gotoAndStop("Pause");
       this._levelMeter.SetPercent(a_levelPercent);
+   }
+   function updateFrostfallWarmth(warmth)
+   {
+      this._currentTotalWarmth = warmth;
+      this.updateFrostfallWarmthFromStoredValues();
+      this.updateFrostfallElementPositions();
+   }
+   function updateFrostfallCoverage(coverage)
+   {
+      this._currentTotalCoverage = coverage;
+      this.updateFrostfallCoverageFromStoredValues();
+      this.updateFrostfallElementPositions();
+   }
+   function updateFrostfallElementPositions()
+   {
+      var _loc2_ = this.playerInfoCard;
+      _loc2_.RainProtectionValue._x = _loc2_.ArmorRatingLabel._x + _loc2_.ArmorRatingLabel.getLineMetrics(0).x - _loc2_.RainProtectionValue._width - 5;
+      _loc2_.RainProtectionLabel._x = _loc2_.RainProtectionValue._x + _loc2_.RainProtectionValue.getLineMetrics(0).x - _loc2_.RainProtectionLabel._width;
+      _loc2_.ExposureProtectionValue._x = _loc2_.RainProtectionLabel._x + _loc2_.RainProtectionLabel.getLineMetrics(0).x - _loc2_.ExposureProtectionValue._width - 5;
+      _loc2_.ExposureProtectionLabel._x = _loc2_.ExposureProtectionValue._x + _loc2_.ExposureProtectionValue.getLineMetrics(0).x - _loc2_.ExposureProtectionLabel._width;
+   }
+   function updateFrostfallValues(a_itemUpdateObj)
+   {
+      var _loc2_ = this.playerInfoCard;
+      _loc2_.ExposureProtectionLabel._visible = this._currentTotalWarmth != undefined;
+      _loc2_.ExposureProtectionValue._visible = this._currentTotalWarmth != undefined;
+      _loc2_.RainProtectionLabel._visible = this._currentTotalWarmth != undefined;
+      _loc2_.RainProtectionValue._visible = this._currentTotalWarmth != undefined;
+      var _loc4_ = this._currentTotalWarmth.toString();
+      var _loc6_;
+      if(a_itemUpdateObj.currentArmorWarmth !== undefined)
+      {
+         _loc6_ = a_itemUpdateObj.warmth - a_itemUpdateObj.currentArmorWarmth;
+         if(_loc6_ > 0)
+         {
+            this._lastWarmthDelta = " <font color=\'#00db00\'>(+" + _loc6_.toString() + ")</font>";
+            _loc4_ += this._lastWarmthDelta;
+         }
+         else if(_loc6_ < 0)
+         {
+            this._lastWarmthDelta = " <font color=\'#ee0000\'>(" + _loc6_.toString() + ")</font>";
+            _loc4_ += this._lastWarmthDelta;
+         }
+         else
+         {
+            this._lastWarmthDelta = "";
+         }
+      }
+      _loc2_.ExposureProtectionValue.textAutoSize = "shrink";
+      _loc2_.ExposureProtectionValue.html = true;
+      _loc2_.ExposureProtectionValue.SetText(_loc4_,true);
+      var _loc3_ = this._currentTotalCoverage.toString();
+      var _loc5_;
+      if(a_itemUpdateObj.currentArmorCoverage !== undefined)
+      {
+         _loc5_ = a_itemUpdateObj.coverage - a_itemUpdateObj.currentArmorCoverage;
+         if(_loc5_ > 0)
+         {
+            this._lastCoverageDelta = " <font color=\'#00db00\'>(+" + _loc5_.toString() + ")</font>";
+            _loc3_ += this._lastCoverageDelta;
+         }
+         else if(_loc5_ < 0)
+         {
+            this._lastCoverageDelta = " <font color=\'#ee0000\'>(" + _loc5_.toString() + ")</font>";
+            _loc3_ += this._lastCoverageDelta;
+         }
+         else
+         {
+            this._lastCoverageDelta = "";
+         }
+      }
+      _loc2_.RainProtectionValue.textAutoSize = "shrink";
+      _loc2_.RainProtectionValue.html = true;
+      _loc2_.RainProtectionValue.SetText(_loc3_,true);
+   }
+   function updateFrostfallWarmthFromStoredValues()
+   {
+      var _loc3_ = this.playerInfoCard;
+      var _loc2_ = this._currentTotalWarmth.toString();
+      _loc2_ += this._lastWarmthDelta;
+      _loc3_.ExposureProtectionValue.textAutoSize = "shrink";
+      _loc3_.ExposureProtectionValue.html = true;
+      _loc3_.ExposureProtectionValue.SetText(_loc2_,true);
+   }
+   function updateFrostfallCoverageFromStoredValues()
+   {
+      var _loc3_ = this.playerInfoCard;
+      var _loc2_ = this._currentTotalCoverage.toString();
+      _loc2_ += this._lastCoverageDelta;
+      _loc3_.RainProtectionValue.textAutoSize = "shrink";
+      _loc3_.RainProtectionValue.html = true;
+      _loc3_.RainProtectionValue.SetText(_loc2_,true);
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = BottomBar.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = BottomBar.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = BottomBar.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return BottomBar.trim(_loc12_);
    }
 }

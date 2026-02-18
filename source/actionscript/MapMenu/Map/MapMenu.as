@@ -117,38 +117,47 @@ class Map.MapMenu
       {
          return undefined;
       }
-      var _loc6_ = 0;
-      var _loc3_ = this._nextCreateIndex * Map.MapMenu.CREATE_STRIDE;
-      var _loc8_ = this._markerList.length;
-      var _loc9_ = this.MarkerData.length;
-      var _loc4_;
-      var _loc5_;
-      var _loc7_;
-      var _loc2_;
-      while(this._nextCreateIndex < _loc8_ && _loc3_ < _loc9_ && _loc6_ < Map.MapMenu.MARKER_CREATE_PER_FRAME)
+      if(Map.MapMarker.REMOVEMARKERS == "true")
       {
-         _loc4_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_ICONTYPE];
-         _loc5_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_NAME];
-         _loc7_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_UNDISCOVERED];
-         _loc2_ = this._markerContainer.attachMovie("MapMarker","Marker" + this._nextCreateIndex,this._nextCreateIndex,{markerType:_loc4_,isUndiscovered:_loc7_});
-         this._markerList[this._nextCreateIndex] = _loc2_;
-         if(_loc4_ == this.PlayerLocationMarkerType)
+         return undefined;
+      }
+      var _loc2_ = 0;
+      var _loc3_ = this._nextCreateIndex * Map.MapMenu.CREATE_STRIDE;
+      var _loc4_ = this._markerList.length;
+      var _loc5_ = this.MarkerData.length;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(this._nextCreateIndex < _loc4_ && _loc3_ < _loc5_ && _loc2_ < Map.MapMenu.MARKER_CREATE_PER_FRAME)
+      {
+         _loc6_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_ICONTYPE];
+         _loc7_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_NAME];
+         _loc8_ = this.MarkerData[_loc3_ + Map.MapMenu.CREATE_UNDISCOVERED];
+         if(_loc6_ == this.PlayerLocationMarkerType && Map.MapMarker.NOPLAYERMARKER == "true")
          {
-            this.YouAreHereMarker = _loc2_.IconClip;
+            this._nextCreateIndex += 1;
+            break;
          }
-         _loc2_.index = this._nextCreateIndex;
-         _loc2_.label = _loc5_;
-         _loc2_.visible = false;
-         if(0 < _loc4_ && _loc4_ < Map.LocationFinder.TYPE_RANGE)
+         _loc9_ = this._markerContainer.attachMovie("MapMarker","Marker" + this._nextCreateIndex,this._nextCreateIndex,{markerType:_loc6_,isUndiscovered:_loc8_});
+         this._markerList[this._nextCreateIndex] = _loc9_;
+         if(_loc6_ == this.PlayerLocationMarkerType)
          {
-            this._locationFinder.list.entryList.push(_loc2_);
+            this.YouAreHereMarker = _loc9_.IconClip;
          }
-         _loc6_ = _loc6_ + 1;
-         this._nextCreateIndex = this._nextCreateIndex + 1;
+         _loc9_.index = this._nextCreateIndex;
+         _loc9_.label = _loc7_;
+         _loc9_.visible = false;
+         if(0 < _loc6_ && _loc6_ < Map.LocationFinder.TYPE_RANGE)
+         {
+            this._locationFinder.list.entryList.push(_loc9_);
+         }
+         _loc2_ += 1;
+         this._nextCreateIndex += 1;
          _loc3_ += Map.MapMenu.CREATE_STRIDE;
       }
       this._locationFinder.list.InvalidateData();
-      if(this._nextCreateIndex >= _loc8_)
+      if(this._nextCreateIndex >= _loc4_)
       {
          this._locationFinder.setLoading(false);
          this._nextCreateIndex = -1;
@@ -211,6 +220,7 @@ class Map.MapMenu
    }
    function SetPlatform(a_platform, a_bPS3Switch)
    {
+      gfx.io.GameDelegate.call("PlaySound",["UIMenuBladeOpenSD"]);
       if(a_platform == Shared.ButtonChange.PLATFORM_PC)
       {
          this._localMapControls = {keyCode:38};
@@ -263,9 +273,9 @@ class Map.MapMenu
       {
          return true;
       }
-      if(this._platform == Shared.ButtonChange.PLATFORM_PC || skse.version != undefined)
+      if(this._platform == Shared.ButtonChange.PLATFORM_PC)
       {
-         if(Shared.GlobalFunc.IsKeyPressed(details) && (details.skseKeycode == this._findLocControls.keyCode))
+         if(Shared.GlobalFunc.IsKeyPressed(details) && details.skseKeycode == 33)
          {
             this.LocalMapMenu.showLocationFinder();
          }
@@ -337,7 +347,7 @@ class Map.MapMenu
       this._journalButton.disabled = a_bGamepad;
       this._playerLocButton.disabled = a_bGamepad;
       this._findLocButton.disabled = a_bGamepad;
-      this._findLocButton.visible = (skse.version == undefined) ? !a_bGamepad : a_bGamepad;
+      this._findLocButton.visible = !a_bGamepad;
       this._searchButton.visible = false;
       _loc2_.updateButtons(true);
    }

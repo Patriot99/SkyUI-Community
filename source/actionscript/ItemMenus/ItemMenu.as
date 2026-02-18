@@ -4,6 +4,8 @@ class ItemMenu extends MovieClip
    var _bPlayBladeSound;
    var _cancelControls;
    var _config;
+   var _fetchedChangeRanges;
+   var _fetchedRanges;
    var _platform;
    var _searchControls;
    var _searchKey;
@@ -62,6 +64,9 @@ class ItemMenu extends MovieClip
       this.inventoryLists.itemList.addEventListener("itemPress",this,"onItemSelect");
       this.itemCard.addEventListener("quantitySelect",this,"onQuantityMenuSelect");
       this.itemCard.addEventListener("subMenuAction",this,"onItemCardSubMenuAction");
+      this._fetchedRanges = [];
+      this._fetchedChangeRanges = [];
+      this.itemCard.currentList = this.inventoryLists.itemList.entryList;
       this.positionFixedElements();
       this.itemCard._visible = false;
       this.navPanel.hideButtons();
@@ -156,10 +161,26 @@ class ItemMenu extends MovieClip
    }
    function UpdatePlayerInfo(aUpdateObj)
    {
+      var _loc3_ = this.inventoryLists.itemList.selectedEntry;
+      if(_loc3_.coverage !== undefined && _loc3_.warmth !== undefined)
+      {
+         aUpdateObj.warmth = _loc3_.warmth;
+         aUpdateObj.coverage = _loc3_.coverage;
+         aUpdateObj.currentArmorWarmth = _loc3_.currentArmorWarmth;
+         aUpdateObj.currentArmorCoverage = _loc3_.currentArmorCoverage;
+      }
       this.bottomBar.UpdatePlayerInfo(aUpdateObj,this.itemCard.itemInfo);
    }
    function UpdateItemCardInfo(aUpdateObj)
    {
+      var _loc3_ = this.inventoryLists.itemList.selectedEntry;
+      if(_loc3_.coverage !== undefined && _loc3_.warmth !== undefined)
+      {
+         aUpdateObj.warmth = _loc3_.warmth;
+         aUpdateObj.coverage = _loc3_.coverage;
+         aUpdateObj.currentArmorWarmth = _loc3_.currentArmorWarmth;
+         aUpdateObj.currentArmorCoverage = _loc3_.currentArmorCoverage;
+      }
       this.itemCard.itemInfo = aUpdateObj;
       this.bottomBar.updatePerItemInfo(aUpdateObj);
    }
@@ -268,6 +289,24 @@ class ItemMenu extends MovieClip
    }
    function onItemHighlightChange(event)
    {
+      this.itemCard.currentListIndex = event.index;
+      var _loc2_ = Math.floor(event.index / 5);
+      var _loc5_;
+      var _loc4_;
+      if(this._fetchedRanges.indexOf(_loc2_) === -1 || this._fetchedRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc5_ = _loc2_ * 5;
+         _loc4_ = _loc2_ * 5 + 4;
+         this.FetchProtectionDataForList(event.target.itemList._entryList,_loc5_,_loc4_);
+         this._fetchedRanges.push(_loc2_);
+      }
+      if(this._fetchedChangeRanges.indexOf(_loc2_) === -1 || this._fetchedChangeRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc5_ = _loc2_ * 5;
+         _loc4_ = _loc2_ * 5 + 4;
+         this.FetchChangeDataForList(this.inventoryLists.itemList.entryList,_loc5_,_loc4_);
+         this._fetchedChangeRanges.push(_loc2_);
+      }
       if(event.index != -1)
       {
          if(!this._bItemCardFadedIn)
@@ -499,5 +538,127 @@ class ItemMenu extends MovieClip
    }
    function updateBottomBar(a_bSelected)
    {
+   }
+   function FetchProtectionDataForList(entryList, rangeMin, rangeMax)
+   {
+      var _loc2_ = rangeMin;
+      var _loc3_;
+      while(_loc2_ <= rangeMax)
+      {
+         _loc3_ = entryList[_loc2_];
+         if(_loc3_.formType === 26)
+         {
+            this.getEntryProtectionData(_loc3_.text,_loc2_,Number(_loc3_.formId));
+         }
+         _loc2_ = _loc2_ + 1;
+      }
+   }
+   function FetchChangeDataForList(entryList, rangeMin, rangeMax)
+   {
+      var _loc2_ = rangeMin;
+      var _loc3_;
+      while(_loc2_ <= rangeMax)
+      {
+         _loc3_ = entryList[_loc2_];
+         if(_loc3_.formType === 26)
+         {
+            this.getEntryChangeData(_loc3_.text,_loc2_,Number(_loc3_.formId));
+         }
+         _loc2_ = _loc2_ + 1;
+      }
+   }
+   function setEntryProtectionData()
+   {
+      var _loc8_ = arguments[0];
+      var _loc9_ = arguments[1];
+      var _loc7_ = arguments[2];
+      var _loc5_ = this.inventoryLists.itemList.entryList[_loc8_];
+      _loc5_.warmth = _loc9_;
+      _loc5_.coverage = _loc7_;
+      var _loc4_ = this.inventoryLists.itemList.selectedEntry;
+      var _loc6_;
+      var _loc3_;
+      if(_loc4_.formType === 26)
+      {
+         _loc6_ = _loc4_.itemIndex;
+         _loc3_ = this.inventoryLists.itemList.entryList[_loc6_];
+         if(_loc3_.warmth !== undefined && _loc3_.coverage !== undefined)
+         {
+            this.itemCard.ForceProtectionDisplay(_loc3_.warmth,_loc3_.coverage);
+            if(_loc3_.currentArmorWarmth !== undefined && _loc3_.currentArmorCoverage !== undefined)
+            {
+               this.bottomBar.updateFrostfallValues(_loc4_);
+               this.bottomBar.updateFrostfallElementPositions();
+            }
+         }
+      }
+   }
+   function setEntryChangeData()
+   {
+      var _loc7_ = arguments[0];
+      var _loc9_ = arguments[1];
+      var _loc8_ = arguments[2];
+      var _loc4_ = this.inventoryLists.itemList.entryList[_loc7_];
+      _loc4_.currentArmorWarmth = _loc9_;
+      _loc4_.currentArmorCoverage = _loc8_;
+      var _loc3_ = this.inventoryLists.itemList.selectedEntry;
+      var _loc6_;
+      var _loc5_;
+      if(_loc3_.formType === 26)
+      {
+         _loc6_ = _loc3_.itemIndex;
+         _loc5_ = this.inventoryLists.itemList.entryList[_loc6_];
+         if(_loc5_.currentArmorWarmth !== undefined && _loc5_.currentArmorCoverage !== undefined)
+         {
+            this.bottomBar.updateFrostfallValues(_loc3_);
+            this.bottomBar.updateFrostfallElementPositions();
+         }
+      }
+   }
+   function setEntryProtectionDataOnProcess(entryIndex)
+   {
+      this.itemCard.currentListIndex = entryIndex;
+      var _loc2_ = Math.floor(entryIndex / 5);
+      var _loc4_;
+      var _loc3_;
+      if(this._fetchedRanges.indexOf(_loc2_) === -1 || this._fetchedRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc4_ = _loc2_ * 5;
+         _loc3_ = _loc2_ * 5 + 4;
+         this.FetchProtectionDataForList(this.inventoryLists.itemList.entryList,_loc4_,_loc3_);
+         this._fetchedRanges.push(_loc2_);
+      }
+   }
+   function setEntryChangeDataOnProcess(entryIndex)
+   {
+      this.itemCard.currentListIndex = entryIndex;
+      var _loc2_ = Math.floor(entryIndex / 5);
+      var _loc4_;
+      var _loc3_;
+      if(this._fetchedChangeRanges.indexOf(_loc2_) === -1 || this._fetchedChangeRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc4_ = _loc2_ * 5;
+         _loc3_ = _loc2_ * 5 + 4;
+         this.FetchChangeDataForList(this.inventoryLists.itemList.entryList,_loc4_,_loc3_);
+         this._fetchedChangeRanges.push(_loc2_);
+      }
+   }
+   function getEntryProtectionData(entryName, entryIndex, formId)
+   {
+      skse.SendModEvent("Frost_OnSkyUIInvListGetEntryProtectionData",entryName,entryIndex,formId);
+   }
+   function getEntryChangeData(entryName, entryIndex, formId)
+   {
+      skse.SendModEvent("Frost_OnSkyUIInvListGetEntryChangeData",entryName,entryIndex,formId);
+   }
+   function onFrostfallInvalidateFetchedRangesOnProcess()
+   {
+      this._fetchedRanges = [];
+      this.setEntryProtectionDataOnProcess(this.inventoryLists.itemList.selectedIndex);
+   }
+   function onFrostfallInvalidateChangeRanges()
+   {
+      this._fetchedChangeRanges = [];
+      this.setEntryChangeDataOnProcess(this.inventoryLists.itemList.selectedIndex);
    }
 }

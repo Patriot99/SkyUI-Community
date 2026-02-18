@@ -65,20 +65,233 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
       }
       switch(a_entryObject.weightClass)
       {
-         default:
-            if(a_entryObject.keywords != undefined)
-            {
-               if(a_entryObject.keywords.VendorItemClothing != undefined)
-               {
-                  a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_CLOTHING;
-               }
-               else if(a_entryObject.keywords.VendorItemJewelry != undefined)
-               {
-                  a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
-               }
-            }
          case skyui.defines.Armor.WEIGHT_LIGHT:
+            if(a_entryObject.keywords.ArmorJewelry != undefined)
+            {
+               if(a_entryObject.keywords.ClothingRing != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarrings != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarCuffs != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingChoker != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingHighNecklace != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingBracelet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingCrown != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ArmorTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.JewelryTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingAmulet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingCirclet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               return;
+            }
+            return;
+            break;
          case skyui.defines.Armor.WEIGHT_HEAVY:
+            if(a_entryObject.keywords.ArmorJewelry != undefined)
+            {
+               if(a_entryObject.keywords.ClothingRing != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarrings != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarCuffs != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingChoker != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingHighNecklace != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingBracelet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingCrown != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ArmorTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.JewelryTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingAmulet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingCirclet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               return;
+            }
+            return;
+            break;
+         default:
+            if(a_entryObject.keywords == undefined)
+            {
+               return;
+            }
+            if(a_entryObject.keywords.VendorItemClothing != undefined)
+            {
+               a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_CLOTHING;
+               if(a_entryObject.keywords.ClothingPouch != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_POUCH;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.CDC_StorageHelpersToken != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_POUCH;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               return;
+            }
+            if(a_entryObject.keywords.ArmorJewelry != undefined)
+            {
+               a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
+               if(a_entryObject.keywords.ClothingRing != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarrings != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingEarCuffs != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_RING;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingChoker != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingHighNecklace != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_AMULET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingBracelet != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ClothingCrown != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.ArmorTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               if(a_entryObject.keywords.JewelryTorc != undefined)
+               {
+                  a_entryObject.subType = skyui.defines.Armor.EQUIP_CIRCLET;
+                  a_entryObject.partMask = undefined;
+                  return undefined;
+               }
+               return;
+            }
             return;
       }
    }
@@ -182,7 +395,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processArmorBaseId(a_entryObject)
    {
-      switch(a_entryObject.baseId)
+      switch(a_entryObject.formId)
       {
          case skyui.defines.Form.BASEID_CLOTHESWEDDINGWREATH:
             a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
@@ -292,13 +505,46 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
       switch(a_entryObject.subType)
       {
          case skyui.defines.Armor.EQUIP_AMULET:
-            a_entryObject.iconLabel = "armor_amulet";
+            if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_LIGHT)
+            {
+               a_entryObject.iconLabel = "armor_amulet_light";
+            }
+            else if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_HEAVY)
+            {
+               a_entryObject.iconLabel = "armor_amulet_heavy";
+            }
+            else
+            {
+               a_entryObject.iconLabel = "armor_amulet";
+            }
             break;
          case skyui.defines.Armor.EQUIP_RING:
-            a_entryObject.iconLabel = "armor_ring";
+            if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_LIGHT)
+            {
+               a_entryObject.iconLabel = "armor_ring_light";
+            }
+            else if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_HEAVY)
+            {
+               a_entryObject.iconLabel = "armor_ring_heavy";
+            }
+            else
+            {
+               a_entryObject.iconLabel = "armor_ring";
+            }
             break;
          case skyui.defines.Armor.EQUIP_CIRCLET:
-            a_entryObject.iconLabel = "armor_circlet";
+            if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_LIGHT)
+            {
+               a_entryObject.iconLabel = "armor_circlet_light";
+            }
+            else if(a_entryObject.weightClass == skyui.defines.Armor.WEIGHT_HEAVY)
+            {
+               a_entryObject.iconLabel = "armor_circlet_heavy";
+            }
+            else
+            {
+               a_entryObject.iconLabel = "armor_circlet";
+            }
          case skyui.defines.Armor.EQUIP_EARS:
          default:
             return;
@@ -331,6 +577,9 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Armor.EQUIP_SHIELD:
             a_entryObject.iconLabel = "clothing_shield";
+            break;
+         case skyui.defines.Armor.EQUIP_POUCH:
+            a_entryObject.iconLabel = "misc_goldsack";
          case skyui.defines.Armor.EQUIP_EARS:
          default:
             return;
@@ -338,6 +587,61 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processWeaponType(a_entryObject)
    {
+      if(a_entryObject.keywords.WeapTypeSpear != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SPEAR;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeJavelin != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_JAVELIN;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypePike != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_PIKE;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeHalberd != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_HALBERD;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeRapier != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_RAPIER;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeQuarterstaff != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_QUARTERSTAFF;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeClaw != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_CLAW;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeWhip != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_WHIP;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeKatana != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_KATANA;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeScythe != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SCYTHE;
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeGun != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_GUN;
+         return undefined;
+      }
       a_entryObject.subType = null;
       switch(a_entryObject.weaponType)
       {
@@ -390,7 +694,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processWeaponBaseId(a_entryObject)
    {
-      switch(a_entryObject.baseId)
+      switch(a_entryObject.formId)
       {
          case skyui.defines.Form.BASEID_WEAPPICKAXE:
          case skyui.defines.Form.BASEID_SSDROCKSPLINTERPICKAXE:
@@ -444,6 +748,39 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Weapon.TYPE_WOODAXE:
             a_entryObject.iconLabel = "weapon_woodaxe";
+            break;
+         case skyui.defines.Weapon.TYPE_SPEAR:
+            a_entryObject.iconLabel = "weapon_spear";
+            break;
+         case skyui.defines.Weapon.TYPE_JAVELIN:
+            a_entryObject.iconLabel = "weapon_javelin";
+            break;
+         case skyui.defines.Weapon.TYPE_PIKE:
+            a_entryObject.iconLabel = "weapon_pike";
+            break;
+         case skyui.defines.Weapon.TYPE_HALBERD:
+            a_entryObject.iconLabel = "weapon_halberd";
+            break;
+         case skyui.defines.Weapon.TYPE_RAPIER:
+            a_entryObject.iconLabel = "weapon_rapier";
+            break;
+         case skyui.defines.Weapon.TYPE_QUARTERSTAFF:
+            a_entryObject.iconLabel = "weapon_quarterstaff";
+            break;
+         case skyui.defines.Weapon.TYPE_CLAW:
+            a_entryObject.iconLabel = "weapon_claw";
+            break;
+         case skyui.defines.Weapon.TYPE_WHIP:
+            a_entryObject.iconLabel = "weapon_whip";
+            break;
+         case skyui.defines.Weapon.TYPE_KATANA:
+            a_entryObject.iconLabel = "weapon_katana";
+            break;
+         case skyui.defines.Weapon.TYPE_SCYTHE:
+            a_entryObject.iconLabel = "weapon_scythe";
+            break;
+         case skyui.defines.Weapon.TYPE_GUN:
+            a_entryObject.iconLabel = "weapon_gun";
          case skyui.defines.Weapon.TYPE_MELEE:
          default:
             return;
@@ -587,6 +924,24 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Actor.AV_DESTRUCTION:
             a_entryObject.iconLabel = "default_destruction";
+            if(a_entryObject.resistance == undefined || a_entryObject.resistance == skyui.defines.Actor.AV_NONE)
+            {
+               return undefined;
+            }
+            switch(a_entryObject.resistance)
+            {
+               case skyui.defines.Actor.AV_FIRERESIST:
+                  a_entryObject.iconLabel = "magic_fire";
+                  a_entryObject.iconColor = 13055542;
+                  break;
+               case skyui.defines.Actor.AV_ELECTRICRESIST:
+                  a_entryObject.iconLabel = "magic_shock";
+                  a_entryObject.iconColor = 15379200;
+                  break;
+               case skyui.defines.Actor.AV_FROSTRESIST:
+                  a_entryObject.iconLabel = "magic_frost";
+                  a_entryObject.iconColor = 2096127;
+            }
             break;
          case skyui.defines.Actor.AV_ILLUSION:
             a_entryObject.iconLabel = "default_illusion";

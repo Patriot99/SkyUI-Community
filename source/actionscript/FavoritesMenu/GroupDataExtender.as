@@ -136,6 +136,7 @@ class GroupDataExtender implements skyui.components.list.IListProcessor
          _loc5_ = this.iconData[_loc2_];
          if(_loc5_)
          {
+            this._groupButtons[_loc2_].groupNum._y = 33;
             _loc3_ = this._itemIdMap[_loc5_];
             if(_loc3_ != null)
             {
@@ -149,6 +150,7 @@ class GroupDataExtender implements skyui.components.list.IListProcessor
          }
          else
          {
+            this._groupButtons[_loc2_].groupNum._y = 14;
             _loc4_ = "none";
          }
          this._groupButtons[_loc2_].itemIcon.gotoAndStop(_loc4_);

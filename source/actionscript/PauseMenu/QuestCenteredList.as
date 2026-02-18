@@ -9,7 +9,7 @@ class QuestCenteredList extends Shared.CenteredScrollingList
       super.SetEntryText(aEntryClip,aEntryObject);
       if(aEntryClip.textField != undefined)
       {
-         aEntryClip.textField.textColor = aEntryObject.completed != true ? 16777215 : 6316128;
+         aEntryClip.textField.textColor = aEntryObject.completed != true ? 16764057 : 56320;
       }
       if(aEntryClip.EquipIcon != undefined)
       {

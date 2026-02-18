@@ -2,6 +2,8 @@ class CraftingMenu extends MovieClip
 {
    var AdditionalDescription;
    var AdditionalDescriptionHolder;
+   var BestRecipeDescription;
+   var BestRecipeName;
    var BottomBarInfo;
    var ButtonText;
    var CategoryList;
@@ -18,6 +20,7 @@ class CraftingMenu extends MovieClip
    var _acceptControls;
    var _cancelControls;
    var _config;
+   var _fetchedRanges;
    var _searchControls;
    var _searchKey;
    var _sortColumnControls;
@@ -35,6 +38,7 @@ class CraftingMenu extends MovieClip
    static var EXIT_BUTTON = 1;
    static var AUX_BUTTON = 2;
    static var CRAFT_BUTTON = 3;
+   static var BG_ALPHA = 100;
    static var SUBTYPE_NAMES = ["ConstructibleObject","Smithing","EnchantConstruct","EnchantDestruct","Alchemy"];
    var _bCanCraft = false;
    var _bCanFadeItemInfo = true;
@@ -53,6 +57,12 @@ class CraftingMenu extends MovieClip
       Mouse.addListener(this);
       skyui.util.ConfigManager.registerLoadCallback(this,"onConfigLoad");
       this.navPanel = this.BottomBarInfo.buttonPanel;
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         CraftingMenu.BG_ALPHA = parseFloat(CraftingMenu.ParseConfig(str,"fInventoryAlpha"));
+      };
    }
    function get bCanCraft()
    {
@@ -84,6 +94,50 @@ class CraftingMenu extends MovieClip
          this.AdditionalDescription.text = "";
       }
    }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = CraftingMenu.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = CraftingMenu.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = CraftingMenu.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return CraftingMenu.trim(_loc12_);
+   }
    function Initialize()
    {
       skse.ExtendData(true);
@@ -102,6 +156,13 @@ class CraftingMenu extends MovieClip
       this.MenuNameHolder._visible = false;
       this.MenuDescription = this.MenuDescriptionHolder.MenuDescription;
       this.MenuDescription.autoSize = "center";
+      this.BestRecipeName = this.MenuDescriptionHolder.BestRecipeName;
+      this.BestRecipeDescription = this.MenuDescriptionHolder.BestRecipeDescription;
+      this.BestRecipeName.autoSize = "center";
+      this.BestRecipeDescription.autoSize = "center";
+      this.BestRecipeName.textAutoSize = "shrink";
+      this.BestRecipeDescription.textAutoSize = "shrink";
+      this.MenuDescriptionHolder.RecipeDescription.autosize = "center";
       this.CategoryList.InitExtensions(this._subtypeName);
       gfx.managers.FocusHandler.instance.setFocus(this.CategoryList,0);
       this.CategoryList.addEventListener("itemHighlightChange",this,"onItemHighlightChange");
@@ -110,6 +171,8 @@ class CraftingMenu extends MovieClip
       this.CategoryList.addEventListener("categoryChange",this,"onCategoryListChange");
       this.ItemList = this.CategoryList.itemList;
       this.ItemList.addEventListener("itemPress",this,"onItemSelect");
+      this._fetchedRanges = [];
+      this.ItemInfo.currentList = this.ItemList.entryList;
       this.ExitMenuRect.onPress = function()
       {
          gfx.io.GameDelegate.call("CloseMenu",[]);
@@ -127,6 +190,7 @@ class CraftingMenu extends MovieClip
    }
    function UpdateButtonText()
    {
+      this.InventoryLists.panelContainer.ListBackground._alpha = CraftingMenu.BG_ALPHA;
       this.navPanel.clearButtons();
       if(this.getItemShown())
       {
@@ -239,7 +303,7 @@ class CraftingMenu extends MovieClip
       while(_loc3_ < aIngredients.length)
       {
          _loc2_ = aIngredients[_loc3_];
-         _loc9_.color = _loc2_.PlayerCount >= _loc2_.RequiredCount ? 16777215 : 7829367;
+         _loc9_.color = _loc2_.PlayerCount >= _loc2_.RequiredCount ? 16764057 : 7829367;
          _loc4_.setNewTextFormat(_loc9_);
          _loc6_ = "";
          if(_loc2_.RequiredCount > 1)
@@ -256,6 +320,9 @@ class CraftingMenu extends MovieClip
          _loc3_ = _loc3_ + 1;
       }
       _loc4_.setNewTextFormat(_loc12_);
+      var _loc13_ = skse.plugins.alchemist.GetBestRecipeName(this.MenuDescription.text);
+      this.BestRecipeName.text = _loc13_ == undefined ? "" : _loc13_;
+      this.BestRecipeDescription.text = _loc13_ == undefined ? "" : skse.plugins.alchemist.GetBestRecipeDescription(this.MenuDescription.text);
    }
    function EditItemName(aInitialText, aMaxChars)
    {
@@ -363,25 +430,63 @@ class CraftingMenu extends MovieClip
       if(this._subtypeName == "EnchantConstruct")
       {
          _loc5_ = skyui.components.list.ListLayoutManager.createLayout(a_config.ListLayout,"EnchantListLayout");
+         this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_enchanting_BG.swf");
       }
       else if(this._subtypeName == "Smithing")
       {
          _loc5_ = skyui.components.list.ListLayoutManager.createLayout(a_config.ListLayout,"SmithingListLayout");
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftArmorSmithing.text.length) == this.MenuDescriptionHolder.CraftArmorSmithing.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_armorsmithing_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftWeaponSmithing.text.length) == this.MenuDescriptionHolder.CraftWeaponSmithing.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_weaponsmithing_BG.swf");
+         }
       }
       else if(this._subtypeName == "ConstructibleObject")
       {
          _loc5_ = skyui.components.list.ListLayoutManager.createLayout(a_config.ListLayout,"ConstructListLayout");
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftBlacksmith.text.length) == this.MenuDescriptionHolder.CraftBlacksmith.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_smithing_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftAnvil.text.length) == this.MenuDescriptionHolder.CraftAnvil.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_smithing_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftSmelter.text.length) == this.MenuDescriptionHolder.CraftSmelter.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_smelting_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftTanningRack.text.length) == this.MenuDescriptionHolder.CraftTanningRack.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_tanning_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftCookingSpit.text.length) == this.MenuDescriptionHolder.CraftCookingSpit.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_cooking_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftCookingPot.text.length) == this.MenuDescriptionHolder.CraftCookingPot.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_cooking_BG.swf");
+         }
+         if(this.MenuDescriptionHolder.MenuDescription.text.substr(0,this.MenuDescriptionHolder.CraftPot.text.length) == this.MenuDescriptionHolder.CraftPot.text)
+         {
+            this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_cooking_BG.swf");
+         }
       }
       else
       {
          _loc5_ = skyui.components.list.ListLayoutManager.createLayout(a_config.ListLayout,"AlchemyListLayout");
+         this.InventoryLists.panelContainer.craftImage.loadMovie("deardiary_dm/inventory/craftingmenu_alchemy_BG.swf");
          _loc5_.entryWidth -= CraftingLists.SHORT_LIST_OFFSET;
       }
       this.ItemList.layout = _loc5_;
-      var _loc7_ = a_config.Input.controls.gamepad.prevColumn;
-      var _loc6_ = a_config.Input.controls.gamepad.nextColumn;
+      var _loc6_ = a_config.Input.controls.gamepad.prevColumn;
+      var _loc7_ = a_config.Input.controls.gamepad.nextColumn;
       var _loc8_ = a_config.Input.controls.gamepad.sortOrder;
-      this._sortColumnControls = [{keyCode:_loc7_},{keyCode:_loc6_}];
+      this._sortColumnControls = [{keyCode:_loc6_},{keyCode:_loc7_}];
       this._sortOrderControls = {keyCode:_loc8_};
       this._searchKey = a_config.Input.controls.pc.search;
       this._searchControls = {keyCode:this._searchKey};
@@ -399,6 +504,17 @@ class CraftingMenu extends MovieClip
    }
    function onItemHighlightChange(event)
    {
+      this.ItemInfo.currentListIndex = event.index;
+      var _loc2_ = Math.floor(event.index / 5);
+      var _loc5_;
+      var _loc4_;
+      if(this._fetchedRanges.indexOf(_loc2_) === -1 || this._fetchedRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc5_ = _loc2_ * 5;
+         _loc4_ = _loc2_ * 5 + 4;
+         this.FetchProtectionDataForList(event.target.itemList._entryList,_loc5_,_loc4_);
+         this._fetchedRanges.push(_loc2_);
+      }
       this.SetSelectedItem(event.index);
       this.FadeInfoCard(event.index == -1);
       this.UpdateButtonText();
@@ -507,5 +623,63 @@ class CraftingMenu extends MovieClip
       {
          this.onItemsListInputCatcherClick();
       }
+   }
+   function FetchProtectionDataForList(entryList, rangeMin, rangeMax)
+   {
+      var _loc2_ = rangeMin;
+      var _loc3_;
+      while(_loc2_ <= rangeMax)
+      {
+         _loc3_ = entryList[_loc2_];
+         if(_loc3_.formType === 26)
+         {
+            this.getEntryProtectionData(_loc3_.text,_loc2_,Number(_loc3_.formId));
+         }
+         _loc2_ = _loc2_ + 1;
+      }
+   }
+   function setEntryProtectionData()
+   {
+      var _loc8_ = arguments[0];
+      var _loc9_ = arguments[1];
+      var _loc7_ = arguments[2];
+      var _loc4_ = this.ItemList.entryList[_loc8_];
+      _loc4_.warmth = _loc9_;
+      _loc4_.coverage = _loc7_;
+      var _loc5_ = this.ItemList.selectedEntry;
+      var _loc6_;
+      var _loc3_;
+      if(_loc5_.formType === 26)
+      {
+         _loc6_ = _loc5_.itemIndex;
+         _loc3_ = this.ItemList.entryList[_loc6_];
+         if(_loc3_.warmth !== undefined && _loc3_.coverage !== undefined)
+         {
+            this.ItemInfo.ForceProtectionDisplay(_loc3_.warmth,_loc3_.coverage);
+         }
+      }
+   }
+   function setEntryProtectionDataOnProcess(entryIndex)
+   {
+      this.ItemInfo.currentListIndex = entryIndex;
+      var _loc2_ = Math.floor(entryIndex / 5);
+      var _loc4_;
+      var _loc3_;
+      if(this._fetchedRanges.indexOf(_loc2_) === -1 || this._fetchedRanges.indexOf(_loc2_) === undefined)
+      {
+         _loc4_ = _loc2_ * 5;
+         _loc3_ = _loc2_ * 5 + 4;
+         this.FetchProtectionDataForList(this.ItemList.entryList,_loc4_,_loc3_);
+         this._fetchedRanges.push(_loc2_);
+      }
+   }
+   function getEntryProtectionData(entryName, entryIndex, formId)
+   {
+      skse.SendModEvent("Frost_OnSkyUIInvListGetEntryProtectionData",entryName,entryIndex,formId);
+   }
+   function onFrostfallInvalidateFetchedRangesOnProcess()
+   {
+      this._fetchedRanges = [];
+      this.setEntryProtectionDataOnProcess(this.ItemList.selectedIndex);
    }
 }

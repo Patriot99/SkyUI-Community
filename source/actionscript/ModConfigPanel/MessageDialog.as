@@ -91,10 +91,10 @@ class MessageDialog extends OptionDialog
    function positionElements()
    {
       var _loc3_ = Math.max(75,this.textField.textHeight);
-      this.background._height = _loc3_ + 78;
+      this.background._height = _loc3_ * 1.6 + 78;
       var _loc2_ = - this.background._height / 2;
-      this.seperator._y = _loc2_ + this.background._height - 50;
-      this.buttonPanel._y = _loc2_ + this.background._height - 42;
-      this.textField._y = _loc2_ + 14 + (_loc3_ - this.textField.textHeight) / 2;
+      this.seperator._y = (_loc2_ + this.background._height) / 1.6 - 35;
+      this.buttonPanel._y = (_loc2_ + this.background._height) / 1.6 - 27;
+      this.textField._y = _loc2_ / 1.6 + (_loc3_ - this.textField.textHeight) / 2;
    }
 }

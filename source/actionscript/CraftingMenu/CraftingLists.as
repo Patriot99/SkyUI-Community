@@ -74,7 +74,7 @@ class CraftingLists extends MovieClip
          this.CategoriesList._visible = true;
          this.itemList.gotoAndStop("short");
          this.itemList.leftBorder = CraftingLists.SHORT_LIST_OFFSET;
-         this.itemList.listHeight = 560;
+         this.itemList.listHeight = 511;
       }
       else if(this._subtypeName == "ConstructibleObject")
       {
@@ -84,7 +84,7 @@ class CraftingLists extends MovieClip
       {
          this.panelContainer.gotoAndStop("no_categories");
          this.CategoriesList._visible = false;
-         this.itemList.listHeight = 560;
+         this.itemList.listHeight = 511;
       }
       var _loc2_ = new skyui.components.list.FilteredEnumeration(this.itemList.entryList);
       _loc2_.addFilter(this._typeFilter);

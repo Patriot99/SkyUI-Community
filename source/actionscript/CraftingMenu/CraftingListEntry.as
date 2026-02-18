@@ -131,7 +131,7 @@ class CraftingListEntry extends skyui.components.list.TabularListEntry
          {
             _loc1_ = new flash.geom.ColorTransform();
             _loc3_ = new flash.geom.Transform(MovieClip(_loc2_));
-            _loc1_.rgb = a_rgb != undefined ? a_rgb : 16777215;
+            _loc1_.rgb = a_rgb != undefined ? a_rgb : 16764057;
             _loc3_.colorTransform = _loc1_;
          }
       }

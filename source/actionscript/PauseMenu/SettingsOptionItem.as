@@ -85,6 +85,7 @@ class SettingsOptionItem extends MovieClip
             this.bSendChangeEvent = false;
             this.ScrollBar_mc.position = afNewValue * 20;
             this.bSendChangeEvent = true;
+            this.ScrollBar_mc.trackNew._height = 158;
             break;
          case 1:
             this.bSendChangeEvent = false;
@@ -110,9 +111,9 @@ class SettingsOptionItem extends MovieClip
    function set selected(abSelected)
    {
       this.textField._alpha = !abSelected ? 30 : 100;
-      this.ScrollBar_mc._alpha = !abSelected ? 30 : 100;
-      this.OptionStepper_mc._alpha = !abSelected ? 30 : 100;
-      this.CheckBox_mc._alpha = !abSelected ? 30 : 100;
+      this.ScrollBar_mc._alpha = !abSelected ? 45 : 100;
+      this.OptionStepper_mc._alpha = !abSelected ? 45 : 100;
+      this.CheckBox_mc._alpha = !abSelected ? 45 : 100;
    }
    function handleInput(details, pathToFocus)
    {

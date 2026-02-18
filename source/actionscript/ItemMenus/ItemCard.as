@@ -3,6 +3,10 @@ class ItemCard extends MovieClip
    var ActiveEffectTimeValue;
    var ApparelArmorValue;
    var ApparelEnchantedLabel;
+   var ApparelExposureLabel;
+   var ApparelRainProtectionLabel;
+   var ApparelWarmthLabel;
+   var ApparelWarmthValue;
    var BookDescriptionLabel;
    var ButtonRect;
    var ButtonRect_mc;
@@ -15,6 +19,7 @@ class ItemCard extends MovieClip
    var Enchanting_Background;
    var Enchanting_Slim_Background;
    var EnchantmentLabel;
+   var ExposureProtectionValue;
    var InputHandler;
    var ItemCardMeters;
    var ItemList;
@@ -35,6 +40,7 @@ class ItemCard extends MovieClip
    var PotionsLabel;
    var PrevFocus;
    var QuantitySlider_mc;
+   var RainProtectionValue;
    var SecsText;
    var ShoutCostValue;
    var ShoutEffectsLabel;
@@ -47,12 +53,26 @@ class ItemCard extends MovieClip
    var WeaponChargeMeter;
    var WeaponDamageValue;
    var WeaponEnchantedLabel;
+   var WeaponReachLabel;
+   var WeaponReachValue;
+   var WeaponSpeedLabel;
+   var WeaponSpeedValue;
+   var WeaponStaggerLabel;
+   var WeaponStaggerValue;
    var _bEditNameMode;
    var bFadedIn;
+   var background;
+   var currentList;
+   var currentListIndex;
    var dispatchEvent;
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
    static var SKYUI_VERSION_MINOR = 2;
+   static var BG_ALPHA = 100;
+   static var MOREHUDIE = 0;
+   static var SCR_SPEED = 1;
+   static var DISABLE_SM = "false";
+   static var WEAPON_ADDS = "false";
    static var SKYUI_VERSION_STRING = ItemCard.SKYUI_VERSION_MAJOR + "." + ItemCard.SKYUI_VERSION_MINOR + " SE";
    function ItemCard()
    {
@@ -67,6 +87,21 @@ class ItemCard extends MovieClip
       this.bFadedIn = false;
       this.InputHandler = undefined;
       this._bEditNameMode = false;
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         ItemCard.BG_ALPHA = parseFloat(ItemCard.ParseConfig(str,"fInventoryAlpha"));
+         ItemCard.SCR_SPEED = parseFloat(ItemCard.ParseConfig(str,"iFavScrollSpeed"));
+         ItemCard.DISABLE_SM = ItemCard.ParseConfig(str,"bDisableSM");
+         ItemCard.WEAPON_ADDS = ItemCard.ParseConfig(str,"bItemCardAdditions");
+      };
+      var _loc4_ = new LoadVars();
+      _loc4_.load("../SKSE/Plugins/AHZmoreHUDInventory.dll");
+      _loc4_.onData = function(str)
+      {
+         ItemCard.MOREHUDIE = str.length;
+      };
    }
    function get bEditNameMode()
    {
@@ -78,6 +113,10 @@ class ItemCard extends MovieClip
    }
    function SetupItemName(aPrevName)
    {
+      if(ItemCard.MOREHUDIE == 0)
+      {
+         this.background._alpha = ItemCard.BG_ALPHA;
+      }
       this.ItemName = this.ItemText.ItemTextField;
       if(this.ItemName != undefined)
       {
@@ -106,6 +145,50 @@ class ItemCard extends MovieClip
          this.ButtonRect_mc.CancelGamepadButton.SetPlatform(aiPlatform,abPS3Switch);
       }
       this.ItemList.SetPlatform(aiPlatform,abPS3Switch);
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc3_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ += 1;
+      }
+      while(str.charCodeAt(_loc3_) < 33)
+      {
+         _loc3_ -= 1;
+      }
+      return str.substring(_loc2_,_loc3_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = ItemCard.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = ItemCard.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = ItemCard.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return ItemCard.trim(_loc12_);
    }
    function onAcceptMouseClick()
    {
@@ -155,12 +238,63 @@ class ItemCard extends MovieClip
    {
       return this.LastUpdateObj;
    }
+   function replacestr(str, searchStr, replaceStr)
+   {
+      return str.split(searchStr).join(replaceStr);
+   }
+   function replaceF(str)
+   {
+      return this.replacestr(str,"FFFFFF","FFCC99");
+   }
+   function getTextSize(str)
+   {
+      var _loc2_;
+      var _loc3_;
+      var _loc4_;
+      if(str.indexOf("size=") != -1)
+      {
+         _loc2_ = str.indexOf("size=") + 6;
+         _loc3_ = str.slice(_loc2_);
+         _loc4_ = _loc3_.indexOf("\'");
+         return _loc3_.slice(0,_loc4_);
+      }
+      return "20";
+   }
+   function changeTextSize(str)
+   {
+      var _loc3_ = this.getTextSize(str);
+      var _loc4_ = _loc3_ - 1;
+      return this.replacestr(str,"size=\'" + _loc3_,"size=\'" + _loc4_);
+   }
+   function htmlAll(str)
+   {
+      var _loc3_ = this.getTextSize(str);
+      var _loc4_ = this.replacestr(str,"<font","</FONT1><font");
+      _loc4_ = this.replacestr(_loc4_,"</font>","</font><FONT1 size=\'" + _loc3_ + "\'>");
+      if(_loc4_.slice(0,5) != "<font")
+      {
+         _loc4_ = "<FONT1 size=\'" + _loc3_ + "\'>" + _loc4_;
+      }
+      if(_loc4_.slice(-5,5) != "font>")
+      {
+         _loc4_ += "</FONT1>";
+      }
+      return this.replacestr(_loc4_,"FONT1","font");
+   }
    function set itemInfo(aUpdateObj)
    {
       this.ItemCardMeters = new Array();
       var _loc3_ = this.ItemName != undefined ? this.ItemName.htmlText : "";
       var _loc4_ = aUpdateObj.type;
+      var _loc28_;
+      var _loc29_;
       var _loc5_;
+      var _loc20_;
+      var _loc21_;
+      var _loc24_;
+      var _loc25_;
+      var _loc26_;
+      var _loc27_;
       var _loc6_;
       var _loc7_;
       var _loc8_;
@@ -179,20 +313,47 @@ class ItemCard extends MovieClip
             {
                this.gotoAndStop("Apparel_Enchanted");
             }
+            this.ApparelWarmthLabel._visible = aUpdateObj.warmth != undefined && aUpdateObj.coverage == undefined && ItemCard.DISABLE_SM != "true";
+            this.ApparelWarmthValue._visible = aUpdateObj.warmth != undefined && aUpdateObj.coverage == undefined && ItemCard.DISABLE_SM != "true";
+            this.ApparelExposureLabel.text = this.currentList[this.currentListIndex].warmth !== undefined ? "$EXPPROT" : "";
+            this.ApparelRainProtectionLabel.text = this.currentList[this.currentListIndex].coverage !== undefined ? "$RAINPROT" : "";
             this.ApparelArmorValue.textAutoSize = "shrink";
             this.ApparelArmorValue.SetText(aUpdateObj.armor);
-            this.ApparelEnchantedLabel.textAutoSize = "shrink";
-            this.ApparelEnchantedLabel.htmlText = aUpdateObj.effects;
+            this.ApparelEnchantedLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc28_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc29_ = this.ApparelEnchantedLabel.textHeight;
+            while(_loc29_ > 112)
+            {
+               _loc28_ = this.changeTextSize(_loc28_);
+               this.ApparelEnchantedLabel.htmlText = _loc28_;
+               _loc29_ = this.ApparelEnchantedLabel.textHeight;
+            }
             this.SkillTextInstance.text = aUpdateObj.skillText;
+            this.ApparelWarmthValue.textAutoSize = "shrink";
+            this.ApparelWarmthValue.SetText(aUpdateObj.warmth);
+            this.ExposureProtectionValue.text = this.currentList[this.currentListIndex].warmth !== undefined ? this.currentList[this.currentListIndex].warmth : "";
+            this.RainProtectionValue.text = this.currentList[this.currentListIndex].coverage !== undefined ? this.currentList[this.currentListIndex].coverage : "";
             break;
          case skyui.defines.Inventory.ICT_WEAPON:
             if(aUpdateObj.effects.length == 0)
             {
                this.gotoAndStop("Weapons_reg");
+               this.WeaponReachLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponReachValue._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponSpeedLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponSpeedValue._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponStaggerLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponStaggerValue._visible = ItemCard.WEAPON_ADDS == "true";
             }
             else
             {
                this.gotoAndStop("Weapons_Enchanted");
+               this.WeaponReachLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponReachValue._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponSpeedLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponSpeedValue._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponStaggerLabel._visible = ItemCard.WEAPON_ADDS == "true";
+               this.WeaponStaggerValue._visible = ItemCard.WEAPON_ADDS == "true";
                if(this.ItemCardMeters[skyui.defines.Inventory.ICT_WEAPON] == undefined)
                {
                   this.ItemCardMeters[skyui.defines.Inventory.ICT_WEAPON] = new Components.DeltaMeter(this.WeaponChargeMeter.MeterInstance);
@@ -210,10 +371,26 @@ class ItemCard extends MovieClip
             }
             _loc5_ = aUpdateObj.poisoned != true ? "Off" : "On";
             this.PoisonInstance.gotoAndStop(_loc5_);
-            this.WeaponDamageValue.textAutoSize = "shrink";
             this.WeaponDamageValue.SetText(aUpdateObj.damage);
-            this.WeaponEnchantedLabel.textAutoSize = "shrink";
-            this.WeaponEnchantedLabel.htmlText = aUpdateObj.effects;
+            this.WeaponReachLabel.textAutoSize = "shrink";
+            this.WeaponSpeedLabel.textAutoSize = "shrink";
+            this.WeaponStaggerLabel.textAutoSize = "shrink";
+            this.WeaponReachValue.text = this.currentList[this.currentListIndex].reach !== undefined ? this.RoundDecimal(this.currentList[this.currentListIndex].reach,2) : "-";
+            this.WeaponSpeedValue.text = this.currentList[this.currentListIndex].speed !== undefined ? this.RoundDecimal(this.currentList[this.currentListIndex].speed,2) : "-";
+            this.WeaponStaggerValue.text = this.currentList[this.currentListIndex].stagger !== undefined ? this.RoundDecimal(this.currentList[this.currentListIndex].stagger,2) : "-";
+            this.WeaponEnchantedLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc20_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc21_ = this.WeaponEnchantedLabel.textHeight;
+            while(_loc21_ > 112)
+            {
+               _loc20_ = this.changeTextSize(_loc20_);
+               this.WeaponEnchantedLabel.htmlText = _loc20_;
+               _loc21_ = this.WeaponEnchantedLabel.textHeight;
+            }
+            if(ItemCard.WEAPON_ADDS == "true")
+            {
+               this.WeaponChargeMeter._y = 267;
+            }
             break;
          case skyui.defines.Inventory.ICT_BOOK:
             if(aUpdateObj.description != undefined && aUpdateObj.description != "")
@@ -226,20 +403,41 @@ class ItemCard extends MovieClip
             break;
          case skyui.defines.Inventory.ICT_POTION:
             this.gotoAndStop("Potions_reg");
-            this.PotionsLabel.textAutoSize = "shrink";
-            this.PotionsLabel.htmlText = aUpdateObj.effects;
+            this.PotionsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc24_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc25_ = this.PotionsLabel.textHeight;
+            while(_loc25_ > 142)
+            {
+               _loc24_ = this.changeTextSize(_loc24_);
+               this.PotionsLabel.htmlText = _loc24_;
+               _loc25_ = this.PotionsLabel.textHeight;
+            }
             this.SkillTextInstance.text = aUpdateObj.skillName != undefined ? aUpdateObj.skillName : "";
             break;
          case skyui.defines.Inventory.ICT_FOOD:
             this.gotoAndStop("Potions_reg");
-            this.PotionsLabel.textAutoSize = "shrink";
-            this.PotionsLabel.htmlText = aUpdateObj.effects;
+            this.PotionsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc26_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc27_ = this.PotionsLabel.textHeight;
+            while(_loc27_ > 142)
+            {
+               _loc26_ = this.changeTextSize(_loc26_);
+               this.PotionsLabel.htmlText = _loc26_;
+               _loc27_ = this.PotionsLabel.textHeight;
+            }
             this.SkillTextInstance.text = aUpdateObj.skillName != undefined ? aUpdateObj.skillName : "";
             break;
          case skyui.defines.Inventory.ICT_SPELL_DEFAULT:
             this.gotoAndStop("Power_reg");
-            this.MagicEffectsLabel.SetText(aUpdateObj.effects,true);
-            this.MagicEffectsLabel.textAutoSize = "shrink";
+            this.MagicEffectsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc28_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc29_ = this.MagicEffectsLabel.textHeight;
+            while(_loc29_ > 142)
+            {
+               _loc28_ = this.changeTextSize(_loc28_);
+               this.MagicEffectsLabel.htmlText = _loc28_;
+               _loc29_ = this.MagicEffectsLabel.textHeight;
+            }
             if(aUpdateObj.spellCost <= 0)
             {
                this.MagicCostValue._alpha = 0;
@@ -264,8 +462,15 @@ class ItemCard extends MovieClip
                this.gotoAndStop("Magic_reg");
             }
             this.SkillLevelText.text = aUpdateObj.castLevel.toString();
-            this.MagicEffectsLabel.SetText(aUpdateObj.effects,true);
-            this.MagicEffectsLabel.textAutoSize = "shrink";
+            this.MagicEffectsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc28_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc29_ = this.MagicEffectsLabel.textHeight;
+            while(_loc29_ > 142)
+            {
+               _loc28_ = this.changeTextSize(_loc28_);
+               this.MagicEffectsLabel.htmlText = _loc28_;
+               _loc29_ = this.MagicEffectsLabel.textHeight;
+            }
             this.MagicCostValue.textAutoSize = "shrink";
             this.MagicCostTimeValue.textAutoSize = "shrink";
             if(_loc6_)
@@ -283,12 +488,12 @@ class ItemCard extends MovieClip
                this["EffectLabel" + _loc7_].textAutoSize = "shrink";
                if(aUpdateObj["itemEffect" + _loc7_] != undefined && aUpdateObj["itemEffect" + _loc7_] != "")
                {
-                  this["EffectLabel" + _loc7_].textColor = 16777215;
+                  this["EffectLabel" + _loc7_].textColor = 16764057;
                   this["EffectLabel" + _loc7_].SetText(aUpdateObj["itemEffect" + _loc7_]);
                }
                else if(_loc7_ < aUpdateObj.numItemEffects)
                {
-                  this["EffectLabel" + _loc7_].textColor = 10066329;
+                  this["EffectLabel" + _loc7_].textColor = 13801832;
                   this["EffectLabel" + _loc7_].SetText("$UNKNOWN");
                }
                else
@@ -339,14 +544,29 @@ class ItemCard extends MovieClip
                }
                _loc7_ += 1;
             }
-            this.ShoutEffectsLabel.htmlText = aUpdateObj.effects;
+            this.ShoutEffectsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc28_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc29_ = this.ShoutEffectsLabel.textHeight;
+            while(_loc29_ > 105)
+            {
+               _loc28_ = this.changeTextSize(_loc28_);
+               this.ShoutEffectsLabel.htmlText = _loc28_;
+               _loc29_ = this.ShoutEffectsLabel.textHeight;
+            }
             this.ShoutCostValue.text = aUpdateObj.spellCost.toString();
             break;
          case skyui.defines.Inventory.ICT_ACTIVE_EFFECT:
             this.gotoAndStop("ActiveEffects");
             this.MagicEffectsLabel.html = true;
-            this.MagicEffectsLabel.SetText(aUpdateObj.effects,true);
-            this.MagicEffectsLabel.textAutoSize = "shrink";
+            this.MagicEffectsLabel.htmlText = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc28_ = this.htmlAll(this.replaceF(aUpdateObj.effects));
+            _loc29_ = this.MagicEffectsLabel.textHeight;
+            while(_loc29_ > 142)
+            {
+               _loc28_ = this.changeTextSize(_loc28_);
+               this.MagicEffectsLabel.htmlText = _loc28_;
+               _loc29_ = this.MagicEffectsLabel.textHeight;
+            }
             if(aUpdateObj.timeRemaining > 0)
             {
                _loc12_ = Math.floor(aUpdateObj.timeRemaining);
@@ -415,7 +635,7 @@ class ItemCard extends MovieClip
                }
                else
                {
-                  this.MagicEffectsLabel.SetText(aUpdateObj.effects,true);
+                  this.MagicEffectsLabel.SetText(this.replaceF(aUpdateObj.effects),true);
                }
             }
             else if(aUpdateObj.sliderShown == true)
@@ -457,7 +677,6 @@ class ItemCard extends MovieClip
             {
                this.gotoAndStop("Craft_Enchanting_Weapon");
                this.ItemCardMeters[skyui.defines.Inventory.ICT_WEAPON] = new Components.DeltaMeter(this.ChargeMeter_Weapon.MeterInstance);
-               this.WeaponDamageValue.textAutoSize = "shrink";
                this.WeaponDamageValue.SetText(aUpdateObj.damage);
             }
             if(aUpdateObj.usedCharge == 0 && aUpdateObj.totalCharges == 0)
@@ -472,11 +691,11 @@ class ItemCard extends MovieClip
             {
                if(this.EnchantmentLabel != undefined)
                {
-                  this.EnchantmentLabel.SetText(aUpdateObj.effects,true);
+                  this.EnchantmentLabel.SetText(this.replaceF(aUpdateObj.effects),true);
                }
                this.EnchantmentLabel.textAutoSize = "shrink";
                this.WeaponChargeMeter._alpha = 100;
-               this.Enchanting_Background._alpha = 60;
+               this.Enchanting_Background._alpha = 100;
                this.Enchanting_Slim_Background._alpha = 0;
                break;
             }
@@ -485,7 +704,7 @@ class ItemCard extends MovieClip
                this.EnchantmentLabel.SetText("",true);
             }
             this.WeaponChargeMeter._alpha = 0;
-            this.Enchanting_Slim_Background._alpha = 60;
+            this.Enchanting_Slim_Background._alpha = 100;
             this.Enchanting_Background._alpha = 0;
             break;
          case skyui.defines.Inventory.ICT_KEY:
@@ -499,7 +718,7 @@ class ItemCard extends MovieClip
       {
          _loc13_ = !(aUpdateObj.count != undefined && aUpdateObj.count > 1) ? aUpdateObj.name : aUpdateObj.name + " (" + aUpdateObj.count + ")";
          this.ItemText.ItemTextField.SetText(!(this._bEditNameMode || aUpdateObj.upperCaseName == false) ? _loc13_.toUpperCase() : _loc13_,false);
-         this.ItemText.ItemTextField.textColor = aUpdateObj.negativeEffect != true ? 16777215 : 16711680;
+         this.ItemText.ItemTextField.textColor = aUpdateObj.negativeEffect != true ? 13801832 : 16711680;
       }
       this.ItemValueText.textAutoSize = "shrink";
       this.ItemWeightText.textAutoSize = "shrink";
@@ -521,11 +740,11 @@ class ItemCard extends MovieClip
    }
    function PrepareInputElements(aActiveClip)
    {
-      var _loc3_ = 92;
-      var _loc4_ = 98;
-      var _loc5_ = 147.3;
-      var _loc6_ = 130;
-      var _loc7_ = 166;
+      var _loc3_ = 157;
+      var _loc4_ = 125;
+      var _loc5_ = 166;
+      var _loc6_ = 198;
+      var _loc7_ = 203;
       switch(aActiveClip)
       {
          case this.EnchantingSlider_mc:
@@ -797,5 +1016,12 @@ class ItemCard extends MovieClip
    function onListSelectionChange(event)
    {
       this.ItemCardMeters[skyui.defines.Inventory.ICT_LIST].SetDeltaPercent(this.ItemList.selectedEntry.chargeAdded + this.LastUpdateObj.currentCharge);
+   }
+   function ForceProtectionDisplay(warmth, coverage)
+   {
+      this.ExposureProtectionValue.text = this.currentList[this.currentListIndex].warmth !== undefined ? this.currentList[this.currentListIndex].warmth : "";
+      this.RainProtectionValue.text = this.currentList[this.currentListIndex].coverage !== undefined ? this.currentList[this.currentListIndex].coverage : "";
+      this.ApparelExposureLabel.text = this.currentList[this.currentListIndex].warmth !== undefined ? "$EXPPROT" : "";
+      this.ApparelRainProtectionLabel.text = this.currentList[this.currentListIndex].coverage !== undefined ? "$RAINPROT" : "";
    }
 }

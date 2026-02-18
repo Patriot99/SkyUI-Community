@@ -15,6 +15,8 @@ class BarterMenu extends ItemMenu
    static var SKYUI_RELEASE_IDX = 2018;
    static var SKYUI_VERSION_MAJOR = 5;
    static var SKYUI_VERSION_MINOR = 2;
+   static var TIMER_A = 0;
+   static var TIMER_B = 9;
    static var SKYUI_VERSION_STRING = BarterMenu.SKYUI_VERSION_MAJOR + "." + BarterMenu.SKYUI_VERSION_MINOR + " SE";
    var _buyMult = 1;
    var _sellMult = 1;
@@ -30,6 +32,7 @@ class BarterMenu extends ItemMenu
    }
    function InitExtensions()
    {
+      this.bottomBar._visible = false;
       super.InitExtensions();
       gfx.io.GameDelegate.addCallBack("SetBarterMultipliers",this,"SetBarterMultipliers");
       this.itemCard.addEventListener("messageConfirm",this,"onTransactionConfirm");
@@ -37,6 +40,7 @@ class BarterMenu extends ItemMenu
       this.inventoryLists.tabBarIconArt = this._tabBarIconArt;
       var _loc3_ = this.inventoryLists.categoryList;
       _loc3_.iconArt = this._categoryListIconArt;
+      1;
    }
    function setConfig(a_config)
    {
@@ -77,6 +81,14 @@ class BarterMenu extends ItemMenu
          a_updateObj.value *= this._sellMult;
       }
       a_updateObj.value = Math.floor(a_updateObj.value + 0.5);
+      var _loc3_ = this.inventoryLists.itemList.selectedEntry;
+      if(_loc3_.coverage !== undefined && _loc3_.warmth !== undefined)
+      {
+         a_updateObj.warmth = _loc3_.warmth;
+         a_updateObj.coverage = _loc3_.coverage;
+         a_updateObj.currentArmorWarmth = _loc3_.currentArmorWarmth;
+         a_updateObj.currentArmorCoverage = _loc3_.currentArmorCoverage;
+      }
       this.itemCard.itemInfo = a_updateObj;
       this.bottomBar.updateBarterPerItemInfo(a_updateObj);
    }

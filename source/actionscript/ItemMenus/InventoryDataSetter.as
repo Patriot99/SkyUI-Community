@@ -1,5 +1,6 @@
 class InventoryDataSetter extends ItemcardDataExtender
 {
+   var _listProcessed;
    function InventoryDataSetter()
    {
       super();
@@ -13,6 +14,7 @@ class InventoryDataSetter extends ItemcardDataExtender
       a_entryObject.infoValue = a_itemInfo.value <= 0 ? null : Math.round(a_itemInfo.value * 100) / 100;
       a_entryObject.infoWeight = a_itemInfo.weight <= 0 ? null : Math.round(a_itemInfo.weight * 100) / 100;
       a_entryObject.infoValueWeight = !(a_itemInfo.weight > 0 && a_itemInfo.value > 0) ? null : Math.round(a_itemInfo.value / a_itemInfo.weight);
+      a_entryObject.infoTotalWeight = !(a_itemInfo.weight > 0 && a_itemInfo.count > 0) ? null : Math.round(a_itemInfo.weight * a_itemInfo.count * 100) / 100;
       switch(a_entryObject.formType)
       {
          case skyui.defines.Form.TYPE_SCROLLITEM:
@@ -23,11 +25,16 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.TYPE_ARMOR:
             a_entryObject.isEnchanted = a_itemInfo.effects != "";
             a_entryObject.infoArmor = a_itemInfo.armor <= 0 ? null : Math.round(a_itemInfo.armor * 100) / 100;
+            a_entryObject.infoWarmth = a_itemInfo.warmth <= 0 ? null : Math.round(a_itemInfo.warmth * 100) / 100;
             this.processArmorClass(a_entryObject);
             this.processArmorPartMask(a_entryObject);
             this.processMaterialKeywords(a_entryObject);
             this.processArmorOther(a_entryObject);
             this.processArmorBaseId(a_entryObject);
+            if(this._listProcessed)
+            {
+               skse.SendModEvent("Frost_OnSkyUIInvListGetEntryProtectionDataOnProcess","",a_entryObject.itemIndex,0);
+            }
             break;
          case skyui.defines.Form.TYPE_BOOK:
             this.processBookType(a_entryObject);
@@ -46,6 +53,10 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.isEnchanted = a_itemInfo.effects != "";
             a_entryObject.isPoisoned = a_itemInfo.poisoned == true;
             a_entryObject.infoDamage = a_itemInfo.damage <= 0 ? null : Math.round(a_itemInfo.damage * 100) / 100;
+            a_entryObject.infoBaseDamage = a_entryObject.baseDamage <= 0 ? null : Math.round(a_entryObject.baseDamage * 100) / 100;
+            a_entryObject.infoReach = a_entryObject.reach <= 0 ? null : Math.round(a_entryObject.reach * 100) / 100;
+            a_entryObject.infoSpeed = a_entryObject.speed <= 0 ? null : Math.round(a_entryObject.speed * 100) / 100;
+            a_entryObject.infoStagger = a_entryObject.stagger <= 0 ? null : Math.round(a_entryObject.stagger * 100) / 100;
             this.processWeaponType(a_entryObject);
             this.processMaterialKeywords(a_entryObject);
             this.processWeaponBaseId(a_entryObject);
@@ -309,6 +320,72 @@ class InventoryDataSetter extends ItemcardDataExtender
    }
    function processWeaponType(a_entryObject)
    {
+      if(a_entryObject.keywords.WeapTypeSpear != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SPEAR;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Spear");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeJavelin != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_JAVELIN;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Javelin");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypePike != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_PIKE;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Pike");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeHalberd != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_HALBERD;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Halberd");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeRapier != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_RAPIER;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Rapier");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeQuarterstaff != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_QUARTERSTAFF;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Quarterstaff");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeClaw != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_CLAW;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Claw");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeWhip != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_WHIP;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Whip");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeKatana != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_KATANA;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Katana");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeScythe != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_SCYTHE;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Scythe");
+         return undefined;
+      }
+      if(a_entryObject.keywords.WeapTypeGun != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_GUN;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gun");
+         return undefined;
+      }
       a_entryObject.subType = null;
       a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Weapon");
       switch(a_entryObject.weaponType)
@@ -403,7 +480,7 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.mainPartMask = skyui.defines.Armor.PARTMASK_PRECEDENCE[_loc2_];
             break;
          }
-         _loc2_ = _loc2_ + 1;
+         _loc2_ += 1;
       }
       if(a_entryObject.mainPartMask == undefined)
       {
@@ -474,6 +551,19 @@ class InventoryDataSetter extends ItemcardDataExtender
    }
    function processArmorOther(a_entryObject)
    {
+      var _loc2_ = [];
+      var _loc3_ = 0;
+      var _loc4_ = skyui.defines.Armor.PARTMASK_PRECEDENCE;
+      while(_loc3_ < _loc4_.length)
+      {
+         if(a_entryObject.partMask & _loc4_[_loc3_])
+         {
+            _loc2_.push(Math.log(_loc4_[_loc3_]) / 0.6931471805599453 + 30);
+         }
+         _loc3_ += 1;
+      }
+      a_entryObject.bipedSlots = a_entryObject.mainPartMask;
+      a_entryObject.bipedSlotsDisplay = _loc2_.join(",");
       if(a_entryObject.weightClass != null)
       {
          return undefined;
@@ -490,6 +580,7 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Armor.PARTMASK_CALVES:
          case skyui.defines.Armor.PARTMASK_SHIELD:
          case skyui.defines.Armor.PARTMASK_TAIL:
+         default:
             a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_CLOTHING;
             a_entryObject.weightClassDisplay = skyui.util.Translator.translate("$Clothing");
             break;
@@ -497,11 +588,9 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Armor.PARTMASK_RING:
          case skyui.defines.Armor.PARTMASK_CIRCLET:
          case skyui.defines.Armor.PARTMASK_EARS:
-            a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
-            a_entryObject.weightClassDisplay = skyui.util.Translator.translate("$Jewelry");
-         default:
-            return;
       }
+      a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
+      a_entryObject.weightClassDisplay = skyui.util.Translator.translate("$Jewelry");
    }
    function processArmorBaseId(a_entryObject)
    {

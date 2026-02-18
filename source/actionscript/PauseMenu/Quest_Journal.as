@@ -1,5 +1,6 @@
 class Quest_Journal extends MovieClip
 {
+   var Background;
    var BottomBar;
    var BottomBar_mc;
    var ConfigPanel;
@@ -36,8 +37,6 @@ class Quest_Journal extends MovieClip
    }
    function InitExtensions()
    {
-      Shared.GlobalFunc.SetLockFunction();
-      MovieClip(this.BottomBar_mc).Lock("B");
       this.ConfigPanel = _root.ConfigPanelFader.configPanel;
       this.QuestsTab.disableFocus = true;
       this.StatsTab.disableFocus = true;
@@ -53,6 +52,7 @@ class Quest_Journal extends MovieClip
       gfx.io.GameDelegate.call("ShouldShowMod",[],this,"SetShowMod");
       this.BottomBar_mc.InitBar();
       this.ConfigPanel.initExtensions();
+      Shared.GlobalFunc.SetLockFunction();
    }
    function SetShowMod()
    {
@@ -80,7 +80,7 @@ class Quest_Journal extends MovieClip
          this.TopmostPage = this.PageArray[this.iCurrentTab]._parent;
       }
       this.TopmostPage.gotoAndPlay(!abForceFade ? "fadeIn" : "ForceFade");
-      this.BottomBar_mc.LevelMeterRect._visible = this.iCurrentTab != 0;
+      this.BottomBar_mc.LevelMeterRect._visible = this.iCurrentTab != 4;
    }
    function handleInput(details, pathToFocus)
    {
@@ -180,7 +180,15 @@ class Quest_Journal extends MovieClip
    {
       event.item.gotoAndPlay("selecting");
       this.PageArray[this.iCurrentTab].startPage();
-      gfx.io.GameDelegate.call("PlaySound",["UIJournalTabsSD"]);
+      if(SystemPage.PAPER_SOUNDS == "true")
+      {
+         gfx.io.GameDelegate.call("PlaySound",["UIJournalTabs_DD"]);
+      }
+      else
+      {
+         gfx.io.GameDelegate.call("PlaySound",["UIJournalTabsSD"]);
+      }
+      this.Background._alpha = SystemPage.BG_ALPHA;
    }
    function onRightStickInput(afX, afY)
    {

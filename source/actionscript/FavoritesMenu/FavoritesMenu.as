@@ -1,5 +1,6 @@
 class FavoritesMenu extends MovieClip
 {
+   var Background;
    var _categoryButtonGroup;
    var _groupAddControls;
    var _groupButtonGroup;
@@ -16,6 +17,7 @@ class FavoritesMenu extends MovieClip
    var btnAll;
    var btnGear;
    var btnMagic;
+   var btnShout;
    var groupButtonFader;
    var headerText;
    var itemList;
@@ -37,6 +39,10 @@ class FavoritesMenu extends MovieClip
    static var CLOSING = 4;
    static var SAVE_EQUIP_STATE_SYNC = 5;
    static var SET_ICON_SYNC = 6;
+   static var BG_ALPHA = 100;
+   static var SCR_SPEED = 1;
+   static var EXTENDED = 0;
+   static var FAVSTIPS = "true";
    var _leftKeycode = -1;
    var _rightKeycode = -1;
    var _groupAddKey = -1;
@@ -64,6 +70,19 @@ class FavoritesMenu extends MovieClip
       this._sortFilter = new skyui.filter.SortFilter();
       this._categoryButtonGroup = new gfx.controls.ButtonGroup("CategoryButtonGroup");
       this._groupButtonGroup = new gfx.controls.ButtonGroup("GroupButtonGroup");
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         FavoritesMenu.BG_ALPHA = parseFloat(FavoritesMenu.ParseConfig(str,"fFavoritesAlpha"));
+         FavoritesMenu.SCR_SPEED = parseFloat(FavoritesMenu.ParseConfig(str,"iFavScrollSpeed"));
+      };
+      var _loc4_ = new LoadVars();
+      _loc4_.load("../SKSE/Plugins/ExtendedHotkeySystem.ini");
+      _loc4_.onData = function(str)
+      {
+         FavoritesMenu.EXTENDED = str.length;
+      };
       Mouse.addListener(this);
    }
    function initControls(a_navPanelEnabled, a_groupAddKey, a_groupUseKey, a_setIconKey, a_saveEquipStateKey, a_toggleFocusKey)
@@ -88,6 +107,50 @@ class FavoritesMenu extends MovieClip
          this._groupDataExtender.groupData.push(arguments[_loc3_] & 0xFFFFFFFF);
          _loc3_ = _loc3_ + 1;
       }
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = FavoritesMenu.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = FavoritesMenu.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = FavoritesMenu.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return FavoritesMenu.trim(_loc12_);
    }
    function finishGroupData(a_groupCount)
    {
@@ -169,6 +232,7 @@ class FavoritesMenu extends MovieClip
       this.btnGear.group = this._categoryButtonGroup;
       this.btnAid.group = this._categoryButtonGroup;
       this.btnMagic.group = this._categoryButtonGroup;
+      this.btnShout.group = this._categoryButtonGroup;
       var _loc4_ = [];
       var _loc3_ = 1;
       var _loc2_;
@@ -210,6 +274,9 @@ class FavoritesMenu extends MovieClip
       this.setGroupFocus(false);
       this._isInitialized = true;
       this.updateNavButtons();
+      this.Background._alpha = FavoritesMenu.BG_ALPHA;
+      this.btnMagic.icon_shout._alpha = 0;
+      this.btnShout.icon_magic._alpha = 0;
    }
    function get ItemList()
    {
@@ -454,6 +521,7 @@ class FavoritesMenu extends MovieClip
       this._groupButtonGroup.setSelectedButton(null);
       this.itemList.listState.activeGroupIndex = -1;
       this.headerText.SetText(_loc2_.text);
+      this.headerText.textAutoSize = "shrink";
       this._typeFilter.changeFilterFlag(_loc2_.filterFlag);
       gfx.io.GameDelegate.call("PlaySound",["UIMenuBladeOpenSD"]);
       this.updateNavButtons();
@@ -543,10 +611,12 @@ class FavoritesMenu extends MovieClip
       this.btnGear.disabled = true;
       this.btnAid.disabled = true;
       this.btnMagic.disabled = true;
+      this.btnShout.disabled = true;
       this.btnAll.visible = false;
       this.btnGear.visible = false;
       this.btnAid.visible = false;
       this.btnMagic.visible = false;
+      this.btnShout.visible = false;
       this.updateNavButtons();
    }
    function applyGroupAssignment()
@@ -586,10 +656,12 @@ class FavoritesMenu extends MovieClip
       this.btnGear.disabled = false;
       this.btnAid.disabled = false;
       this.btnMagic.disabled = false;
+      this.btnShout.disabled = false;
       this.btnAll.visible = true;
       this.btnGear.visible = true;
       this.btnAid.visible = true;
       this.btnMagic.visible = true;
+      this.btnShout.visible = true;
       this.headerText._visible = true;
       this.navButton.visible = false;
       this.setGroupFocus(false);
@@ -746,7 +818,7 @@ class FavoritesMenu extends MovieClip
    }
    function updateNavButtons()
    {
-      if(this._state != FavoritesMenu.ITEM_SELECT || !this._navPanelEnabled || !this._fadedIn || this._waitingForGroupData)
+      if(this._state != FavoritesMenu.ITEM_SELECT || !this._navPanelEnabled || !this._fadedIn || this._waitingForGroupData || FavoritesMenu.FAVSTIPS != "true")
       {
          this.navPanel._visible = false;
          return undefined;
@@ -777,9 +849,9 @@ class FavoritesMenu extends MovieClip
       }
       _loc2_.updateButtons(true);
       _loc3_._x = - _loc3_._width / 2;
-      _loc3_._y = !_loc4_ ? 35 : 10;
+      _loc3_._y = !_loc4_ ? 38 : 23;
       _loc2_._x = - _loc2_._width / 2;
-      _loc2_._y = 65;
+      _loc2_._y = 50;
    }
    function createControls()
    {

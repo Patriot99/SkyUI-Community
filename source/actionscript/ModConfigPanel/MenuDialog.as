@@ -2,6 +2,7 @@ class MenuDialog extends OptionDialog
 {
    var _closeControls;
    var _defaultControls;
+   var background;
    var leftButtonPanel;
    var menuDefaultIndex;
    var menuList;
@@ -15,6 +16,7 @@ class MenuDialog extends OptionDialog
    }
    function initButtons()
    {
+      this.background.loadMovie("deardiary_dm/configpanel/configpanel_window_BG.swf");
       if(this.platform == 0)
       {
          this._defaultControls = skyui.defines.Input.ReadyWeapon;

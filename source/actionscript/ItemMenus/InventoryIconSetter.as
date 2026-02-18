@@ -245,6 +245,9 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
       a_entryObject.iconColor = 10790335;
       switch(a_entryObject.subType)
       {
+         case skyui.defines.Weapon.TYPE_MELEE:
+            a_entryObject.iconLabel = "weapon_melee";
+            break;
          case skyui.defines.Weapon.TYPE_SWORD:
             a_entryObject.iconLabel = "weapon_sword";
             break;
@@ -280,7 +283,39 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Weapon.TYPE_WOODAXE:
             a_entryObject.iconLabel = "weapon_woodaxe";
-         case skyui.defines.Weapon.TYPE_MELEE:
+            break;
+         case skyui.defines.Weapon.TYPE_SPEAR:
+            a_entryObject.iconLabel = "weapon_spear";
+            break;
+         case skyui.defines.Weapon.TYPE_JAVELIN:
+            a_entryObject.iconLabel = "weapon_javelin";
+            break;
+         case skyui.defines.Weapon.TYPE_PIKE:
+            a_entryObject.iconLabel = "weapon_pike";
+            break;
+         case skyui.defines.Weapon.TYPE_HALBERD:
+            a_entryObject.iconLabel = "weapon_halberd";
+            break;
+         case skyui.defines.Weapon.TYPE_RAPIER:
+            a_entryObject.iconLabel = "weapon_rapier";
+            break;
+         case skyui.defines.Weapon.TYPE_QUARTERSTAFF:
+            a_entryObject.iconLabel = "weapon_quarterstaff";
+            break;
+         case skyui.defines.Weapon.TYPE_CLAW:
+            a_entryObject.iconLabel = "weapon_claw";
+            break;
+         case skyui.defines.Weapon.TYPE_WHIP:
+            a_entryObject.iconLabel = "weapon_whip";
+            break;
+         case skyui.defines.Weapon.TYPE_KATANA:
+            a_entryObject.iconLabel = "weapon_katana";
+            break;
+         case skyui.defines.Weapon.TYPE_SCYTHE:
+            a_entryObject.iconLabel = "weapon_scythe";
+            break;
+         case skyui.defines.Weapon.TYPE_GUN:
+            a_entryObject.iconLabel = "weapon_gun";
          default:
             return;
       }

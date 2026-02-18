@@ -15,10 +15,15 @@ class JournalBottomBar extends MovieClip
    }
    function SetPlayerInfo()
    {
+      this.DateText.textAutoSize = "shrink";
       this.DateText.SetText(arguments[0]);
       this.LevelMeterRect.LevelNumberLabel.textAutoSize = "shrink";
+      this.LevelMeterRect.LevelString.textAutoSize = "shrink";
       this.LevelMeterRect.LevelNumberLabel.SetText(arguments[1]);
       this.LevelMeter_mc.SetPercent(arguments[2]);
+      arguments[0];
+      1;
+      this.DateText;
    }
    function setPlatform(a_platform, a_bPS3Switch)
    {

@@ -1,6 +1,7 @@
 class ItemcardDataExtender implements skyui.components.list.IListProcessor
 {
    var _itemInfo;
+   var _listProcessed;
    var _requestItemInfo;
    var _selectedIndex;
    function ItemcardDataExtender()
@@ -19,6 +20,7 @@ class ItemcardDataExtender implements skyui.components.list.IListProcessor
    }
    function processList(a_list)
    {
+      this._listProcessed = false;
       var _loc4_ = a_list.entryList;
       var _loc3_ = 0;
       var _loc2_;
@@ -34,6 +36,8 @@ class ItemcardDataExtender implements skyui.components.list.IListProcessor
          }
          _loc3_ = _loc3_ + 1;
       }
+      this._listProcessed = true;
+      skse.SendModEvent("Frost_InvalidateFetchedRangesOnProcess","",0,0);
    }
    function processEntry(a_entryObject, a_itemInfo)
    {

@@ -326,6 +326,7 @@ class QuestsPage extends MovieClip
          {
             this.ObjectiveList.disableSelection = true;
          }
+         this._showOnMapButton._visible = true;
          this.updateShowOnMapButtonAlpha(0);
       }
       else
@@ -336,21 +337,15 @@ class QuestsPage extends MovieClip
          this.ObjectiveList.ClearList();
          this.questTitleEndpieces._visible = false;
          this.ObjectivesHeader._visible = false;
+         this._showOnMapButton._visible = false;
       }
-      this.UpdateButtonVisiblity();
       this.ObjectiveList.InvalidateData();
-   }
-   function UpdateButtonVisiblity()
-   {
-      var _loc2_ = this.TitleList.entryList.length > 0 && this.TitleList.entryList.selectedEntry != null;
-      this._toggleActiveButton._visible = _loc2_ && !this.TitleList.selectedEntry.completed;
-      this._showOnMapButton._visible = _loc2_ && !this.TitleList.selectedEntry.completed && this.bAllowShowOnMap;
    }
    function SetDescriptionText()
    {
       var _loc2_ = 25;
       var _loc4_ = 10;
-      var _loc3_ = 470;
+      var _loc3_ = 510;
       var _loc5_ = 40;
       this.DescriptionText.SetText(this.TitleList.selectedEntry.description);
       var _loc6_ = this.DescriptionText.getCharBoundaries(this.DescriptionText.getLineOffset(this.DescriptionText.numLines - 1));

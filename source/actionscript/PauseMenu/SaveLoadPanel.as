@@ -1,11 +1,18 @@
 class SaveLoadPanel extends MovieClip
 {
+   var BackGamepadButton;
+   var BackMouseButton;
+   var Background;
+   var CharacterSelectionHint_mc;
    var List_mc;
    var PlayerInfoText;
    var SaveLoadList_mc;
+   var ScreenShotRect_mc;
    var ScreenshotHolder;
    var ScreenshotLoader;
    var ScreenshotRect;
+   var SelectGamepadButton;
+   var SelectMouseButton;
    var bSaving;
    var dispatchEvent;
    var iBatchSize;
@@ -17,11 +24,12 @@ class SaveLoadPanel extends MovieClip
    var showingCharacterList;
    var uiSaveLoadManagerNumElementsToLoad;
    var uiSaveLoadManagerProcessedElements;
-   static var SCREENSHOT_DELAY = 200;
+   static var SCREENSHOT_DELAY = 5;
    static var CONTROLLER_PC = 0;
    static var CONTROLLER_PC_GAMEPAD = 1;
    static var CONTROLLER_DURANGO = 2;
    static var CONTROLLER_ORBIS = 3;
+   static var BG_ALPHA = 100;
    function SaveLoadPanel()
    {
       super();
@@ -34,6 +42,12 @@ class SaveLoadPanel extends MovieClip
       this.uiSaveLoadManagerProcessedElements = 0;
       this.uiSaveLoadManagerNumElementsToLoad = 0;
       this.isForceStopping = false;
+      var _loc3_ = new LoadVars();
+      _loc3_.load("deardiary_dm/config.txt");
+      _loc3_.onData = function(str)
+      {
+         SaveLoadPanel.BG_ALPHA = parseFloat(SaveLoadPanel.ParseConfig(str,"fStartMenuAlpha"));
+      };
    }
    function onLoad()
    {
@@ -65,9 +79,10 @@ class SaveLoadPanel extends MovieClip
    function set isShowingCharacterList(abFlag)
    {
       this.showingCharacterList = abFlag;
-      if(this.iPlatform != SaveLoadPanel.CONTROLLER_ORBIS)
+      if(this.iPlatform != 3)
       {
          this.ScreenshotHolder._visible = !this.showingCharacterList;
+         this.ScreenShotRect_mc._visible = !this.showingCharacterList;
       }
       this.PlayerInfoText._visible = !this.showingCharacterList;
    }
@@ -81,7 +96,74 @@ class SaveLoadPanel extends MovieClip
    }
    function set platform(aiPlatform)
    {
+      this.Background._alpha = SaveLoadPanel.BG_ALPHA;
       this.iPlatform = aiPlatform;
+      var _loc2_;
+      if(this.iPlatform == SaveLoadPanel.CONTROLLER_PC)
+      {
+         this.BackMouseButton.SetPlatform(this.iPlatform);
+         this.SelectMouseButton.SetPlatform(this.iPlatform);
+         this.BackMouseButton.addEventListener("click",Shared.Proxy.create(this,this.OnBackClicked));
+         this.SelectMouseButton.addEventListener("click",Shared.Proxy.create(this,this.OnSelectClicked));
+         _loc2_ = this.SelectMouseButton.getBounds(this);
+         this.SelectMouseButton._x += this.CharacterSelectionHint_mc._x - _loc2_.xMin;
+      }
+      else
+      {
+         this.BackGamepadButton.SetPlatform(this.iPlatform);
+         this.SelectGamepadButton.SetPlatform(this.iPlatform);
+      }
+      this.BackMouseButton._visible = this.SelectMouseButton._visible = this.iPlatform == SaveLoadPanel.CONTROLLER_PC;
+      this.BackGamepadButton._visible = this.SelectGamepadButton._visible = this.iPlatform != SaveLoadPanel.CONTROLLER_PC;
+      if(this.iPlatform == SaveLoadPanel.CONTROLLER_ORBIS)
+      {
+         this.ScreenshotHolder._visible = false;
+         this.ScreenShotRect_mc._visible = false;
+      }
+   }
+   static function trim(str)
+   {
+      var _loc2_ = 0;
+      var _loc1_ = str.length - 1;
+      while(str.charCodeAt(_loc2_) < 33)
+      {
+         _loc2_ = _loc2_ + 1;
+      }
+      while(str.charCodeAt(_loc1_) < 33)
+      {
+         _loc1_ = _loc1_ - 1;
+      }
+      return str.substring(_loc2_,_loc1_ + 1);
+   }
+   static function ParseConfig(str, par)
+   {
+      var _loc3_ = str.split("\n");
+      var _loc4_ = 0;
+      var _loc5_ = 0;
+      var _loc6_;
+      var _loc7_;
+      var _loc8_;
+      var _loc9_;
+      while(_loc4_ < _loc3_.length)
+      {
+         if(_loc3_[_loc4_].charAt(0) != "#")
+         {
+            _loc6_ = SaveLoadPanel.trim(_loc3_[_loc4_]);
+            _loc7_ = _loc6_.indexOf("=");
+            _loc8_ = _loc6_.substring(0,_loc7_);
+            _loc9_ = SaveLoadPanel.trim(_loc8_);
+            if(_loc9_ == par)
+            {
+               _loc5_ = _loc4_;
+               break;
+            }
+         }
+         _loc4_ += 1;
+      }
+      var _loc10_ = SaveLoadPanel.trim(_loc3_[_loc5_]);
+      var _loc11_ = _loc10_.indexOf("=");
+      var _loc12_ = _loc10_.substring(_loc11_ + 1,_loc10_.length);
+      return SaveLoadPanel.trim(_loc12_);
    }
    function get batchSize()
    {
@@ -89,7 +171,7 @@ class SaveLoadPanel extends MovieClip
    }
    function get numSaves()
    {
-      return this.SaveLoadList_mc.entryList.length;
+      return this.SaveLoadList_mc.length;
    }
    function get selectedEntry()
    {
@@ -106,39 +188,51 @@ class SaveLoadPanel extends MovieClip
    function onSaveLoadItemPress(event)
    {
       this.lastSelectedIndexMemory = this.SaveLoadList_mc.selectedIndex;
+      var _loc4_;
       var _loc3_;
       var _loc2_;
-      var _loc4_;
       if(this.isShowingCharacterList)
       {
-         _loc3_ = this.SaveLoadList_mc.entryList[this.SaveLoadList_mc.selectedIndex];
-         if(_loc3_ != undefined)
+         _loc4_ = this.SaveLoadList_mc.entryList[this.SaveLoadList_mc.selectedIndex];
+         if(_loc4_ != undefined)
          {
             if(this.iPlatform != 0)
             {
                this.SaveLoadList_mc.selectedIndex = 0;
             }
-            _loc2_ = _loc3_.flags;
-            if(_loc2_ == undefined)
+            _loc3_ = _loc4_.flags;
+            if(_loc3_ == undefined)
             {
-               _loc2_ = 0;
+               _loc3_ = 0;
             }
-            _loc4_ = _loc3_.id;
-            if(_loc4_ == undefined)
+            _loc2_ = _loc4_.id;
+            if(_loc2_ == undefined)
             {
                _loc2_ = 4294967295;
             }
-            gfx.io.GameDelegate.call("CharacterSelected",[_loc4_,_loc2_,this.bSaving,this.SaveLoadList_mc.entryList,this.iBatchSize]);
+            gfx.io.GameDelegate.call("CharacterSelected",[_loc2_,_loc3_,this.bSaving,this.SaveLoadList_mc.entryList,this.iBatchSize]);
             this.dispatchEvent({type:"OnCharacterSelected"});
-            return undefined;
          }
       }
-      if(!this.bSaving)
+      else if(!this.bSaving)
       {
          gfx.io.GameDelegate.call("IsOKtoLoad",[this.SaveLoadList_mc.selectedIndex]);
-         return undefined;
       }
-      this.dispatchEvent({type:"saveGameSelected",index:this.SaveLoadList_mc.selectedIndex});
+      else
+      {
+         this.dispatchEvent({type:"saveGameSelected",index:this.SaveLoadList_mc.selectedIndex});
+      }
+   }
+   function ShowSelectionButtons(show)
+   {
+      if(this.iPlatform == SaveLoadPanel.CONTROLLER_PC)
+      {
+         this.SelectMouseButton._visible = this.BackMouseButton._visible = show;
+      }
+      else
+      {
+         this.SelectGamepadButton._visible = this.BackGamepadButton._visible = show;
+      }
    }
    function onOKToLoadConfirm()
    {
@@ -175,15 +269,14 @@ class SaveLoadPanel extends MovieClip
          return undefined;
       }
       this.RemoveScreenshot();
-      if(this.isShowingCharacterList)
+      if(!this.isShowingCharacterList)
       {
-         return undefined;
+         if(event.index != -1)
+         {
+            this.iScreenshotTimerID = setInterval(this,"PrepScreenshot",SaveLoadPanel.SCREENSHOT_DELAY);
+         }
+         this.dispatchEvent({type:"saveHighlighted",index:this.SaveLoadList_mc.selectedIndex});
       }
-      if(event.index != -1)
-      {
-         this.iScreenshotTimerID = setInterval(this,"PrepScreenshot",SaveLoadPanel.SCREENSHOT_DELAY);
-      }
-      this.dispatchEvent({type:"saveHighlighted",index:this.SaveLoadList_mc.selectedIndex});
    }
    function PrepScreenshot()
    {
@@ -192,13 +285,15 @@ class SaveLoadPanel extends MovieClip
       if(this.bSaving)
       {
          gfx.io.GameDelegate.call("PrepSaveGameScreenshot",[this.SaveLoadList_mc.selectedIndex - 1,this.SaveLoadList_mc.selectedEntry]);
-         return undefined;
       }
-      gfx.io.GameDelegate.call("PrepSaveGameScreenshot",[this.SaveLoadList_mc.selectedIndex,this.SaveLoadList_mc.selectedEntry]);
+      else
+      {
+         gfx.io.GameDelegate.call("PrepSaveGameScreenshot",[this.SaveLoadList_mc.selectedIndex,this.SaveLoadList_mc.selectedEntry]);
+      }
    }
    function ShowScreenshot()
    {
-      this.ScreenshotRect = this.ScreenshotHolder.createEmptyMovieClip("ScreenshotRect",0);
+      this.ScreenshotRect = this.ScreenshotHolder.createEmptyMovieClip("ScreenshotRect",-16384);
       this.ScreenshotLoader.loadClip("img://BGSSaveLoadHeader_Screenshot",this.ScreenshotRect);
       var _loc2_;
       var _loc3_;
@@ -210,11 +305,7 @@ class SaveLoadPanel extends MovieClip
       {
          this.PlayerInfoText.textField.SetText("$SAVE OBSOLETE");
       }
-      else if(this.SaveLoadList_mc.selectedEntry.name == undefined)
-      {
-         this.PlayerInfoText.textField.SetText(" ");
-      }
-      else
+      else if(this.SaveLoadList_mc.selectedEntry.name != undefined)
       {
          _loc2_ = this.SaveLoadList_mc.selectedEntry.name;
          _loc3_ = 20;
@@ -233,20 +324,26 @@ class SaveLoadPanel extends MovieClip
          this.PlayerInfoText.textField.textAutoSize = "shrink";
          this.PlayerInfoText.textField.SetText(_loc2_);
       }
-      if(this.SaveLoadList_mc.selectedEntry.playTime == undefined)
+      else
       {
-         this.PlayerInfoText.PlayTimeText.SetText(" ");
+         this.PlayerInfoText.textField.SetText(" ");
+      }
+      if(this.SaveLoadList_mc.selectedEntry.playTime != undefined)
+      {
+         this.PlayerInfoText.PlayTimeText.SetText(this.SaveLoadList_mc.selectedEntry.playTime);
       }
       else
       {
-         this.PlayerInfoText.PlayTimeText.SetText(this.SaveLoadList_mc.selectedEntry.playTime);
+         this.PlayerInfoText.PlayTimeText.SetText(" ");
       }
       if(this.SaveLoadList_mc.selectedEntry.dateString != undefined)
       {
          this.PlayerInfoText.DateText.SetText(this.SaveLoadList_mc.selectedEntry.dateString);
-         return undefined;
       }
-      this.PlayerInfoText.DateText.SetText(" ");
+      else
+      {
+         this.PlayerInfoText.DateText.SetText(" ");
+      }
    }
    function onLoadInit(aTargetClip)
    {
@@ -255,16 +352,14 @@ class SaveLoadPanel extends MovieClip
    }
    function onFillCharacterListComplete(abDoInitialUpdate)
    {
-      this.isShowingCharacterList(true);
-      var _loc3_ = 20;
-      var _loc2_ = 0;
-      while(_loc2_ < this.SaveLoadList_mc.entryList.length)
+      this.isShowingCharacterList = true;
+      var _loc2_ = 35;
+      for(var _loc3_ in this.SaveLoadList_mc.entryList)
       {
-         if(this.SaveLoadList_mc.entryList[_loc2_].text.length > _loc3_)
+         if(this.SaveLoadList_mc.entryList[_loc3_].text.length > _loc2_)
          {
-            this.SaveLoadList_mc.entryList[_loc2_].text = this.SaveLoadList_mc.entryList[_loc2_].text.substr(0,_loc3_ - 3) + "...";
+            this.SaveLoadList_mc.entryList[_loc3_].text = this.SaveLoadList_mc.entryList[_loc3_].text.substr(0,_loc2_ - 3) + "...";
          }
-         _loc2_ = _loc2_ + 1;
       }
       this.SaveLoadList_mc.InvalidateData();
       if(this.iPlatform != 0)
@@ -277,24 +372,22 @@ class SaveLoadPanel extends MovieClip
    }
    function onSaveLoadBatchComplete(abDoInitialUpdate, aNumProcessed, aSaveCount)
    {
-      var _loc3_ = 20;
+      var _loc2_ = 35;
       this.uiSaveLoadManagerProcessedElements = aNumProcessed;
       this.uiSaveLoadManagerNumElementsToLoad = aSaveCount;
-      var _loc2_ = 0;
-      while(_loc2_ < this.SaveLoadList_mc.entryList.length)
+      for(var _loc3_ in this.SaveLoadList_mc.entryList)
       {
          if(this.iPlatform == SaveLoadPanel.CONTROLLER_ORBIS)
          {
-            if(this.SaveLoadList_mc.entryList[_loc2_].text == undefined)
+            if(this.SaveLoadList_mc.entryList[_loc3_].text == undefined)
             {
-               this.SaveLoadList_mc.entryList.splice(_loc2_,1);
+               this.SaveLoadList_mc.entryList.splice(_loc3_,1);
             }
          }
-         if(this.SaveLoadList_mc.entryList[_loc2_].text.length > _loc3_)
+         if(this.SaveLoadList_mc.entryList[_loc3_].text.length > _loc2_)
          {
-            this.SaveLoadList_mc.entryList[_loc2_].text = this.SaveLoadList_mc.entryList[_loc2_].text.substr(0,_loc3_ - 3) + "...";
+            this.SaveLoadList_mc.entryList[_loc3_].text = this.SaveLoadList_mc.entryList[_loc3_].text.substr(0,_loc2_ - 3) + "...";
          }
-         _loc2_ = _loc2_ + 1;
       }
       var _loc4_ = "$[NEW SAVE]";
       var _loc5_;
@@ -317,16 +410,14 @@ class SaveLoadPanel extends MovieClip
          this.isForceStopping = false;
          this.isShowingCharacterList = false;
          this.onSaveLoadItemHighlight({index:this.LastSelectedIndexMemory});
-         this.SaveLoadList_mc.selectedIndex(this.LastSelectedIndexMemory);
+         this.SaveLoadList_mc.selectedIndex = this.LastSelectedIndexMemory;
          this.SaveLoadList_mc.UpdateList();
          this.dispatchEvent({type:"saveListPopulated"});
-         return undefined;
       }
-      if(this.isForceStopping)
+      else if(!this.isForceStopping)
       {
-         return undefined;
+         this.dispatchEvent({type:"saveListOnBatchAdded"});
       }
-      this.dispatchEvent({type:"saveListOnBatchAdded"});
    }
    function DeleteSelectedSave()
    {
@@ -348,7 +439,7 @@ class SaveLoadPanel extends MovieClip
    function PopulateEmptySaveList()
    {
       this.SaveLoadList_mc.ClearList();
-      this.SaveLoadList_mc.entryList.push(new Object());
+      this.SaveLoadList_mc.entryList().push(new Object());
       this.onSaveLoadBatchComplete(true,0,0);
    }
    function OnSelectClicked()

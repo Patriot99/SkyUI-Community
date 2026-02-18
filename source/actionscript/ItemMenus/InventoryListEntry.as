@@ -72,28 +72,34 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
          a_entryField.SetText(" ");
          return undefined;
       }
-      var _loc4_ = a_entryObject.text;
+      var _loc5_ = a_entryObject.text;
+      var _loc6_ = _loc5_.split("CompTag");
+      _loc5_ = _loc6_[0].length > 0 ? _loc6_[0] : _loc5_;
       if(a_entryObject.soulLVL != undefined)
       {
-         _loc4_ = _loc4_ + " (" + a_entryObject.soulLVL + ")";
+         _loc5_ = _loc5_ + " (" + a_entryObject.soulLVL + ")";
       }
       if(a_entryObject.count > 1)
       {
-         _loc4_ = _loc4_ + " (" + a_entryObject.count.toString() + ")";
+         _loc5_ = _loc5_ + " (" + a_entryObject.count.toString() + ")";
       }
-      if(_loc4_.length > a_state.maxTextLength)
+      if(_loc5_.length > a_state.maxTextLength)
       {
-         _loc4_ = _loc4_.substr(0,a_state.maxTextLength - 3) + "...";
+         _loc5_ = _loc5_.substr(0,a_state.maxTextLength - 3) + "...";
       }
       a_entryField.autoSize = "left";
-      a_entryField.SetText(_loc4_);
       this.formatColor(a_entryField,a_entryObject,a_state);
-      var _loc2_ = a_entryField._x + a_entryField._width + 5;
-      var _loc5_ = this.bestIcon._width * 1.25;
+      if(a_entryObject.enabled != false && _loc6_[1].length > 0)
+      {
+         a_entryField.textColor = parseInt(_loc6_[1]);
+      }
+      a_entryField.SetText(_loc5_);
+      var _loc7_ = a_entryField._x + a_entryField._width + 5;
+      var _loc8_ = this.bestIcon._width * 1.25;
       if(a_entryObject.bestInClass == true)
       {
-         this.bestIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.bestIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.bestIcon.gotoAndStop("show");
       }
       else
@@ -102,8 +108,8 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
       }
       if(a_entryObject.favorite == true)
       {
-         this.favoriteIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.favoriteIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.favoriteIcon.gotoAndStop("show");
       }
       else
@@ -112,8 +118,8 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
       }
       if(a_entryObject.isPoisoned == true)
       {
-         this.poisonIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.poisonIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.poisonIcon.gotoAndStop("show");
       }
       else
@@ -122,8 +128,8 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
       }
       if((a_entryObject.isStolen == true || a_entryObject.isStealing == true) && a_state.showStolenIcon == true)
       {
-         this.stolenIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.stolenIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.stolenIcon.gotoAndStop("show");
       }
       else
@@ -132,8 +138,8 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
       }
       if(a_entryObject.isEnchanted == true)
       {
-         this.enchIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.enchIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.enchIcon.gotoAndStop("show");
       }
       else
@@ -142,8 +148,8 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
       }
       if(a_entryObject.isRead == true)
       {
-         this.readIcon._x = _loc2_;
-         _loc2_ += _loc5_;
+         this.readIcon._x = _loc7_;
+         _loc7_ += _loc8_;
          this.readIcon.gotoAndStop("show");
       }
       else
@@ -187,7 +193,7 @@ class InventoryListEntry extends skyui.components.list.TabularListEntry
          {
             _loc1_ = new flash.geom.ColorTransform();
             _loc3_ = new flash.geom.Transform(MovieClip(_loc2_));
-            _loc1_.rgb = a_rgb != undefined ? a_rgb : 16777215;
+            _loc1_.rgb = a_rgb != undefined ? a_rgb : 16764057;
             _loc3_.colorTransform = _loc1_;
          }
       }
