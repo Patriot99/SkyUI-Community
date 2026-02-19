@@ -137,9 +137,7 @@ def main():
         138: 349,  # DefineSpriteTag  (background rect sprite wrapper)
         510: 350,  # DefineEditTextTag (cScrollableText text field)
         511: 351,  # DefineSpriteTag  (cScrollableText) -> exported as "cScrollableText"
-        512: 352,  # DefineEditTextTag (CREATIONS TOPIC text)
-        513: 353,  # DefineEditTextTag (HELP TOPIC text)
-        514: 354,  # DefineSpriteTag  (list entry item)
+        514: 206,  # DefineSpriteTag  (list entry) -> use SkyUI's HelpList item renderer
         515: 355,  # DefineSpriteTag  (CreationList) -> exported as "CreationList"
         591: 356,  # DefineShapeTag   (decorative shape)
         595: 357,  # DefineSpriteTag  (CreationListPanel, 20-frame animated)
@@ -159,8 +157,12 @@ def main():
         438: 204,  # $EverywhereMediumFont
     }
 
-    # Character definition tags to copy from the before SWF (original IDs)
-    chars_to_copy = {137, 138, 510, 511, 512, 513, 514, 515, 591, 595, 596, 597, 598, 668}
+    # Character definition tags to copy from the before SWF (original IDs).
+    # Note: 512, 513 (HTML textFields inside Bethesda's item renderer) and 514
+    # (the item renderer itself) are NOT copied — we use SkyUI's existing
+    # HelpList item renderer (charId 206) instead, which has plain-text textFields
+    # that work correctly with BSScrollingList.SetEntryText.
+    chars_to_copy = {137, 138, 510, 511, 515, 591, 595, 596, 597, 598, 668}
     def_id_attribs = ('shapeId', 'spriteId', 'characterID')
 
     # DoInitActionTag sprite IDs to copy from the before SWF:
@@ -170,8 +172,14 @@ def main():
     # ffdec importScript will update these with our compiled ActionScript source.
     init_actions_to_copy = {511, 515, 668}
 
-    # Collect tags to copy from before.xml
-    tags_to_insert = []
+    # Collect tags to copy from before.xml, split by type:
+    #   char_tags     - character definition tags (DefineSprite, DefineShape, DefineEditText, etc.)
+    #   init_action_tags - DoInitActionTag entries for class registration
+    # They must be inserted at different points: char_tags before the __Packages section,
+    # init_action_tags AFTER all existing DoInitActionTags (so Shared.* classes are defined
+    # before Object.registerClass("CreationList", Shared.BSScrollingList) runs).
+    char_tags = []
+    init_action_tags = []
     for item in before_tags:
         if item.get('type') == 'DoInitActionTag':
             # Selectively copy DoInitActionTag entries needed for class registration
@@ -181,7 +189,7 @@ def main():
                     if int(sid) in init_actions_to_copy:
                         new_item = copy.deepcopy(item)
                         remap_element(new_item, id_remap, font_remap)
-                        tags_to_insert.append(new_item)
+                        init_action_tags.append(new_item)
                 except ValueError:
                     pass
             continue
@@ -192,14 +200,15 @@ def main():
                     if int(val) in chars_to_copy:
                         new_item = copy.deepcopy(item)
                         remap_element(new_item, id_remap, font_remap)
-                        tags_to_insert.append(new_item)
+                        char_tags.append(new_item)
                         break
                 except ValueError:
                     pass
 
-    print(f"Copying {len(tags_to_insert)} tags from before SWF...")
+    print(f"Copying {len(char_tags)} char tags and {len(init_action_tags)} DoInitAction tags "
+          f"from before SWF...")
 
-    # Find insertion point: before the first __Packages ExportAssetsTag
+    # Find insertion point for char defs: before the first __Packages ExportAssetsTag
     # (which marks the start of the AS2 class definitions section)
     items = list(input_tags)
     insert_idx = len(items)
@@ -214,20 +223,34 @@ def main():
             if insert_idx != len(items):
                 break
 
-    # Insert new character tags
-    for j, new_item in enumerate(tags_to_insert):
+    # Insert new character definition tags before the __Packages section
+    for j, new_item in enumerate(char_tags):
         input_tags.insert(insert_idx + j, new_item)
 
-    # Insert ExportAssetsTag entries:
+    # Insert ExportAssetsTag entries immediately after the character definitions:
     #   "cScrollableText" and "CreationList" are sprite-level exports (matched by name at root)
     #   "__Packages.Shared.ButtonMapping" is a class-level export (matched by __Packages path)
-    export_offset = insert_idx + len(tags_to_insert)
+    export_offset = insert_idx + len(char_tags)
     input_tags.insert(export_offset,     make_export_assets(351, 'cScrollableText'))
     input_tags.insert(export_offset + 1, make_export_assets(355, 'CreationList'))
     input_tags.insert(export_offset + 2, make_export_assets(361, '__Packages.Shared.ButtonMapping'))
 
     print("Added ExportAssets for cScrollableText (351), CreationList (355), "
           "and __Packages.Shared.ButtonMapping (361)...")
+
+    # Insert DoInitActions AFTER the last existing DoInitActionTag.
+    # This ensures Shared.BSScrollingList (and other __Packages classes) are already defined
+    # when Object.registerClass("CreationList", Shared.BSScrollingList) runs.
+    items = list(input_tags)  # refresh after previous insertions
+    last_init_idx = 0
+    for i, item in enumerate(items):
+        if item.get('type') == 'DoInitActionTag':
+            last_init_idx = i
+    for j, new_item in enumerate(init_action_tags):
+        input_tags.insert(last_init_idx + 1 + j, new_item)
+
+    print(f"Inserted {len(init_action_tags)} DoInitAction tags after position {last_init_idx} "
+          f"(after all existing __Packages DoInitActions)...")
 
     # Add PlaceObject2 entries to SystemPage sprite (spriteId=275)
     system_page = None
@@ -253,11 +276,11 @@ def main():
             break
 
     subtags.insert(sp_insert,
-        make_place_object2(357, 105, 'CreationListPanel', 5690, 1516))
+        make_place_object2(357, 101, 'CreationListPanel', 5690, 1516))
     subtags.insert(sp_insert + 1,
-        make_place_object2(360, 109, 'CreationTextPanel', 5708, 299))
+        make_place_object2(360, 102, 'CreationTextPanel', 5708, 299))
 
-    print("Added CreationListPanel (357, depth=105) and CreationTextPanel (360, depth=109) "
+    print("Added CreationListPanel (357, depth=101) and CreationTextPanel (360, depth=102) "
           "to SystemPage (spriteId=275)...")
 
     # Write output XML
