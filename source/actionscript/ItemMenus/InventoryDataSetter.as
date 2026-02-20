@@ -854,6 +854,10 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_DLC2GEM3:
          case skyui.defines.Form.BASEID_DLC2GEM4:
          case skyui.defines.Form.BASEID_DLC2GEM5:
+         case skyui.defines.Form.BASEID_CCALMSIVIGEM1:
+         case skyui.defines.Form.BASEID_CCALMSIVIGEM2:
+         case skyui.defines.Form.BASEID_CCALMSIVIGEM3:
+         case skyui.defines.Form.BASEID_CCALMSIVIGEM4:
             a_entryObject.subType = skyui.defines.Item.MISC_GEM;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
             break;

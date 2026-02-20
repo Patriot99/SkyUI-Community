@@ -80,6 +80,10 @@ class skyui.defines.Form
    static var BASEID_DLC2GEM4 = 0x31671;
    static var BASEID_DLC2GEM5 = 0x31672;
    static var BASEID_DLC2TROLLSKULL = 0x247F9;
+   static var BASEID_CCALMSIVIGEM1 = 0x990ED;
+   static var BASEID_CCALMSIVIGEM2 = 0x990F0;
+   static var BASEID_CCALMSIVIGEM3 = 0x990F1;
+   static var BASEID_CCALMSIVIGEM4 = 0x990F2;
    static var BASEID_RUBYDRAGONCLAW = 308588;
    static var BASEID_IVORYDRAGONCLAW = 702395;
    static var BASEID_GLASSCLAW = 508512;
