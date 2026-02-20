@@ -191,25 +191,10 @@ class InventoryDataSetter extends ItemcardDataExtender
          a_entryObject.material = skyui.defines.Material.STEEL;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Steel");
       }
-      else if(a_entryObject.keywords.ArmorMaterialStormcloak != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.STORMCLOAK;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Stormcloak");
-      }
-      else if(a_entryObject.keywords.DLC1ArmorMaterialDawnguard != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.DAWNGUARD;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Dawnguard");
-      }
       else if(a_entryObject.keywords.ArmorMaterialFalmer != undefined || a_entryObject.keywords.DLC1ArmorMaterialFalmerHardened != undefined || a_entryObject.keywords.DLC1ArmorMaterielFalmerHeavy != undefined || a_entryObject.keywords.DLC1ArmorMaterielFalmerHeavyOriginal != undefined)
       {
          a_entryObject.material = skyui.defines.Material.FALMER;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Falmer");
-      }
-      else if(a_entryObject.keywords.DLC1ArmorMaterialHunter != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.HUNTER;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Hunter");
       }
       else if(a_entryObject.keywords.DLC1LD_CraftingMaterialAetherium != undefined)
       {
@@ -226,11 +211,6 @@ class InventoryDataSetter extends ItemcardDataExtender
          a_entryObject.material = skyui.defines.Material.CHITIN;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Chitin");
       }
-      else if(a_entryObject.keywords.DLC2ArmorMaterialMoragTong != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.MORAGTONG;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Morag Tong");
-      }
       else if(a_entryObject.keywords.DLC2ArmorMaterialNordicHeavy != undefined || a_entryObject.keywords.DLC2ArmorMaterialNordicLight != undefined || a_entryObject.keywords.DLC2WeaponMaterialNordic != undefined || a_entryObject.keywords.ccEDHSSE001_NordicJewelryKeyword != undefined)
       {
          a_entryObject.material = skyui.defines.Material.NORDIC;
@@ -245,16 +225,6 @@ class InventoryDataSetter extends ItemcardDataExtender
       {
          a_entryObject.material = skyui.defines.Material.FALMER;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Falmer");
-      }
-      else if(a_entryObject.keywords.WeapMaterialSilver != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.SILVER;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Silver");
-      }
-      else if(a_entryObject.keywords.WeapMaterialWood != undefined)
-      {
-         a_entryObject.material = skyui.defines.Material.WOOD;
-         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
       }
       else if(a_entryObject.keywords.ccASVSSE001_ArmorOrdinator != undefined || a_entryObject.keywords.ccASVSSE001_ArmorOrdinatorIndoril != undefined)
       {
