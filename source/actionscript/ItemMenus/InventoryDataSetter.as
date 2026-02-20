@@ -378,6 +378,9 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_WEAPPICKAXE:
          case skyui.defines.Form.BASEID_SSDROCKSPLINTERPICKAXE:
          case skyui.defines.Form.BASEID_DUNVOLUNRUUDPICKAXE:
+         case skyui.defines.Form.BASEID_DLC2PICKAXE1:
+         case skyui.defines.Form.BASEID_DLC2PICKAXE2:
+         case skyui.defines.Form.BASEID_DLC2PICKAXE3:
             a_entryObject.subType = skyui.defines.Weapon.TYPE_PICKAXE;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Pickaxe");
             break;
@@ -821,6 +824,8 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.subType = skyui.defines.Item.MISC_GEM;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
             break;
+         case skyui.defines.Form.BASEID_DLC2DRAGONCLAW1:
+         case skyui.defines.Form.BASEID_DLC2DRAGONCLAW2:
          case skyui.defines.Form.BASEID_RUBYDRAGONCLAW:
          case skyui.defines.Form.BASEID_IVORYDRAGONCLAW:
          case skyui.defines.Form.BASEID_GLASSCLAW:
@@ -834,6 +839,30 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_MS13GOLDENCLAW:
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Claw");
             a_entryObject.subType = skyui.defines.Item.MISC_DRAGONCLAW;
+            break;
+         case skyui.defines.Form.BASEID_DLC1GEM1:
+         case skyui.defines.Form.BASEID_DLC1GEM2:
+         case skyui.defines.Form.BASEID_DLC1GEM3:
+         case skyui.defines.Form.BASEID_DLC1GEM4:
+         case skyui.defines.Form.BASEID_DLC1GEM5:
+         case skyui.defines.Form.BASEID_DLC2GEM1:
+         case skyui.defines.Form.BASEID_DLC2GEM2:
+         case skyui.defines.Form.BASEID_DLC2GEM3:
+         case skyui.defines.Form.BASEID_DLC2GEM4:
+         case skyui.defines.Form.BASEID_DLC2GEM5:
+            a_entryObject.subType = skyui.defines.Item.MISC_GEM;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
+            break;
+         case skyui.defines.Form.BASEID_DLC1REMAINS1:
+         case skyui.defines.Form.BASEID_DLC1REMAINS2:
+         case skyui.defines.Form.BASEID_DLC1REMAINS3:
+         case skyui.defines.Form.BASEID_DLC1REMAINS4:
+            a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
+            break;
+         case skyui.defines.Form.BASEID_DLC2TROLLSKULL:
+            a_entryObject.subType = skyui.defines.Item.MISC_TROLLSKULL;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
             break;
          case skyui.defines.Form.BASEID_LOCKPICK:
             a_entryObject.subType = skyui.defines.Item.MISC_LOCKPICK;
