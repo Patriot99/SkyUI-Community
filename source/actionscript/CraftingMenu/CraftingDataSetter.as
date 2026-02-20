@@ -317,6 +317,26 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          a_entryObject.material = skyui.defines.Material.WOOD;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
       }
+      else if(a_entryObject.keywords.ccBGSSSE025_ArmorMaterialAmber != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialAmber != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.AMBER;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Amber");
+      }
+      else if(a_entryObject.keywords.ccBGSSSE025_ArmorMaterialDark != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialDark != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.DARK;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Dark");
+      }
+      else if(a_entryObject.keywords.ccBGSSSE025_ArmorMaterialGolden != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialGolden != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.GOLDEN;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Golden");
+      }
+      else if(a_entryObject.keywords.ccBGSSSE025_ArmorMaterialMadness != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialMadness != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.MADNESS;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Madness");
+      }
    }
    function processWeaponType(a_entryObject)
    {

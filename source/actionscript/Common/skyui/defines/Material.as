@@ -44,6 +44,10 @@ class skyui.defines.Material
    static var STUDDED = 41;
    static var VAMPIRE = 42;
    static var WOOD = 43;
+   static var AMBER = 44;
+   static var DARK = 45;
+   static var GOLDEN = 46;
+   static var MADNESS = 47;
    function Material()
    {
    }
