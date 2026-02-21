@@ -24,7 +24,9 @@ class skyui.defines.Material
    static var ORDINATOR = 21;
    static var STALHRIM = 22;
    static var STEEL = 23;
+   static var FORSWORN = 27;
    static var SILVER = 25;
+   static var STORMCLOAK = 26;
    static var WOOD = 24;
    function Material()
    {
