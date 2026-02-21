@@ -87,7 +87,12 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
    {
       a_entryObject.iconLabel = "default_armor";
       a_entryObject.iconColor = 15587975;
-      if(a_entryObject.subType == skyui.defines.Armor.EQUIP_BACK)
+      if(a_entryObject.subType == skyui.defines.Armor.EQUIP_CLOAK)
+      {
+         a_entryObject.iconLabel = "clothing_cloak";
+         return;
+      }
+      if(a_entryObject.subType == skyui.defines.Armor.EQUIP_BACKPACK)
       {
          a_entryObject.iconLabel = "clothing_backpack";
          return;

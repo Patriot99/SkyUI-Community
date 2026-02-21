@@ -439,9 +439,9 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             a_entryObject.subType = skyui.defines.Armor.EQUIP_TAIL;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Tail");
             return;
-         case skyui.defines.Armor.PARTMASK_BACK:
-            a_entryObject.subType = skyui.defines.Armor.EQUIP_BACK;
-            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Back");
+         case skyui.defines.Armor.PARTMASK_BACKPACK:
+            a_entryObject.subType = skyui.defines.Armor.EQUIP_BACKPACK;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Backpack");
             return;
          default:
             a_entryObject.subType = a_entryObject.mainPartMask;
@@ -466,7 +466,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case skyui.defines.Armor.PARTMASK_CALVES:
          case skyui.defines.Armor.PARTMASK_SHIELD:
          case skyui.defines.Armor.PARTMASK_TAIL:
-         case skyui.defines.Armor.PARTMASK_BACK:
+         case skyui.defines.Armor.PARTMASK_BACKPACK:
             a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_CLOTHING;
             a_entryObject.weightClassDisplay = skyui.util.Translator.translate("$Clothing");
             break;
