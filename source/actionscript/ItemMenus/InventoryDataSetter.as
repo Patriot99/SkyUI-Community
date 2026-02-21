@@ -231,6 +231,11 @@ class InventoryDataSetter extends ItemcardDataExtender
          a_entryObject.material = skyui.defines.Material.MADNESS;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Madness");
       }
+      else if(a_entryObject.keywords.WeapMaterialWood != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.WOOD;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
+      }
       else if(a_entryObject.keywords.ArmorJewelry != undefined)
       {
          a_entryObject.material = null;
