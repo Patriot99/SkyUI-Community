@@ -22,12 +22,14 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
          case skyui.defines.Form.TYPE_SCROLLITEM:
             a_entryObject.iconLabel = "default_scroll";
             this.processResist(a_entryObject);
+            this.processScrollBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_ARMOR:
             this.processArmorIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_BOOK:
             this.processBookIcon(a_entryObject);
+            this.processBookBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_INGREDIENT:
             a_entryObject.iconLabel = "default_ingredient";
@@ -37,6 +39,7 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Form.TYPE_MISC:
             this.processMiscIcon(a_entryObject);
+            this.processMiscBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_WEAPON:
             this.processWeaponIcon(a_entryObject);
@@ -49,9 +52,11 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Form.TYPE_POTION:
             this.processPotionIcon(a_entryObject);
+            this.processPotionBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_SOULGEM:
             this.processSoulGemIcon(a_entryObject);
+            this.processSoulGemBaseIdIcon(a_entryObject);
       }
       if(this._noIconColors && a_entryObject.iconColor != undefined)
       {
@@ -469,6 +474,302 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             a_entryObject.iconLabel = "clothing_body";
          default:
             return;
+      }
+   }
+   function processMiscBaseIdIcon(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x5ACDB:
+         case 0x5ACDC:
+         case 0x5ACDE:
+         case 0x71CF3:
+         case 0x5ACE1:
+         case 0x5ACE0:
+         case 0x5ACDD:
+         case 0x5ACE2:
+         case 0x5B2DF:
+         case 0x5ACDF:
+         case 0x2B06B:
+         case 0x17749:
+         case 0x195A9:
+         case 0xBC6:
+         case 0xBC9:
+            a_entryObject.iconLabel = "misc_ore";
+            a_entryObject.iconColor = 8553090;
+            break;
+         case 0x60CC2:
+         case 0xBBCD5:
+         case 0x2BAAE:
+         case 0x80D:
+         case 0xE29A:
+            a_entryObject.iconLabel = "book_map";
+            break;
+         case 0x1CD7C:
+            a_entryObject.iconLabel = "misc_strips";
+            a_entryObject.iconColor = 7886222;
+            break;
+         case 0x3AD57:
+         case 0x195AA:
+         case 0x2B04E:
+            a_entryObject.iconLabel = "misc_chitin";
+            a_entryObject.iconColor = 9141338;
+            break;
+         case 0x17719:
+         case 0x1771F:
+            a_entryObject.iconLabel = "scroll_spider";
+            break;
+         case 0x3043:
+         case 0x3035:
+         case 0x5A69:
+         case 0x3011:
+         case 0x303F:
+         case 0x3012:
+         case 0x300E:
+         case 0x300F:
+         case 0x306C:
+         case 0x5A68:
+            a_entryObject.iconLabel = "misc_housepart";
+            a_entryObject.iconColor = 16777215;
+            break;
+         case 0xE72AA:
+         case 0xE72AC:
+         case 0xE72B0:
+         case 0xE72AE:
+         case 0xE72A6:
+         case 0xE72A8:
+         case 0xE72A0:
+         case 0xE729E:
+         case 0xE729A:
+         case 0xE729C:
+         case 0xE7296:
+         case 0xE7298:
+         case 0xE72A4:
+         case 0xE72A2:
+         case 0x64283:
+         case 0x64285:
+         case 0x64287:
+         case 0x64289:
+         case 0x6428B:
+         case 0x6428E:
+         case 0x64290:
+         case 0x64292:
+         case 0x64294:
+         case 0x64296:
+         case 0x64298:
+         case 0x6E806:
+         case 0xDB351:
+         case 0x240D3:
+         case 0x240D4:
+         case 0x240D5:
+         case 0x240D6:
+            a_entryObject.iconLabel = "default_weapon";
+            a_entryObject.iconColor = 16777215;
+            break;
+         case 0x809:
+         case 0x762B7:
+         case 0x762B8:
+         case 0x762B9:
+         case 0x762BA:
+         case 0xBDB37:
+            a_entryObject.iconLabel = "soulgem_ayleidcrystalfull";
+            a_entryObject.iconColor = 6014153;
+            break;
+         case 0x30C9:
+         case 0x30CA:
+         case 0x723B8:
+            a_entryObject.iconLabel = "misc_horsetack";
+            break;
+         case 0xC886C:
+         case 0xC8878:
+         case 0xC8864:
+         case 0xC8872:
+         case 0xC8866:
+         case 0xC8874:
+         case 0xC886A:
+         case 0xAEBF1:
+         case 0xC8861:
+         case 0xC8868:
+         case 0xC886E:
+         case 0xC8870:
+         case 0x804:
+            a_entryObject.iconLabel = "misc_dwarvenscrap";
+            a_entryObject.iconColor = 7364402;
+            break;
+         case 0x28AD7:
+            a_entryObject.iconLabel = "soulgem_azura";
+            break;
+         case 0x2C259:
+         case 0x2C25A:
+         case 0xC4F2E:
+         case 0x82F:
+            a_entryObject.iconLabel = "default_potion";
+            break;
+         case 0x2BAAB:
+            a_entryObject.iconLabel = "potion_poison";
+            break;
+         case 0x457AB:
+         case 0xDC530:
+         case 0xDC52E:
+         case 0x13201:
+         case 0x13202:
+            a_entryObject.iconLabel = "default_scroll";
+            break;
+         case 0xF1491:
+         case 0xCE70B:
+         case 0xE4897:
+         case 0xE3CB7:
+            a_entryObject.iconLabel = "default_book";
+            break;
+         case 0x1CB34:
+         case 0xDA732:
+         case 0xDA733:
+         case 0xDA734:
+         case 0xDA735:
+            a_entryObject.iconLabel = "armor_ring";
+            break;
+         case 0x1AAD6:
+         case 0x8B2:
+         case 0x8B8:
+         case 0x8B9:
+         case 0x8BA:
+         case 0x8BB:
+         case 0x8BC:
+         case 0x8BD:
+         case 0x8BE:
+         case 0x8BF:
+         case 0x8C3:
+         case 0x8C4:
+         case 0x8C5:
+            a_entryObject.iconLabel = "default_ingredient";
+            break;
+         case 0xDABA9:
+         case 0xDABA7:
+         case 0x105177:
+         case 0x3292F:
+         case 0x200BA:
+         case 0xDABAB:
+         case 0x200B6:
+         case 0x105109:
+         case 0xE77BB:
+         case 0xCE153:
+         case 0x8AD49:
+         case 0x67855:
+            a_entryObject.iconLabel = "misc_instrument";
+            a_entryObject.iconColor = 16777215;
+            break;
+         case 0xB08C7:
+         case 0xFBC3A:
+         case 0xFBC3B:
+         case 0xFBC3C:
+         case 0xFBC3D:
+         case 0x12DD3A:
+         case 0x12DD3B:
+         case 0x12DD3C:
+            a_entryObject.iconLabel = "misc_jar";
+            a_entryObject.iconColor = 16777215;
+            break;
+      }
+   }
+   function processBookBaseIdIcon(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0xDDEFB:
+         case 0xEF07A:
+         case 0xF33CD:
+         case 0xF33CE:
+         case 0xF33CF:
+         case 0xF33D0:
+         case 0xF33D1:
+         case 0xF33D2:
+         case 0xF33D3:
+         case 0xF33D4:
+         case 0xF33D5:
+         case 0xF33E0:
+         case 0x1CAF2:
+         case 0x70CCA:
+         case 0x70CCB:
+         case 0x70CCC:
+         case 0x70CCD:
+         case 0x70CCE:
+         case 0x70CCF:
+         case 0x70CD0:
+         case 0x70CD1:
+         case 0x70CD2:
+         case 0x70CD3:
+         case 0x70CD4:
+         case 0x70CD5:
+            a_entryObject.iconLabel = "book_map";
+            break;
+         case 0x2D513:
+         case 0x48782:
+         case 0x126DC:
+         case 0x11A13:
+         case 0x118F9:
+            a_entryObject.iconLabel = "misc_elderscroll";
+            a_entryObject.iconColor = 7693901;
+            break;
+      }
+   }
+   function processScrollBaseIdIcon(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x1445E:
+         case 0x14480:
+         case 0x16E1C:
+         case 0x1707B:
+         case 0x1952C:
+         case 0x19534:
+         case 0x1CAB0:
+         case 0x1DA03:
+         case 0x206D3:
+         case 0x206D9:
+         case 0x206DB:
+         case 0x2095F:
+         case 0x20960:
+         case 0x20961:
+         case 0x27490:
+         case 0x2749D:
+         case 0x274A5:
+         case 0x3319E:
+         case 0x3319F:
+         case 0x331A0:
+         case 0x331A1:
+            a_entryObject.iconLabel = "scroll_spider";
+            break;
+      }
+   }
+   function processPotionBaseIdIcon(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x20E802:
+         case 0xAF476:
+         case 0xAF477:
+            a_entryObject.iconLabel = "soulgem_ayleidcrystalfull";
+            a_entryObject.iconColor = 6014153;
+            break;
+      }
+   }
+   function processSoulGemBaseIdIcon(a_entryObject)
+   {
+      if(a_entryObject.baseId == 0x804 || a_entryObject.baseId == 0x137F40)
+      {
+         a_entryObject.iconColor = 13716024;
+         switch(a_entryObject.status)
+         {
+            case skyui.defines.Item.SOULGEMSTATUS_EMPTY:
+               a_entryObject.iconLabel = "soulgem_tomatoempty";
+               break;
+            case skyui.defines.Item.SOULGEMSTATUS_PARTIAL:
+               a_entryObject.iconLabel = "soulgem_tomatopartial";
+               break;
+            case skyui.defines.Item.SOULGEMSTATUS_FULL:
+               a_entryObject.iconLabel = "soulgem_tomatofull";
+               break;
+         }
       }
    }
 }
