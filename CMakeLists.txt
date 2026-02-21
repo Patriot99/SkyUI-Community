@@ -33,7 +33,6 @@ Papyrus_Add(
 find_program(FFDEC_CLI NAMES ffdec-cli ffdec-cli.exe
 	PATHS "C:/Program Files (x86)/FFDec" "C:/Program Files/FFDec"
 )
-find_program(PYTHON_EXECUTABLE NAMES python3 python)
 
 set(SWF_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/_SWF")
 
@@ -100,24 +99,11 @@ if(FFDEC_CLI)
 					-P "${ASSEMBLE_SCRIPT}"
 			)
 
-			# Handle optional pre-patch step (merge visual sprites from a reference SWF)
-			if(DEFINED ${VAR_PREFIX}_PATCH_SCRIPT AND PYTHON_EXECUTABLE)
-				set(_PATCHED_SWF "${AS_STAGING_BASE}/${VAR_PREFIX}_patched.swf")
-				add_custom_target("AS_${VAR_PREFIX}"
-					${_ASSEMBLE_COMMAND}
-					COMMAND "${PYTHON_EXECUTABLE}" "${${VAR_PREFIX}_PATCH_SCRIPT}"
-						"${SWF_INPUT}" "${${VAR_PREFIX}_PATCH_CC_SWF}"
-						"${_PATCHED_SWF}" "${FFDEC_CLI}"
-					COMMAND "${FFDEC_CLI}" -importScript "${_PATCHED_SWF}" "${SWF_OUT}" "${AS_STAGING}"
-					COMMENT "Patching and importing ActionScript into ${SWF_REL}"
-				)
-			else()
-				add_custom_target("AS_${VAR_PREFIX}"
-					${_ASSEMBLE_COMMAND}
-					COMMAND "${FFDEC_CLI}" -importScript "${SWF_INPUT}" "${SWF_OUT}" "${AS_STAGING}"
-					COMMENT "Importing ActionScript files into ${SWF_REL}"
-				)
-			endif()
+			add_custom_target("AS_${VAR_PREFIX}"
+				${_ASSEMBLE_COMMAND}
+				COMMAND "${FFDEC_CLI}" -importScript "${SWF_INPUT}" "${SWF_OUT}" "${AS_STAGING}"
+				COMMENT "Importing ActionScript files into ${SWF_REL}"
+			)
 
 			list(APPEND AS_TARGETS "AS_${VAR_PREFIX}")
 		else()

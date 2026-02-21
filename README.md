@@ -5,7 +5,6 @@
 ### Prerequisites
 
 - [CMake 3.24+](https://cmake.org/download/)
-- [Python 3.8+](https://www.python.org/downloads/) (required for SWF patching scripts)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) (or another CMake-supported generator)
 - [JPEXS Free Flash Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) (windows installer)
 - A clean Skyrim Special Edition installation with:
