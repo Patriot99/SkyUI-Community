@@ -116,7 +116,12 @@ class InventoryDataSetter extends ItemcardDataExtender
       {
          return undefined;
       }
-      if(a_entryObject.keywords.ArmorMaterialDaedric != undefined || a_entryObject.keywords.WeapMaterialDaedric != undefined || a_entryObject.keywords.ccBGSSSE025_ArmorMaterialDark != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialDark != undefined || a_entryObject.keywords.ccBGSSSE025_ArmorMaterialGolden != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialGolden != undefined)
+      if(a_entryObject.keywords.ccBGSSSE001_FishingPoleKW != undefined)
+      {
+         a_entryObject.material = null;
+         a_entryObject.materialDisplay = null;
+      }
+      else if(a_entryObject.keywords.ArmorMaterialDaedric != undefined || a_entryObject.keywords.WeapMaterialDaedric != undefined || a_entryObject.keywords.ccBGSSSE025_ArmorMaterialDark != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialDark != undefined || a_entryObject.keywords.ccBGSSSE025_ArmorMaterialGolden != undefined || a_entryObject.keywords.ccBGSSSE025_WeapMaterialGolden != undefined)
       {
          a_entryObject.material = skyui.defines.Material.DAEDRIC;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Daedric");
@@ -226,14 +231,19 @@ class InventoryDataSetter extends ItemcardDataExtender
          a_entryObject.material = skyui.defines.Material.MADNESS;
          a_entryObject.materialDisplay = skyui.util.Translator.translate("$Madness");
       }
+      else if(a_entryObject.keywords.WeapMaterialWood != undefined)
+      {
+         a_entryObject.material = skyui.defines.Material.WOOD;
+         a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
+      }
       else if(a_entryObject.keywords.ArmorJewelry != undefined)
       {
-         a_entryObject.material = skyui.defines.Material.JEWELRY;
+         a_entryObject.material = null;
          a_entryObject.materialDisplay = null;
       }
       else if(a_entryObject.keywords.ArmorClothing != undefined)
       {
-         a_entryObject.material = skyui.defines.Material.CLOTHING;
+         a_entryObject.material = null;
          a_entryObject.materialDisplay = null;
       }
    }
@@ -241,6 +251,12 @@ class InventoryDataSetter extends ItemcardDataExtender
    {
       a_entryObject.subType = null;
       a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Weapon");
+      if(a_entryObject.keywords != undefined && a_entryObject.keywords.ccBGSSSE001_FishingPoleKW != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_FISHINGROD;
+         a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$FishingRod");
+         return;
+      }
       switch(a_entryObject.weaponType)
       {
          case skyui.defines.Weapon.ANIM_HANDTOHANDMELEE:
@@ -400,9 +416,9 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.subType = skyui.defines.Armor.EQUIP_TAIL;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Tail");
             return;
-         case skyui.defines.Armor.PARTMASK_BACKPACK:
-            a_entryObject.subType = skyui.defines.Armor.EQUIP_BACKPACK;
-            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Backpack");
+         case skyui.defines.Armor.PARTMASK_BACK:
+            a_entryObject.subType = skyui.defines.Armor.EQUIP_BACK;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Back");
             return;
          default:
             a_entryObject.subType = a_entryObject.mainPartMask;
@@ -427,7 +443,7 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Armor.PARTMASK_CALVES:
          case skyui.defines.Armor.PARTMASK_SHIELD:
          case skyui.defines.Armor.PARTMASK_TAIL:
-         case skyui.defines.Armor.PARTMASK_BACKPACK:
+         case skyui.defines.Armor.PARTMASK_BACK:
             a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_CLOTHING;
             a_entryObject.weightClassDisplay = skyui.util.Translator.translate("$Clothing");
             break;
@@ -545,6 +561,7 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_STEELARROW:
          case skyui.defines.Form.BASEID_MQ101STEELARROW:
          case skyui.defines.Form.BASEID_DRAUGRARROW:
+         case skyui.defines.Form.BASEID_DUNGEIRMUNDSIGDISARROWSILLUSION:
             a_entryObject.material = skyui.defines.Material.STEEL;
             a_entryObject.materialDisplay = skyui.util.Translator.translate("$Steel");
             break;
@@ -553,7 +570,6 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_CWARROWSHORT:
          case skyui.defines.Form.BASEID_TRAPDART:
          case skyui.defines.Form.BASEID_DUNARCHERPRATICEARROW:
-         case skyui.defines.Form.BASEID_DUNGEIRMUNDSIGDISARROWSILLUSION:
          case skyui.defines.Form.BASEID_FOLLOWERIRONARROW:
          case skyui.defines.Form.BASEID_TESTDLC1BOLT:
             a_entryObject.material = skyui.defines.Material.IRON;
@@ -562,7 +578,6 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_DLC2RIEKLINGSPEARTHROWN:
             a_entryObject.material = skyui.defines.Material.WOOD;
             a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
-            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Spear");
          default:
             return;
       }
