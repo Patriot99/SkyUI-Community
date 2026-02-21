@@ -40,6 +40,14 @@ class skyui.defines.Item
    static var MISC_LOCKPICK = 20;
    static var MISC_GOLD = 21;
    static var MISC_TROLLSKULL = 22;
+   static var MISC_NETCHLEATHER = 23;
+   static var MISC_AYLEIDCRYSTAL = 24;
+   static var MISC_HORSETACK = 25;
+   static var MISC_BROKENWEAPON = 26;
+   static var MISC_DWARVENSCRAP = 27;
+   static var MISC_INSTRUMENT = 28;
+   static var MISC_BUGJAR = 29;
+   static var MISC_SCROLLSPIDER = 30;
    static var BOOK_SPELLTOME = 0;
    static var BOOK_NOTE = 1;
    static var BOOK_RECIPE = 2;

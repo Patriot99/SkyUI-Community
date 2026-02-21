@@ -19,6 +19,7 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Scroll");
             a_entryObject.duration = a_entryObject.duration <= 0 ? null : Math.round(a_entryObject.duration * 100) / 100;
             a_entryObject.magnitude = a_entryObject.magnitude <= 0 ? null : Math.round(a_entryObject.magnitude * 100) / 100;
+            this.processScrollBaseId(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_ARMOR:
             a_entryObject.isEnchanted = a_itemInfo.effects != "";
@@ -31,6 +32,7 @@ class InventoryDataSetter extends ItemcardDataExtender
             break;
          case skyui.defines.Form.TYPE_BOOK:
             this.processBookType(a_entryObject);
+            this.processBookBaseId(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_INGREDIENT:
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ingredient");
@@ -64,6 +66,7 @@ class InventoryDataSetter extends ItemcardDataExtender
             a_entryObject.duration = a_entryObject.duration <= 0 ? null : Math.round(a_entryObject.duration * 100) / 100;
             a_entryObject.magnitude = a_entryObject.magnitude <= 0 ? null : Math.round(a_entryObject.magnitude * 100) / 100;
             this.processPotionType(a_entryObject);
+            this.processPotionBaseId(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_SOULGEM:
             this.processSoulGemType(a_entryObject);
@@ -717,6 +720,11 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_DA01SOULGEMBLACKSTAR:
          case skyui.defines.Form.BASEID_DA01SOULGEMAZURASSTAR:
             a_entryObject.subType = skyui.defines.Item.SOULGEM_AZURA;
+            return;
+         case 0x804:
+         case 0x137F40:
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$SoulTomato");
+            return;
          default:
             return;
       }
@@ -864,6 +872,178 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.BASEID_LEATHERSTRIPS:
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Strips");
             a_entryObject.subType = skyui.defines.Item.MISC_LEATHERSTRIPS;
+            break;
+         case 0x3AD57:
+         case 0x195AA:
+         case 0x2B04E:
+            a_entryObject.subType = skyui.defines.Item.MISC_NETCHLEATHER;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$NetchLeather");
+            break;
+         case 0x3043:
+         case 0x3035:
+         case 0x5A69:
+         case 0x3011:
+         case 0x303F:
+         case 0x3012:
+         case 0x300E:
+         case 0x300F:
+         case 0x306C:
+         case 0x5A68:
+            a_entryObject.subType = skyui.defines.Item.MISC_HOUSEPART;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$BuildingMaterial");
+            break;
+         case 0xE72AA:
+         case 0xE72AC:
+         case 0xE72B0:
+         case 0xE72AE:
+         case 0xE72A6:
+         case 0xE72A8:
+         case 0xE72A0:
+         case 0xE729E:
+         case 0xE729A:
+         case 0xE729C:
+         case 0xE7296:
+         case 0xE7298:
+         case 0xE72A4:
+         case 0xE72A2:
+         case 0x64283:
+         case 0x64285:
+         case 0x64287:
+         case 0x64289:
+         case 0x6428B:
+         case 0x6428E:
+         case 0x64290:
+         case 0x64292:
+         case 0x64294:
+         case 0x64296:
+         case 0x64298:
+         case 0x6E806:
+         case 0xDB351:
+         case 0x240D3:
+         case 0x240D4:
+         case 0x240D5:
+         case 0x240D6:
+            a_entryObject.subType = skyui.defines.Item.MISC_BROKENWEAPON;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$BrokenWeapon");
+            break;
+         case 0x809:
+         case 0x762B7:
+         case 0x762B8:
+         case 0x762B9:
+         case 0x762BA:
+         case 0xBDB37:
+            a_entryObject.subType = skyui.defines.Item.MISC_AYLEIDCRYSTAL;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$AyleidCrystal");
+            break;
+         case 0x30C9:
+         case 0x30CA:
+         case 0x723B8:
+            a_entryObject.subType = skyui.defines.Item.MISC_HORSETACK;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$HorseTack");
+            break;
+         case 0xC886C:
+         case 0xC8878:
+         case 0xC8864:
+         case 0xC8872:
+         case 0xC8866:
+         case 0xC8874:
+         case 0xC886A:
+         case 0xAEBF1:
+         case 0xC8861:
+         case 0xC8868:
+         case 0xC886E:
+         case 0xC8870:
+         case 0x804:
+            a_entryObject.subType = skyui.defines.Item.MISC_DWARVENSCRAP;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$DwarvenScrap");
+            break;
+         case 0xDABA9:
+         case 0xDABA7:
+         case 0x105177:
+         case 0x3292F:
+         case 0x200BA:
+         case 0xDABAB:
+         case 0x200B6:
+         case 0x105109:
+         case 0xE77BB:
+         case 0xCE153:
+         case 0x8AD49:
+         case 0x67855:
+            a_entryObject.subType = skyui.defines.Item.MISC_INSTRUMENT;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Instrument");
+            break;
+         case 0xB08C7:
+         case 0xFBC3A:
+         case 0xFBC3B:
+         case 0xFBC3C:
+         case 0xFBC3D:
+         case 0x12DD3A:
+         case 0x12DD3B:
+         case 0x12DD3C:
+            a_entryObject.subType = skyui.defines.Item.MISC_BUGJAR;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$BugJar");
+            break;
+         case 0x17719:
+         case 0x1771F:
+            a_entryObject.subType = skyui.defines.Item.MISC_SCROLLSPIDER;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ScrollSpider");
+            break;
+         default:
+            return;
+      }
+   }
+   function processBookBaseId(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x2D513:
+         case 0x48782:
+         case 0x126DC:
+         case 0x11A13:
+         case 0x118F9:
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ElderScroll");
+         default:
+            return;
+      }
+   }
+   function processScrollBaseId(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x1445E:
+         case 0x14480:
+         case 0x16E1C:
+         case 0x1707B:
+         case 0x1952C:
+         case 0x19534:
+         case 0x1CAB0:
+         case 0x1DA03:
+         case 0x206D3:
+         case 0x206D9:
+         case 0x206DB:
+         case 0x2095F:
+         case 0x20960:
+         case 0x20961:
+         case 0x27490:
+         case 0x2749D:
+         case 0x274A5:
+         case 0x3319E:
+         case 0x3319F:
+         case 0x331A0:
+         case 0x331A1:
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ScrollSpider");
+         default:
+            return;
+      }
+   }
+   function processPotionBaseId(a_entryObject)
+   {
+      switch(a_entryObject.baseId)
+      {
+         case 0x20E802:
+         case 0xAF476:
+         case 0xAF477:
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$AyleidCrystal");
          default:
             return;
       }
