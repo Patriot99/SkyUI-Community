@@ -1,6 +1,7 @@
 class FavoritesListEntry extends skyui.components.list.BasicListEntry
 {
    var _alpha;
+   var _iconLabel;
    var equipIcon;
    var hotkeyIcon;
    var isEnabled;
@@ -17,6 +18,10 @@ class FavoritesListEntry extends skyui.components.list.BasicListEntry
    function initialize(a_index, a_state)
    {
       super.initialize();
+      var _loc3_ = new MovieClipLoader();
+      _loc3_.addListener(this);
+      _loc3_.loadClip("skyui/icons_item_psychosteve.swf",this.itemIcon);
+      this.itemIcon._visible = false;
    }
    function setEntry(a_entryObject, a_state)
    {
@@ -66,8 +71,8 @@ class FavoritesListEntry extends skyui.components.list.BasicListEntry
             this.textField.SetText(this.textField.text.substr(0,_loc9_ - 3) + "...");
          }
       }
-      var _loc12_ = a_entryObject.iconLabel == undefined ? "default_misc" : a_entryObject.iconLabel;
-      this.itemIcon.gotoAndStop(_loc12_);
+      this._iconLabel = a_entryObject.iconLabel == undefined ? "default_misc" : a_entryObject.iconLabel;
+      this.itemIcon.gotoAndStop(this._iconLabel);
       this.itemIcon._alpha = !_loc10_ ? 50 : 90;
       if(a_entryObject == null)
       {
@@ -89,5 +94,10 @@ class FavoritesListEntry extends skyui.components.list.BasicListEntry
          this.offHandIcon._x = _loc5_;
       }
       this.offHandIcon._visible = _loc8_;
+   }
+   function onLoadInit(a_icon)
+   {
+      a_icon._visible = true;
+      a_icon.gotoAndStop(this._iconLabel == undefined ? "default_misc" : this._iconLabel);
    }
 }
