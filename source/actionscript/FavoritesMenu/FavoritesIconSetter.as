@@ -5,20 +5,16 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processList(a_list)
    {
-      var _loc4_ = a_list.entryList;
-      var _loc3_ = 0;
-      var _loc2_;
-      while(_loc3_ < _loc4_.length)
+      var _loc3_ = a_list.entryList;
+      var _loc2_ = 0;
+      while(_loc2_ < _loc3_.length)
       {
-         _loc2_ = _loc4_[_loc3_];
-         this.fixSKSEExtendedObject(_loc2_);
-         this.processEntry(_loc2_);
-         _loc3_ = _loc3_ + 1;
+         this.processEntry(_loc3_[_loc2_]);
+         _loc2_ = _loc2_ + 1;
       }
    }
    function processEntry(a_entryObject)
    {
-      a_entryObject.baseId = a_entryObject.formId & 0xFFFFFF;
       switch(a_entryObject.formType)
       {
          case skyui.defines.Form.TYPE_SCROLLITEM:
@@ -1008,49 +1004,6 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
          case skyui.defines.Actor.AV_FROSTRESIST:
             a_entryObject.iconLabel = "magic_frost";
             a_entryObject.iconColor = 2096127;
-         default:
-            return;
-      }
-   }
-   function fixSKSEExtendedObject(a_extendedObject)
-   {
-      if(a_extendedObject.formType == undefined)
-      {
-         return undefined;
-      }
-      var _loc2_;
-      switch(a_extendedObject.formType)
-      {
-         case skyui.defines.Form.TYPE_SPELL:
-         case skyui.defines.Form.TYPE_SCROLLITEM:
-         case skyui.defines.Form.TYPE_INGREDIENT:
-         case skyui.defines.Form.TYPE_POTION:
-         case skyui.defines.Form.TYPE_EFFECTSETTING:
-            if(a_extendedObject.school == undefined && a_extendedObject.subType != undefined)
-            {
-               a_extendedObject.school = a_extendedObject.subType;
-               delete a_extendedObject.subType;
-            }
-            if(a_extendedObject.resistance == undefined && a_extendedObject.magicType != undefined)
-            {
-               a_extendedObject.resistance = a_extendedObject.magicType;
-               delete a_extendedObject.magicType;
-            }
-            break;
-         case skyui.defines.Form.TYPE_WEAPON:
-            if(a_extendedObject.weaponType == undefined && a_extendedObject.subType != undefined)
-            {
-               a_extendedObject.weaponType = a_extendedObject.subType;
-               delete a_extendedObject.subType;
-            }
-            break;
-         case skyui.defines.Form.TYPE_BOOK:
-            if(a_extendedObject.flags == undefined && a_extendedObject.bookType != undefined)
-            {
-               _loc2_ = a_extendedObject.bookType;
-               a_extendedObject.bookType = (_loc2_ & 0xFF00) >>> 8;
-               a_extendedObject.flags = _loc2_ & 0xFF;
-            }
          default:
             return;
       }
