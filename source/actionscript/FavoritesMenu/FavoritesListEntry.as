@@ -18,10 +18,18 @@ class FavoritesListEntry extends skyui.components.list.BasicListEntry
    function initialize(a_index, a_state)
    {
       super.initialize();
+      this.fixIconPos();
       var _loc3_ = new MovieClipLoader();
       _loc3_.addListener(this);
       _loc3_.loadClip("skyui/icons_item_psychosteve.swf",this.itemIcon);
       this.itemIcon._visible = false;
+   }
+   function fixIconPos()
+   {
+      var _loc1_ = this.itemIcon.transform;
+      var _loc2_ = _loc1_.matrix;
+      _loc2_.translate(-64 * _loc2_.a,-64 * _loc2_.d);
+      _loc1_.matrix = _loc2_;
    }
    function setEntry(a_entryObject, a_state)
    {
