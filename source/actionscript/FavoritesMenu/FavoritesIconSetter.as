@@ -164,6 +164,12 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
          case skyui.defines.Armor.PARTMASK_TAIL:
             a_entryObject.subType = skyui.defines.Armor.EQUIP_TAIL;
             return;
+         case skyui.defines.Armor.PARTMASK_CLOAK:
+            a_entryObject.subType = skyui.defines.Armor.EQUIP_CLOAK;
+            return;
+         case skyui.defines.Armor.PARTMASK_BACKPACK:
+            a_entryObject.subType = skyui.defines.Armor.EQUIP_BACKPACK;
+            return;
          default:
             a_entryObject.subType = a_entryObject.mainPartMask;
             return;
@@ -555,6 +561,11 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    function processWeaponType(a_entryObject)
    {
       a_entryObject.subType = null;
+      if(a_entryObject.keywords != undefined && a_entryObject.keywords.ccBGSSSE001_FishingPoleKW != undefined)
+      {
+         a_entryObject.subType = skyui.defines.Weapon.TYPE_FISHINGROD;
+         return;
+      }
       switch(a_entryObject.weaponType)
       {
          case skyui.defines.Weapon.ANIM_HANDTOHANDMELEE:

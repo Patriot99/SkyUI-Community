@@ -85,6 +85,16 @@ class CraftingIconSetter implements skyui.components.list.IListProcessor
    {
       a_entryObject.iconLabel = "default_armor";
       a_entryObject.iconColor = 15587975;
+      if(a_entryObject.subType == skyui.defines.Armor.EQUIP_CLOAK)
+      {
+         a_entryObject.iconLabel = "clothing_cloak";
+         return;
+      }
+      if(a_entryObject.subType == skyui.defines.Armor.EQUIP_BACKPACK)
+      {
+         a_entryObject.iconLabel = "clothing_backpack";
+         return;
+      }
       switch(a_entryObject.weightClass)
       {
          case skyui.defines.Armor.WEIGHT_LIGHT:
@@ -280,6 +290,9 @@ class CraftingIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Weapon.TYPE_PICKAXE:
             a_entryObject.iconLabel = "weapon_pickaxe";
+            break;
+         case skyui.defines.Weapon.TYPE_FISHINGROD:
+            a_entryObject.iconLabel = "weapon_fishingrod";
             break;
          case skyui.defines.Weapon.TYPE_WOODAXE:
             a_entryObject.iconLabel = "weapon_woodaxe";

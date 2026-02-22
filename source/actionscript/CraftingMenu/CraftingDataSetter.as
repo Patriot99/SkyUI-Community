@@ -454,6 +454,10 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             a_entryObject.subType = skyui.defines.Armor.EQUIP_TAIL;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Tail");
             return;
+         case skyui.defines.Armor.PARTMASK_CLOAK:
+            a_entryObject.subType = skyui.defines.Armor.EQUIP_CLOAK;
+            a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ClothingCloak");
+            return;
          case skyui.defines.Armor.PARTMASK_BACKPACK:
             a_entryObject.subType = skyui.defines.Armor.EQUIP_BACKPACK;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Backpack");
