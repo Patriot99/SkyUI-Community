@@ -366,9 +366,9 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x04:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC2PICKAXE1:
-               case skyui.defines.Form.BASEID_DLC2PICKAXE2:
-               case skyui.defines.Form.BASEID_DLC2PICKAXE3:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE1:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE2:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE3:
                   a_entryObject.subType = skyui.defines.Weapon.TYPE_PICKAXE;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Pickaxe");
             }
@@ -512,7 +512,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             }
             return;
          case 0x02:
-            if(a_entryObject.formId == skyui.defines.Form.BASEID_DLC1CLOTHESVAMPIRELORDARMOR)
+            if(a_entryObject.formId == skyui.defines.Form.FORMID_DLC1CLOTHESVAMPIRELORDARMOR)
             {
                a_entryObject.subType = skyui.defines.Armor.EQUIP_BODY;
                a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Body");
@@ -629,12 +629,12 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x02:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC1ELVENARROWBLESSED:
-               case skyui.defines.Form.BASEID_DLC1ELVENARROWBLOOD:
+               case skyui.defines.Form.FORMID_DLC1ELVENARROWBLESSED:
+               case skyui.defines.Form.FORMID_DLC1ELVENARROWBLOOD:
                   a_entryObject.material = skyui.defines.Material.ELVEN;
                   a_entryObject.materialDisplay = skyui.util.Translator.translate("$Elven");
                   break;
-               case skyui.defines.Form.BASEID_TESTDLC1BOLT:
+               case skyui.defines.Form.FORMID_TESTDLC1BOLT:
                   a_entryObject.material = skyui.defines.Material.IRON;
                   a_entryObject.materialDisplay = skyui.util.Translator.translate("$Iron");
             }
@@ -642,11 +642,11 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x04:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC2DWARVENBALLISTABOLT:
+               case skyui.defines.Form.FORMID_DLC2DWARVENBALLISTABOLT:
                   a_entryObject.material = skyui.defines.Material.DWARVEN;
                   a_entryObject.materialDisplay = skyui.util.Translator.translate("$Dwarven");
                   break;
-               case skyui.defines.Form.BASEID_DLC2RIEKLINGSPEARTHROWN:
+               case skyui.defines.Form.FORMID_DLC2RIEKLINGSPEARTHROWN:
                   a_entryObject.material = skyui.defines.Material.WOOD;
                   a_entryObject.materialDisplay = skyui.util.Translator.translate("$Wood");
             }
@@ -1053,8 +1053,8 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x01:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_UPDATEHORSETACK1:
-               case skyui.defines.Form.BASEID_UPDATEHORSETACK2:
+               case skyui.defines.Form.FORMID_UPDATEHORSETACK1:
+               case skyui.defines.Form.FORMID_UPDATEHORSETACK2:
                   a_entryObject.subType = skyui.defines.Item.MISC_HORSETACK;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$HorseTack");
             }
@@ -1062,25 +1062,25 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x02:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC1GEM1:
-               case skyui.defines.Form.BASEID_DLC1GEM2:
-               case skyui.defines.Form.BASEID_DLC1GEM3:
-               case skyui.defines.Form.BASEID_DLC1GEM4:
-               case skyui.defines.Form.BASEID_DLC1GEM5:
+               case skyui.defines.Form.FORMID_DLC1GEM1:
+               case skyui.defines.Form.FORMID_DLC1GEM2:
+               case skyui.defines.Form.FORMID_DLC1GEM3:
+               case skyui.defines.Form.FORMID_DLC1GEM4:
+               case skyui.defines.Form.FORMID_DLC1GEM5:
                   a_entryObject.subType = skyui.defines.Item.MISC_GEM;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
                   break;
-               case skyui.defines.Form.BASEID_DLC1REMAINS1:
-               case skyui.defines.Form.BASEID_DLC1REMAINS2:
-               case skyui.defines.Form.BASEID_DLC1REMAINS3:
-               case skyui.defines.Form.BASEID_DLC1REMAINS4:
-               case skyui.defines.Form.BASEID_DLC1REMAINS5:
-               case skyui.defines.Form.BASEID_DLC1REMAINS6:
-               case skyui.defines.Form.BASEID_DLC1REMAINS7:
+               case skyui.defines.Form.FORMID_DLC1REMAINS1:
+               case skyui.defines.Form.FORMID_DLC1REMAINS2:
+               case skyui.defines.Form.FORMID_DLC1REMAINS3:
+               case skyui.defines.Form.FORMID_DLC1REMAINS4:
+               case skyui.defines.Form.FORMID_DLC1REMAINS5:
+               case skyui.defines.Form.FORMID_DLC1REMAINS6:
+               case skyui.defines.Form.FORMID_DLC1REMAINS7:
                   a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
                   break;
-               case skyui.defines.Form.BASEID_DLC1CHITIN1:
+               case skyui.defines.Form.FORMID_DLC1CHITIN1:
                   a_entryObject.subType = skyui.defines.Item.MISC_NETCHLEATHER;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$NetchLeather");
             }
@@ -1088,16 +1088,16 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x03:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_HFHOUSEPART1:
-               case skyui.defines.Form.BASEID_HFHOUSEPART2:
-               case skyui.defines.Form.BASEID_HFHOUSEPART3:
-               case skyui.defines.Form.BASEID_HFHOUSEPART4:
-               case skyui.defines.Form.BASEID_HFHOUSEPART5:
-               case skyui.defines.Form.BASEID_HFHOUSEPART6:
-               case skyui.defines.Form.BASEID_HFHOUSEPART7:
-               case skyui.defines.Form.BASEID_HFHOUSEPART8:
-               case skyui.defines.Form.BASEID_HFHOUSEPART9:
-               case skyui.defines.Form.BASEID_HFHOUSEPART10:
+               case skyui.defines.Form.FORMID_HFHOUSEPART1:
+               case skyui.defines.Form.FORMID_HFHOUSEPART2:
+               case skyui.defines.Form.FORMID_HFHOUSEPART3:
+               case skyui.defines.Form.FORMID_HFHOUSEPART4:
+               case skyui.defines.Form.FORMID_HFHOUSEPART5:
+               case skyui.defines.Form.FORMID_HFHOUSEPART6:
+               case skyui.defines.Form.FORMID_HFHOUSEPART7:
+               case skyui.defines.Form.FORMID_HFHOUSEPART8:
+               case skyui.defines.Form.FORMID_HFHOUSEPART9:
+               case skyui.defines.Form.FORMID_HFHOUSEPART10:
                   a_entryObject.subType = skyui.defines.Item.MISC_HOUSEPART;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$BuildingMaterial");
             }
@@ -1105,44 +1105,44 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
          case 0x04:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC2DRAGONCLAW1:
-               case skyui.defines.Form.BASEID_DLC2DRAGONCLAW2:
+               case skyui.defines.Form.FORMID_DLC2DRAGONCLAW1:
+               case skyui.defines.Form.FORMID_DLC2DRAGONCLAW2:
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Claw");
                   a_entryObject.subType = skyui.defines.Item.MISC_DRAGONCLAW;
                   break;
-               case skyui.defines.Form.BASEID_DLC2GEM1:
-               case skyui.defines.Form.BASEID_DLC2GEM2:
-               case skyui.defines.Form.BASEID_DLC2GEM3:
-               case skyui.defines.Form.BASEID_DLC2GEM4:
-               case skyui.defines.Form.BASEID_DLC2GEM5:
+               case skyui.defines.Form.FORMID_DLC2GEM1:
+               case skyui.defines.Form.FORMID_DLC2GEM2:
+               case skyui.defines.Form.FORMID_DLC2GEM3:
+               case skyui.defines.Form.FORMID_DLC2GEM4:
+               case skyui.defines.Form.FORMID_DLC2GEM5:
                   a_entryObject.subType = skyui.defines.Item.MISC_GEM;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
                   break;
-               case skyui.defines.Form.BASEID_DLC2CHITIN1:
-               case skyui.defines.Form.BASEID_DLC2NETCHLEATHER:
+               case skyui.defines.Form.FORMID_DLC2CHITIN1:
+               case skyui.defines.Form.FORMID_DLC2NETCHLEATHER:
                   a_entryObject.subType = skyui.defines.Item.MISC_NETCHLEATHER;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$NetchLeather");
                   break;
-               case skyui.defines.Form.BASEID_DLC2TROLLSKULL:
+               case skyui.defines.Form.FORMID_DLC2TROLLSKULL:
                   a_entryObject.subType = skyui.defines.Item.MISC_TROLLSKULL;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
                   break;
-               case skyui.defines.Form.BASEID_DLC2SCROLLSPIDERMISC1:
-               case skyui.defines.Form.BASEID_DLC2SCROLLSPIDERMISC2:
+               case skyui.defines.Form.FORMID_DLC2SCROLLSPIDERMISC1:
+               case skyui.defines.Form.FORMID_DLC2SCROLLSPIDERMISC2:
                   a_entryObject.subType = skyui.defines.Item.MISC_SCROLLSPIDER;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ScrollSpider");
                   break;
-               case skyui.defines.Form.BASEID_DLC2MISCMAP:
+               case skyui.defines.Form.FORMID_DLC2MISCMAP:
                   a_entryObject.subType = skyui.defines.Item.MISC_MAP;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Map");
                   break;
-               case skyui.defines.Form.BASEID_DLC2INGREDIENT:
+               case skyui.defines.Form.FORMID_DLC2INGREDIENT:
                   a_entryObject.subType = skyui.defines.Item.MISC_INGREDIENT;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ingredient");
                   break;
-               case skyui.defines.Form.BASEID_DLC2ORE1:
-               case skyui.defines.Form.BASEID_DLC2ORE2:
-               case skyui.defines.Form.BASEID_DLC2ORE3:
+               case skyui.defines.Form.FORMID_DLC2ORE1:
+               case skyui.defines.Form.FORMID_DLC2ORE2:
+               case skyui.defines.Form.FORMID_DLC2ORE3:
                   a_entryObject.subType = skyui.defines.Item.MISC_ORE;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ore");
             }

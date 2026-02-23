@@ -216,7 +216,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
             }
             return;
          case 0x02:
-            if(a_entryObject.formId == skyui.defines.Form.BASEID_DLC1CLOTHESVAMPIRELORDARMOR)
+            if(a_entryObject.formId == skyui.defines.Form.FORMID_DLC1CLOTHESVAMPIRELORDARMOR)
             {
                a_entryObject.subType = skyui.defines.Armor.EQUIP_BODY;
             }
@@ -656,9 +656,9 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
          case 0x04:
             switch(a_entryObject.formId)
             {
-               case skyui.defines.Form.BASEID_DLC2PICKAXE1:
-               case skyui.defines.Form.BASEID_DLC2PICKAXE2:
-               case skyui.defines.Form.BASEID_DLC2PICKAXE3:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE1:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE2:
+               case skyui.defines.Form.FORMID_DLC2PICKAXE3:
                   a_entryObject.subType = skyui.defines.Weapon.TYPE_PICKAXE;
             }
             return;
