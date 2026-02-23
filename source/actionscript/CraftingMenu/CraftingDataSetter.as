@@ -799,6 +799,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
             return;
          case skyui.defines.Form.BASEID_CC025SOULTOMATO1:
          case skyui.defines.Form.BASEID_CC025SOULTOMATO2:
+            a_entryObject.subType = skyui.defines.Item.SOULGEM_SOULTOMATO;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$SoulTomato");
             return;
          default:

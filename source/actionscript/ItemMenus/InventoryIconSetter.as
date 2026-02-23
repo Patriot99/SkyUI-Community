@@ -20,16 +20,14 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
       switch(a_entryObject.formType)
       {
          case skyui.defines.Form.TYPE_SCROLLITEM:
-            a_entryObject.iconLabel = "default_scroll";
+            this.processScrollIcon(a_entryObject);
             this.processResist(a_entryObject);
-            this.processScrollBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_ARMOR:
             this.processArmorIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_BOOK:
             this.processBookIcon(a_entryObject);
-            this.processBookBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_INGREDIENT:
             a_entryObject.iconLabel = "default_ingredient";
@@ -52,11 +50,9 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Form.TYPE_POTION:
             this.processPotionIcon(a_entryObject);
-            this.processPotionBaseIdIcon(a_entryObject);
             break;
          case skyui.defines.Form.TYPE_SOULGEM:
             this.processSoulGemIcon(a_entryObject);
-            this.processSoulGemBaseIdIcon(a_entryObject);
       }
       if(this._noIconColors && a_entryObject.iconColor != undefined)
       {
@@ -239,6 +235,17 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             return;
       }
    }
+   function processScrollIcon(a_entryObject)
+   {
+      a_entryObject.iconLabel = "default_scroll";
+      switch(a_entryObject.subType)
+      {
+         case skyui.defines.Item.SCROLL_SPIDER:
+            a_entryObject.iconLabel = "scroll_spider";
+         default:
+            return;
+      }
+   }
    function processBookIcon(a_entryObject)
    {
       a_entryObject.iconLabel = "default_book";
@@ -250,6 +257,13 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Item.BOOK_SPELLTOME:
             a_entryObject.iconLabel = "book_tome";
+            break;
+         case skyui.defines.Item.BOOK_MAP:
+            a_entryObject.iconLabel = "book_map";
+            break;
+         case skyui.defines.Item.BOOK_ELDERSCROLL:
+            a_entryObject.iconLabel = "misc_elderscroll";
+            a_entryObject.iconColor = 7693901;
          default:
             return;
       }
@@ -359,6 +373,10 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             a_entryObject.iconLabel = "potion_shock";
             a_entryObject.iconColor = 15379200;
             break;
+         case skyui.defines.Item.POTION_AYLEIDCRYSTAL:
+            a_entryObject.iconLabel = "soulgem_ayleidcrystalfull";
+            a_entryObject.iconColor = 6014153;
+            break;
          case skyui.defines.Item.POTION_FROSTRESIST:
             a_entryObject.iconLabel = "potion_frost";
             a_entryObject.iconColor = 2096127;
@@ -392,9 +410,29 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             a_entryObject.iconColor = 7694847;
             this.processGrandSoulGemIcon(a_entryObject);
             break;
+         case skyui.defines.Item.SOULGEM_SOULTOMATO:
+            a_entryObject.iconColor = 13716024;
+            this.processSoulTomatoIcon(a_entryObject);
+            break;
          case skyui.defines.Item.SOULGEM_AZURA:
             a_entryObject.iconColor = 7694847;
             a_entryObject.iconLabel = "soulgem_azura";
+         default:
+            return;
+      }
+   }
+   function processSoulTomatoIcon(a_entryObject)
+   {
+      switch(a_entryObject.status)
+      {
+         case skyui.defines.Item.SOULGEMSTATUS_EMPTY:
+            a_entryObject.iconLabel = "soulgem_tomatoempty";
+            break;
+         case skyui.defines.Item.SOULGEMSTATUS_PARTIAL:
+            a_entryObject.iconLabel = "soulgem_tomatopartial";
+            break;
+         case skyui.defines.Item.SOULGEMSTATUS_FULL:
+            a_entryObject.iconLabel = "soulgem_tomatofull";
          default:
             return;
       }
@@ -463,7 +501,7 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Item.MISC_FIREWOOD:
             a_entryObject.iconLabel = "misc_wood";
-            a_entryObject.iconColor = 11051660;
+            a_entryObject.iconColor = 12553824;
             break;
          case skyui.defines.Item.MISC_DRAGONCLAW:
             a_entryObject.iconLabel = "misc_dragonclaw";
@@ -566,124 +604,6 @@ class InventoryIconSetter implements skyui.components.list.IListProcessor
                   a_entryObject.iconLabel = "armor_amulet";
                   break;
             }
-      }
-   }
-   function processBookBaseIdIcon(a_entryObject)
-   {
-      switch(a_entryObject.formId >>> 24)
-      {
-         case 0x02:
-            switch(a_entryObject.formId)
-            {
-               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL1:
-               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL2:
-               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL3:
-                  a_entryObject.iconLabel = "misc_elderscroll";
-                  a_entryObject.iconColor = 7693901;
-                  break;
-            }
-            return;
-         case 0x04:
-            switch(a_entryObject.formId)
-            {
-               case skyui.defines.Form.FORMID_DLC2BOOKMAP:
-                  a_entryObject.iconLabel = "book_map";
-                  break;
-            }
-            return;
-         default:
-            switch(a_entryObject.baseId)
-            {
-               case skyui.defines.Form.FORMID_BOOKMAP1:
-               case skyui.defines.Form.FORMID_BOOKMAP2:
-               case skyui.defines.Form.FORMID_BOOKMAP3:
-               case skyui.defines.Form.FORMID_BOOKMAP4:
-               case skyui.defines.Form.FORMID_BOOKMAP5:
-               case skyui.defines.Form.FORMID_BOOKMAP6:
-               case skyui.defines.Form.FORMID_BOOKMAP7:
-               case skyui.defines.Form.FORMID_BOOKMAP8:
-               case skyui.defines.Form.FORMID_BOOKMAP9:
-               case skyui.defines.Form.FORMID_BOOKMAP10:
-               case skyui.defines.Form.FORMID_BOOKMAP11:
-               case skyui.defines.Form.FORMID_BOOKMAP12:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP1:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP2:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP3:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP4:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP5:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP6:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP7:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP8:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP9:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP10:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP11:
-               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP12:
-                  a_entryObject.iconLabel = "book_map";
-                  break;
-               case skyui.defines.Form.FORMID_ELDERSCROLL1:
-               case skyui.defines.Form.FORMID_ELDERSCROLL2:
-                  a_entryObject.iconLabel = "misc_elderscroll";
-                  a_entryObject.iconColor = 7693901;
-                  break;
-            }
-      }
-   }
-   function processScrollBaseIdIcon(a_entryObject)
-   {
-      switch(a_entryObject.formId)
-      {
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER1:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER2:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER3:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER4:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER5:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER6:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER7:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER8:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER9:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER10:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER11:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER12:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER13:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER14:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER15:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER16:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER17:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER18:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER19:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER20:
-         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER21:
-            a_entryObject.iconLabel = "scroll_spider";
-            break;
-      }
-   }
-   function processPotionBaseIdIcon(a_entryObject)
-   {
-      switch(a_entryObject.baseId)
-      {
-         case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTALPOTION:
-            a_entryObject.iconLabel = "soulgem_ayleidcrystalfull";
-            a_entryObject.iconColor = 6014153;
-            break;
-      }
-   }
-   function processSoulGemBaseIdIcon(a_entryObject)
-   {
-      if(a_entryObject.baseId == skyui.defines.Form.BASEID_CC025SOULTOMATO1 || a_entryObject.baseId == skyui.defines.Form.BASEID_CC025SOULTOMATO2)
-      {
-         a_entryObject.iconColor = 13716024;
-         switch(a_entryObject.status)
-         {
-            case skyui.defines.Item.SOULGEMSTATUS_EMPTY:
-               a_entryObject.iconLabel = "soulgem_tomatoempty";
-               break;
-            case skyui.defines.Item.SOULGEMSTATUS_PARTIAL:
-               a_entryObject.iconLabel = "soulgem_tomatopartial";
-               break;
-            case skyui.defines.Item.SOULGEMSTATUS_FULL:
-               a_entryObject.iconLabel = "soulgem_tomatofull";
-               break;
-         }
       }
    }
 }

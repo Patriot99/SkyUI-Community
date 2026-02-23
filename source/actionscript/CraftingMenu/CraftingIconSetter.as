@@ -462,7 +462,7 @@ class CraftingIconSetter implements skyui.components.list.IListProcessor
             break;
          case skyui.defines.Item.MISC_FIREWOOD:
             a_entryObject.iconLabel = "misc_wood";
-            a_entryObject.iconColor = 11051660;
+            a_entryObject.iconColor = 12553824;
             break;
          case skyui.defines.Item.MISC_DRAGONCLAW:
             a_entryObject.iconLabel = "misc_dragonclaw";

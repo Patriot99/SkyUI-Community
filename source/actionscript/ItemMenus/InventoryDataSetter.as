@@ -766,6 +766,7 @@ class InventoryDataSetter extends ItemcardDataExtender
             return;
          case skyui.defines.Form.BASEID_CC025SOULTOMATO1:
          case skyui.defines.Form.BASEID_CC025SOULTOMATO2:
+            a_entryObject.subType = skyui.defines.Item.SOULGEM_SOULTOMATO;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$SoulTomato");
             return;
          default:
@@ -1210,10 +1211,12 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.FORMID_BOOKMAP10:
                case skyui.defines.Form.FORMID_BOOKMAP11:
                case skyui.defines.Form.FORMID_BOOKMAP12:
+                  a_entryObject.subType = skyui.defines.Item.BOOK_MAP;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Map");
                   break;
                case skyui.defines.Form.FORMID_ELDERSCROLL1:
                case skyui.defines.Form.FORMID_ELDERSCROLL2:
+                  a_entryObject.subType = skyui.defines.Item.BOOK_ELDERSCROLL;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ElderScroll");
             }
             return;
@@ -1223,12 +1226,14 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.FORMID_DLC1ELDERSCROLL1:
                case skyui.defines.Form.FORMID_DLC1ELDERSCROLL2:
                case skyui.defines.Form.FORMID_DLC1ELDERSCROLL3:
+                  a_entryObject.subType = skyui.defines.Item.BOOK_ELDERSCROLL;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ElderScroll");
             }
             return;
          case 0x04:
             if(a_entryObject.formId == skyui.defines.Form.FORMID_DLC2BOOKMAP)
             {
+               a_entryObject.subType = skyui.defines.Item.BOOK_MAP;
                a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Map");
             }
             return;
@@ -1247,6 +1252,7 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.BASEID_CC001FISHBOOKMAP10:
                case skyui.defines.Form.BASEID_CC001FISHBOOKMAP11:
                case skyui.defines.Form.BASEID_CC001FISHBOOKMAP12:
+                  a_entryObject.subType = skyui.defines.Item.BOOK_MAP;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Map");
             }
             return;
@@ -1281,6 +1287,7 @@ class InventoryDataSetter extends ItemcardDataExtender
          case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER19:
          case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER20:
          case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER21:
+            a_entryObject.subType = skyui.defines.Item.SCROLL_SPIDER;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$ScrollSpider");
          default:
             return;
@@ -1291,6 +1298,9 @@ class InventoryDataSetter extends ItemcardDataExtender
       switch(a_entryObject.baseId)
       {
          case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTALPOTION:
+         case skyui.defines.Form.BASEID_HEARTLANDAYLEIDCRYSTALPOTION1:
+         case skyui.defines.Form.BASEID_HEARTLANDAYLEIDCRYSTALPOTION2:
+            a_entryObject.subType = skyui.defines.Item.POTION_AYLEIDCRYSTAL;
             a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$AyleidCrystal");
          default:
             return;
