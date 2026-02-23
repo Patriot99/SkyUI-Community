@@ -210,7 +210,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
       switch(a_entryObject.formId >>> 24)
       {
          case 0x00:
-            if(a_entryObject.baseId == skyui.defines.Form.BASEID_CLOTHESWEDDINGWREATH)
+            if(a_entryObject.baseId == skyui.defines.Form.FORMID_CLOTHESWEDDINGWREATH)
             {
                a_entryObject.weightClass = skyui.defines.Armor.WEIGHT_JEWELRY;
             }
@@ -643,13 +643,13 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
          case 0x00:
             switch(a_entryObject.baseId)
             {
-               case skyui.defines.Form.BASEID_WEAPPICKAXE:
-               case skyui.defines.Form.BASEID_SSDROCKSPLINTERPICKAXE:
-               case skyui.defines.Form.BASEID_DUNVOLUNRUUDPICKAXE:
+               case skyui.defines.Form.FORMID_WEAPPICKAXE:
+               case skyui.defines.Form.FORMID_SSDROCKSPLINTERPICKAXE:
+               case skyui.defines.Form.FORMID_DUNVOLUNRUUDPICKAXE:
                   a_entryObject.subType = skyui.defines.Weapon.TYPE_PICKAXE;
                   break;
-               case skyui.defines.Form.BASEID_AXE01:
-               case skyui.defines.Form.BASEID_DUNHALTEDSTREAMPOACHERSAXE:
+               case skyui.defines.Form.FORMID_AXE01:
+               case skyui.defines.Form.FORMID_DUNHALTEDSTREAMPOACHERSAXE:
                   a_entryObject.subType = skyui.defines.Weapon.TYPE_WOODAXE;
             }
             return;
