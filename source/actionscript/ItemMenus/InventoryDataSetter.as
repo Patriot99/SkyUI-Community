@@ -120,7 +120,7 @@ class InventoryDataSetter extends ItemcardDataExtender
       {
          return undefined;
       }
-      if(a_entryObject.keywords.VendorItemJewelry != undefined || a_entryObject.keywords.VendorItemClothing != undefined)
+      if(a_entryObject.keywords.VendorItemJewelry != undefined || a_entryObject.keywords.VendorItemClothing != undefined || a_entryObject.keywords.ArmorClothing != undefined)
       {
          a_entryObject.material = null;
          a_entryObject.materialDisplay = null;
@@ -360,6 +360,9 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.FORMID_DLC2PICKAXE3:
                   a_entryObject.subType = skyui.defines.Weapon.TYPE_PICKAXE;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Pickaxe");
+                  a_entryObject.material = skyui.defines.Material.STEEL;
+                  a_entryObject.materialDisplay = skyui.util.Translator.translate("$Steel");
+                  break;
             }
             return;
          default:
