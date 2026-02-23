@@ -1,33 +1,34 @@
 class skyui.defines.Material
 {
-   static var AETHERIUM = 0;
-   static var AMBER = 1;
-   static var BONEMOLD = 2;
-   static var CHITIN = 3;
-   static var CLOTHING = 4;
-   static var DAEDRIC = 5;
-   static var DRAGON = 6;
-   static var DRAUGR = 7;
-   static var DWARVEN = 8;
-   static var EBONY = 9;
-   static var ELVEN = 10;
-   static var FALMER = 11;
-   static var FORSWORN = 12;
-   static var GLASS = 13;
-   static var HIDE = 14;
-   static var IMPERIAL = 15;
-   static var IRON = 16;
-   static var JEWELRY = 17;
-   static var LEATHER = 18;
-   static var MADNESS = 19;
-   static var NORDIC = 20;
-   static var ORCISH = 21;
-   static var ORDINATOR = 22;
-   static var SILVER = 23;
-   static var STALHRIM = 24;
-   static var STEEL = 25;
-   static var STORMCLOAK = 26;
-   static var WOOD = 27;
+   static var ADVANCED = 0;
+   static var AETHERIUM = 1;
+   static var AMBER = 2;
+   static var BONEMOLD = 3;
+   static var CHITIN = 4;
+   static var CLOTHING = 5;
+   static var DAEDRIC = 6;
+   static var DRAGON = 7;
+   static var DRAUGR = 8;
+   static var DWARVEN = 9;
+   static var EBONY = 10;
+   static var ELVEN = 11;
+   static var FALMER = 12;
+   static var FORSWORN = 13;
+   static var GLASS = 14;
+   static var HIDE = 15;
+   static var IMPERIAL = 16;
+   static var IRON = 17;
+   static var JEWELRY = 18;
+   static var LEATHER = 19;
+   static var MADNESS = 20;
+   static var NORDIC = 21;
+   static var ORCISH = 22;
+   static var ORDINATOR = 23;
+   static var SILVER = 24;
+   static var STALHRIM = 25;
+   static var STEEL = 26;
+   static var STORMCLOAK = 27;
+   static var WOOD = 28;
    function Material()
    {
    }
