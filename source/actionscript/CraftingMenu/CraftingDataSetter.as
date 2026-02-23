@@ -609,6 +609,10 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
                   a_entryObject.material = skyui.defines.Material.FALMER;
                   a_entryObject.materialDisplay = skyui.util.Translator.translate("$Falmer");
                   break;
+               case skyui.defines.Form.FORMID_FORSWORNARROW:
+                  a_entryObject.material = skyui.defines.Material.FORSWORN;
+                  a_entryObject.materialDisplay = skyui.util.Translator.translate("$Forsworn");
+                  break;
                case skyui.defines.Form.FORMID_STEELARROW:
                case skyui.defines.Form.FORMID_MQ101STEELARROW:
                case skyui.defines.Form.FORMID_DRAUGRARROW:
