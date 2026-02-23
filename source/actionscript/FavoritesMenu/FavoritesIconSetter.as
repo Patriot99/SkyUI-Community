@@ -403,43 +403,62 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processBookBaseIdIcon(a_entryObject)
    {
-      switch(a_entryObject.baseId)
+      switch(a_entryObject.formId >>> 24)
       {
-         case 0xDDEFB:
-         case 0xEF07A:
-         case 0xF33CD:
-         case 0xF33CE:
-         case 0xF33CF:
-         case 0xF33D0:
-         case 0xF33D1:
-         case 0xF33D2:
-         case 0xF33D3:
-         case 0xF33D4:
-         case 0xF33D5:
-         case 0xF33E0:
-         case 0x1CAF2:
-         case 0x70CCA:
-         case 0x70CCB:
-         case 0x70CCC:
-         case 0x70CCD:
-         case 0x70CCE:
-         case 0x70CCF:
-         case 0x70CD0:
-         case 0x70CD1:
-         case 0x70CD2:
-         case 0x70CD3:
-         case 0x70CD4:
-         case 0x70CD5:
-            a_entryObject.iconLabel = "book_map";
-            break;
-         case 0x2D513:
-         case 0x48782:
-         case 0x126DC:
-         case 0x11A13:
-         case 0x118F9:
-            a_entryObject.iconLabel = "misc_elderscroll";
-            a_entryObject.iconColor = 7693901;
-            break;
+         case 0x02:
+            switch(a_entryObject.formId)
+            {
+               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL1:
+               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL2:
+               case skyui.defines.Form.FORMID_DLC1ELDERSCROLL3:
+                  a_entryObject.iconLabel = "misc_elderscroll";
+                  a_entryObject.iconColor = 7693901;
+                  break;
+            }
+            return;
+         case 0x04:
+            switch(a_entryObject.formId)
+            {
+               case skyui.defines.Form.FORMID_DLC2BOOKMAP:
+                  a_entryObject.iconLabel = "book_map";
+                  break;
+            }
+            return;
+         default:
+            switch(a_entryObject.baseId)
+            {
+               case skyui.defines.Form.FORMID_BOOKMAP1:
+               case skyui.defines.Form.FORMID_BOOKMAP2:
+               case skyui.defines.Form.FORMID_BOOKMAP3:
+               case skyui.defines.Form.FORMID_BOOKMAP4:
+               case skyui.defines.Form.FORMID_BOOKMAP5:
+               case skyui.defines.Form.FORMID_BOOKMAP6:
+               case skyui.defines.Form.FORMID_BOOKMAP7:
+               case skyui.defines.Form.FORMID_BOOKMAP8:
+               case skyui.defines.Form.FORMID_BOOKMAP9:
+               case skyui.defines.Form.FORMID_BOOKMAP10:
+               case skyui.defines.Form.FORMID_BOOKMAP11:
+               case skyui.defines.Form.FORMID_BOOKMAP12:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP1:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP2:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP3:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP4:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP5:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP6:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP7:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP8:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP9:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP10:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP11:
+               case skyui.defines.Form.BASEID_CC001FISHBOOKMAP12:
+                  a_entryObject.iconLabel = "book_map";
+                  break;
+               case skyui.defines.Form.FORMID_ELDERSCROLL1:
+               case skyui.defines.Form.FORMID_ELDERSCROLL2:
+                  a_entryObject.iconLabel = "misc_elderscroll";
+                  a_entryObject.iconColor = 7693901;
+                  break;
+            }
       }
    }
    function processMiscIcon(a_entryObject)
@@ -852,9 +871,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    {
       switch(a_entryObject.baseId)
       {
-         case 0x20E802:
-         case 0xAF476:
-         case 0xAF477:
+         case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTALPOTION:
             a_entryObject.iconLabel = "soulgem_ayleidcrystalfull";
             a_entryObject.iconColor = 6014153;
             break;
@@ -927,7 +944,7 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processSoulGemBaseIdIcon(a_entryObject)
    {
-      if(a_entryObject.baseId == 0x804 || a_entryObject.baseId == 0x137F40)
+      if(a_entryObject.baseId == skyui.defines.Form.BASEID_CC025SOULTOMATO1 || a_entryObject.baseId == skyui.defines.Form.BASEID_CC025SOULTOMATO2)
       {
          a_entryObject.iconColor = 13716024;
          switch(a_entryObject.status)
@@ -966,29 +983,29 @@ class FavoritesIconSetter implements skyui.components.list.IListProcessor
    }
    function processScrollBaseIdIcon(a_entryObject)
    {
-      switch(a_entryObject.baseId)
+      switch(a_entryObject.formId)
       {
-         case 0x1445E:
-         case 0x14480:
-         case 0x16E1C:
-         case 0x1707B:
-         case 0x1952C:
-         case 0x19534:
-         case 0x1CAB0:
-         case 0x1DA03:
-         case 0x206D3:
-         case 0x206D9:
-         case 0x206DB:
-         case 0x2095F:
-         case 0x20960:
-         case 0x20961:
-         case 0x27490:
-         case 0x2749D:
-         case 0x274A5:
-         case 0x3319E:
-         case 0x3319F:
-         case 0x331A0:
-         case 0x331A1:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER1:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER2:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER3:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER4:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER5:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER6:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER7:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER8:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER9:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER10:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER11:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER12:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER13:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER14:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER15:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER16:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER17:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER18:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER19:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER20:
+         case skyui.defines.Form.FORMID_DLC2SCROLLSPIDER21:
             a_entryObject.iconLabel = "scroll_spider";
             break;
       }
