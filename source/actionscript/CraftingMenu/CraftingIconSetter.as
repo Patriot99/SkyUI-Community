@@ -556,11 +556,15 @@ class CraftingIconSetter implements skyui.components.list.IListProcessor
    }
    function processMiscBaseIdIcon(a_entryObject)
    {
-      switch(a_entryObject.baseId)
+      switch(a_entryObject.formId >>> 24)
       {
-         case skyui.defines.Form.BASEID_CCVSV002PETAMULET:
-            a_entryObject.iconLabel = "armor_amulet";
-            break;
+         case 0xFE:
+            switch(a_entryObject.eslId)
+            {
+               case skyui.defines.Form.ESLID_CCVSV002PETAMULET:
+                  a_entryObject.iconLabel = "armor_amulet";
+                  break;
+            }
       }
    }
 }

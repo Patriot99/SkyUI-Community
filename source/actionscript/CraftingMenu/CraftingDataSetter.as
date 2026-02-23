@@ -24,6 +24,7 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
    function processEntry(a_entryObject)
    {
       a_entryObject.baseId = a_entryObject.formId & 0xFFFFFF;
+      a_entryObject.eslId = a_entryObject.formId & 0xFFF;
       a_entryObject.isEquipped = a_entryObject.equipState > 0;
       a_entryObject.infoValue = a_entryObject.value <= 0 ? null : Math.round(a_entryObject.value * 100) / 100;
       a_entryObject.infoWeight = a_entryObject.weight <= 0 ? null : Math.round(a_entryObject.weight * 100) / 100;
@@ -1146,6 +1147,24 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ore");
             }
             return;
+         case 0xFE:
+            switch(a_entryObject.eslId)
+            {
+               case skyui.defines.Form.ESLID_CC019STAFFREMAINS:
+               case skyui.defines.Form.ESLID_CC036PETWOLFREMAINS:
+                  a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
+                  break;
+               case skyui.defines.Form.ESLID_CCKRTALTARGOLD:
+                  a_entryObject.subType = skyui.defines.Item.MISC_GOLD;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gold");
+                  break;
+               case skyui.defines.Form.ESLID_CCVSV002PETGEAR:
+               case skyui.defines.Form.ESLID_CCVSV002PETAMULET:
+                  a_entryObject.subType = skyui.defines.Item.MISC_PETGEAR;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$PetGear");
+            }
+            return;
          default:
             switch(a_entryObject.baseId)
             {
@@ -1155,15 +1174,6 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
                case skyui.defines.Form.BASEID_CCALMSIVIGEM4:
                   a_entryObject.subType = skyui.defines.Item.MISC_GEM;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
-                  break;
-               case skyui.defines.Form.BASEID_CC019STAFFREMAINS:
-               case skyui.defines.Form.BASEID_CC036PETWOLFREMAINS:
-                  a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
-                  break;
-               case skyui.defines.Form.BASEID_CCKRTALTARGOLD:
-                  a_entryObject.subType = skyui.defines.Item.MISC_GOLD;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gold");
                   break;
                case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTAL1:
                case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTAL2:
@@ -1221,11 +1231,6 @@ class CraftingDataSetter implements skyui.components.list.IListProcessor
                case skyui.defines.Form.BASEID_CC025ORE2:
                   a_entryObject.subType = skyui.defines.Item.MISC_ORE;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ore");
-                  break;
-               case skyui.defines.Form.BASEID_CCVSV002PETGEAR:
-               case skyui.defines.Form.BASEID_CCVSV002PETAMULET:
-                  a_entryObject.subType = skyui.defines.Item.MISC_PETGEAR;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$PetGear");
             }
             return;
       }

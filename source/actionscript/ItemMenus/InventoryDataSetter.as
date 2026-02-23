@@ -7,6 +7,7 @@ class InventoryDataSetter extends ItemcardDataExtender
    function processEntry(a_entryObject, a_itemInfo)
    {
       a_entryObject.baseId = a_entryObject.formId & 0xFFFFFF;
+      a_entryObject.eslId = a_entryObject.formId & 0xFFF;
       a_entryObject.type = a_itemInfo.type;
       a_entryObject.isEquipped = a_entryObject.equipState > 0;
       a_entryObject.isStolen = a_itemInfo.stolen == true;
@@ -1112,6 +1113,24 @@ class InventoryDataSetter extends ItemcardDataExtender
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ore");
             }
             return;
+         case 0xFE:
+            switch(a_entryObject.eslId)
+            {
+               case skyui.defines.Form.ESLID_CC019STAFFREMAINS:
+               case skyui.defines.Form.ESLID_CC036PETWOLFREMAINS:
+                  a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
+                  break;
+               case skyui.defines.Form.ESLID_CCKRTALTARGOLD:
+                  a_entryObject.subType = skyui.defines.Item.MISC_GOLD;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gold");
+                  break;
+               case skyui.defines.Form.ESLID_CCVSV002PETGEAR:
+               case skyui.defines.Form.ESLID_CCVSV002PETAMULET:
+                  a_entryObject.subType = skyui.defines.Item.MISC_PETGEAR;
+                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$PetGear");
+            }
+            return;
          default:
             switch(a_entryObject.baseId)
             {
@@ -1121,15 +1140,6 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.BASEID_CCALMSIVIGEM4:
                   a_entryObject.subType = skyui.defines.Item.MISC_GEM;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gem");
-                  break;
-               case skyui.defines.Form.BASEID_CC019STAFFREMAINS:
-               case skyui.defines.Form.BASEID_CC036PETWOLFREMAINS:
-                  a_entryObject.subType = skyui.defines.Item.MISC_REMAINS;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Remains");
-                  break;
-               case skyui.defines.Form.BASEID_CCKRTALTARGOLD:
-                  a_entryObject.subType = skyui.defines.Item.MISC_GOLD;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Gold");
                   break;
                case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTAL1:
                case skyui.defines.Form.BASEID_CC067AYLEIDCRYSTAL2:
@@ -1187,11 +1197,6 @@ class InventoryDataSetter extends ItemcardDataExtender
                case skyui.defines.Form.BASEID_CC025ORE2:
                   a_entryObject.subType = skyui.defines.Item.MISC_ORE;
                   a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$Ore");
-                  break;
-               case skyui.defines.Form.BASEID_CCVSV002PETGEAR:
-               case skyui.defines.Form.BASEID_CCVSV002PETAMULET:
-                  a_entryObject.subType = skyui.defines.Item.MISC_PETGEAR;
-                  a_entryObject.subTypeDisplay = skyui.util.Translator.translate("$PetGear");
             }
             return;
       }
