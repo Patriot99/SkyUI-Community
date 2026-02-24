@@ -141,36 +141,36 @@ class TweenMenu extends MovieClip
    }
    function handleInput(details, pathToFocus)
    {
-      var _loc2_;
+      var menuFrameIdx;
       if(!this.bClosing && Shared.GlobalFunc.IsKeyPressed(details))
       {
-         _loc2_ = 0;
+         menuFrameIdx = 0;
          if(details.navEquivalent == gfx.ui.NavigationCode.UP)
          {
-            _loc2_ = 1;
+            menuFrameIdx = 1;
          }
          else if(details.navEquivalent == gfx.ui.NavigationCode.LEFT)
          {
-            _loc2_ = 2;
+            menuFrameIdx = 2;
          }
          else if(details.navEquivalent == gfx.ui.NavigationCode.RIGHT)
          {
-            _loc2_ = 3;
+            menuFrameIdx = 3;
          }
          else if(details.navEquivalent == gfx.ui.NavigationCode.DOWN)
          {
-            _loc2_ = 4;
+            menuFrameIdx = 4;
          }
-         if(_loc2_ > 0)
+         if(menuFrameIdx > 0)
          {
-            if(_loc2_ != this.Selections_mc._currentframe - 1)
+            if(menuFrameIdx != this.Selections_mc._currentframe - 1)
             {
-               this.Selections_mc.gotoAndStop(TweenMenu.FrameToLabelMap[_loc2_]);
-               gfx.io.GameDelegate.call("HighlightMenu",[_loc2_]);
+               this.Selections_mc.gotoAndStop(TweenMenu.FrameToLabelMap[menuFrameIdx]);
+               gfx.io.GameDelegate.call("HighlightMenu",[menuFrameIdx]);
             }
             else
             {
-               gfx.io.GameDelegate.call("OpenHighlightedMenu",[_loc2_]);
+               gfx.io.GameDelegate.call("OpenHighlightedMenu",[menuFrameIdx]);
             }
          }
          else if(details.navEquivalent == gfx.ui.NavigationCode.ENTER && this.Selections_mc._currentframe > 1)
