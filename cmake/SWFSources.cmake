@@ -1,30 +1,6 @@
-# cmake/SWFSources.cmake
+# cmake/SWFSources.cmake (Generated)
 # Consolidated source and path mapping for all SWF targets.
-# Every relevant ActionScript file is listed here.
-# Files that are already identical to what's in the base SWF are commented out.
-# Relative paths are automatically prefixed with source/actionscript/.
-
-# ---- Shared source groups ----------------------------------------------------
-
-# (These variables are used for convenience in the lists below)
-
-set(CORE_SOURCES
-    Common/skyui/defines/Armor.as
-    Common/skyui/defines/Form.as
-    Common/skyui/defines/Item.as
-    Common/skyui/defines/Material.as
-    Common/skyui/defines/Weapon.as
-    Common/skyui/filter/NameFilter.as
-)
-
-set(ITEM_MENU_CORE
-    ${CORE_SOURCES}
-    ItemMenus/InventoryDataSetter.as
-    ItemMenus/InventoryIconSetter.as
-    ItemMenus/ItemMenu.as
-)
-
-# ---- Helper macro ------------------------------------------------------------
+# Identical files are commented out.
 
 macro(Add_SWF _TARGET_NAME _SWF_REL _XML_PATH)
     SkyUI_AS_Add(
@@ -37,222 +13,677 @@ macro(Add_SWF _TARGET_NAME _SWF_REL _XML_PATH)
     list(APPEND SWF_COMPILED_OUTPUTS ${AS_${_TARGET_NAME}_OUTPUT})
 endmacro()
 
-# ---- Target Definitions ------------------------------------------------------
-
-# Item Menus
 Add_SWF(bartermenu
     bartermenu.swf
-    ItemMenus/bartermenu.xml
-    # ItemMenus/BarterMenu.as (identical)
-    # ItemMenus/BarterDataSetter.as (identical)
-    ${ITEM_MENU_CORE}
+    bartermenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    # ItemMenus/BarterDataSetter.as
+    # ItemMenus/BarterMenu.as
+    ItemMenus/BottomBar.as
+    ItemMenus/CategoryList.as
+    ItemMenus/InventoryDataSetter.as
+    ItemMenus/InventoryIconSetter.as
+    ItemMenus/InventoryLists.as
+    ItemMenus/ItemMenu.as
+    # ItemMenus/ItemcardDataExtender.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(bethesdanetlogin
+    bethesdanetlogin.swf
+    bethesdanetlogin.xml
+    # Vanilla/BethesdaNetLogin.as
+    # Vanilla/BottomButtons.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/LoginCheckbox.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+)
+
+Add_SWF(book
+    book.swf
+    book.xml
+    # Vanilla/BookMenu.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(bookmenu
+    bookmenu.swf
+    bookmenu.xml
+    ItemMenus/BottomBar.as
+    Vanilla/BookBottomBar.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+)
+
+Add_SWF(console
+    console.swf
+    console.xml
+    # Vanilla/Console.as
+    # Vanilla/Shared/GlobalFunc.as
 )
 
 Add_SWF(containermenu
     containermenu.swf
-    ItemMenus/containermenu.xml
-    # ItemMenus/ContainerMenu.as (identical)
-    ${ITEM_MENU_CORE}
-)
-
-Add_SWF(inventorymenu
-    inventorymenu.swf
-    ItemMenus/inventorymenu.xml
-    # ItemMenus/InventoryMenu.as (identical)
-    ${ITEM_MENU_CORE}
-)
-
-Add_SWF(magicmenu
-    magicmenu.swf
-    ItemMenus/magicmenu.xml
-    # ItemMenus/MagicMenu.as (identical)
-    ItemMenus/MagicDataSetter.as
-    ItemMenus/MagicIconSetter.as
-    ${ITEM_MENU_CORE}
-)
-
-Add_SWF(giftmenu
-    giftmenu.swf
-    ItemMenus/giftmenu.xml
-    # ItemMenus/GiftMenu.as (identical)
-    ${ITEM_MENU_CORE}
-)
-
-Add_SWF(bottombar
-    skyui/bottombar.swf
-    ItemMenus/bottombar.xml
+    containermenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
     ItemMenus/BottomBar.as
-)
-
-Add_SWF(inventorylists
-    skyui/inventorylists.swf
-    ItemMenus/inventorylists.xml
-    ItemMenus/InventoryLists.as
     ItemMenus/CategoryList.as
+    # ItemMenus/ContainerMenu.as
+    ItemMenus/InventoryDataSetter.as
+    ItemMenus/InventoryIconSetter.as
+    ItemMenus/InventoryLists.as
+    ItemMenus/ItemMenu.as
+    # ItemMenus/ItemcardDataExtender.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
 )
 
-Add_SWF(itemcard
-    skyui/itemcard.swf
-    ItemMenus/itemcard.xml
-    ItemMenus/ItemCard.as
-)
-
-# Crafting
 Add_SWF(craftingmenu
     craftingmenu.swf
-    CraftingMenu/craftingmenu.xml
-    CraftingMenu/CraftingMenu.as
+    craftingmenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
     CraftingMenu/CraftingDataSetter.as
     CraftingMenu/CraftingIconSetter.as
+    CraftingMenu/CraftingListEntry.as
+    CraftingMenu/CraftingLists.as
+    CraftingMenu/CraftingMenu.as
     CraftingMenu/IconTabList.as
-    ${CORE_SOURCES}
+    CraftingMenu/IconTabListEntry.as
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/GlobalFunc.as
 )
 
-# Favorites
-Add_SWF(favoritesmenu
-    favoritesmenu.swf
-    FavoritesMenu/favoritesmenu.xml
-    FavoritesMenu/FavoritesMenu.as
-    FavoritesMenu/FavoritesIconSetter.as
-    FavoritesMenu/FavoritesListEntry.as
-    FavoritesMenu/FilterDataExtender.as
-    FavoritesMenu/GroupDataExtender.as
-    ${CORE_SOURCES}
+Add_SWF(creationclubmenu
+    creationclubmenu.swf
+    creationclubmenu.xml
+    Vanilla/AutoResizeTextBacking.as
+    # Vanilla/BethesdaNetLogin.as
+    # Vanilla/BottomButtons.as
+    Vanilla/BuyNowButton.as
+    # Vanilla/CCCarousel.as
+    # Vanilla/CCCreditCost.as
+    Vanilla/CCHeader.as
+    # Vanilla/CCListEntry.as
+    Vanilla/CCModDetails.as
+    # Vanilla/CCPurchaseDialog.as
+    Vanilla/CCWallet.as
+    # Vanilla/CarouselButton.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/CreationClubMenu.as
+    Vanilla/CreationScreenshot.as
+    Vanilla/DialogCreditCost.as
+    Vanilla/FilterTabs.as
+    # Vanilla/ListEntryBase.as
+    Vanilla/ModCategoryList.as
+    # Vanilla/ModDetailsRating.as
+    Vanilla/ModListEntry.as
+    # Vanilla/NavigationButton.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    # Vanilla/WideCreditCost.as
 )
 
-# Journal & Map
-Add_SWF(quest_journal
-    quest_journal.swf
-    PauseMenu/quest_journal.xml
-    PauseMenu/Quest_Journal.as
-    PauseMenu/InputMappingArt.as
-    PauseMenu/InputMappingList.as
-    PauseMenu/ObjectiveScrollingList.as
-    PauseMenu/OptionsList.as
-    PauseMenu/QuestsPage.as
-    PauseMenu/SaveLoadPanel.as
-    PauseMenu/SettingsOptionItem.as
-    PauseMenu/StatsPage.as
-    PauseMenu/SystemPage.as
-    ${CORE_SOURCES}
-)
-
-Add_SWF(map
-    map.swf
-    MapMenu/map.xml
-    MapMenu/Map/MapMenu.as
-    ${CORE_SOURCES}
-)
-
-# MCM
-Add_SWF(modmanager
-    modmanager.swf
-    ModConfigPanel/modmanager.xml
-    ModConfigPanel/ConfigPanel.as
-)
-
-Add_SWF(configpanel     skyui/configpanel.swf ModConfigPanel/configpanel.xml)
-Add_SWF(mcm_splash      skyui/mcm_splash.swf ModConfigPanel/mcm_splash.xml)
-Add_SWF(skyui_splash    skyui/skyui_splash.swf ModConfigPanel/skyui_splash.xml)
-
-# HUD & Widgets
-Add_SWF(activeeffects
-    exported/widgets/skyui/activeeffects.swf
-    HUDWidgets/activeeffects.xml
-    HUDWidgets/skyui/widgets/activeeffects/ActiveEffectsWidget.as
-)
-
-Add_SWF(widgetloader    exported/skyui/widgetloader.swf HUDWidgets/widgetloader.xml)
-
-# Resources
-Add_SWF(buttonart       skyui/buttonart.swf Resources/buttonArt.xml)
-Add_SWF(mapmarkerart    skyui/mapmarkerart.swf Resources/mapMarkerArt.xml)
-Add_SWF(icons_category_celtic      skyui/icons_category_celtic.swf      Resources/icons_category_celtic.xml)
-Add_SWF(icons_category_curved      skyui/icons_category_curved.swf      Resources/icons_category_curved.xml)
-Add_SWF(icons_category_psychosteve  skyui/icons_category_psychosteve.swf  Resources/icons_category_psychosteve.xml)
-Add_SWF(icons_category_straight    skyui/icons_category_straight.swf    Resources/icons_category_straight.xml)
-Add_SWF(icons_item_psychosteve      skyui/icons_item_psychosteve.swf      Resources/icons_item_psychosteve.xml)
-Add_SWF(icons_effect_psychosteve    exported/skyui/icons_effect_psychosteve.swf Resources/icons_effect_psychosteve.xml)
-
-# Vanilla / Shared
-Add_SWF(hudmenu
-    hudmenu.swf
-    Vanilla/hudmenu.xml
-    Vanilla/HUDMenu.as
-)
-
-Add_SWF(statsmenu
-    statsmenu.swf
-    Vanilla/statsmenu.xml
-    Vanilla/StatsMenu.as
-    Vanilla/Shared/BSScrollingList.as
-)
-
-Add_SWF(sleepwaitmenu
-    sleepwaitmenu.swf
-    Vanilla/sleepwaitmenu.xml
-    Vanilla/SleepWaitMenu.as
-)
-
-Add_SWF(startmenu       startmenu.swf       Vanilla/startmenu.xml)
-Add_SWF(console         console.swf         Vanilla/console.xml)
-
-Add_SWF(bookmenu
-    bookmenu.swf
-    Vanilla/bookmenu.xml
-    Vanilla/BookBottomBar.as
-)
-
-Add_SWF(messagebox
-    messagebox.swf
-    Vanilla/messagebox.xml
-    Vanilla/MessageBox.as
+Add_SWF(creditsmenu
+    creditsmenu.swf
+    creditsmenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/CreditsMenu.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
 )
 
 Add_SWF(dialoguemenu
     dialoguemenu.swf
-    Vanilla/dialoguemenu.xml
-    Vanilla/DialogueMenu.as
+    dialoguemenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
     Vanilla/DialogueCenteredList.as
+    Vanilla/DialogueMenu.as
+    Vanilla/Shared/BSScrollingList.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/ButtonMapping.as
+    Vanilla/Shared/CenteredScrollingList.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/ListFilterer.as
+    # Vanilla/Shared/Proxy.as
 )
 
-Add_SWF(lockpickingmenu lockpickingmenu.swf Vanilla/lockpickingmenu.xml)
-Add_SWF(loadingmenu     loadingmenu.swf     Vanilla/loadingmenu.xml)
-Add_SWF(loadwaitspinner loadwaitspinner.swf Vanilla/loadwaitspinner.xml)
+Add_SWF(exported_skyui_widgetloader
+    exported/skyui/widgetloader.swf
+    exported/skyui/widgetloader.xml
+    # Common/skyui/defines/Input.as
+    HUDWidgets/WidgetLoader.as
+)
+
+Add_SWF(exported_widgets_skyui_activeeffects
+    exported/widgets/skyui/activeeffects.swf
+    exported/widgets/skyui/activeeffects.xml
+    # Common/skyui/defines/Actor.as
+    # Common/skyui/defines/Magic.as
+    # HUDWidgets/skyui/widgets/WidgetBase.as
+    HUDWidgets/skyui/widgets/activeeffects/ActiveEffect.as
+    HUDWidgets/skyui/widgets/activeeffects/ActiveEffectsGroup.as
+    HUDWidgets/skyui/widgets/activeeffects/ActiveEffectsWidget.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(fadermenu
+    fadermenu.swf
+    fadermenu.xml
+    # Vanilla/FaderMenu.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(favoritesmenu
+    favoritesmenu.swf
+    favoritesmenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    Common/skyui/defines/Item.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    # Common/skyui/filter/SortFilter.as
+    FavoritesMenu/FavoritesIconSetter.as
+    FavoritesMenu/FavoritesListEntry.as
+    FavoritesMenu/FavoritesMenu.as
+    FavoritesMenu/FilterDataExtender.as
+    FavoritesMenu/GroupButton.as
+    FavoritesMenu/GroupDataExtender.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(giftmenu
+    giftmenu.swf
+    giftmenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    ItemMenus/BottomBar.as
+    ItemMenus/CategoryList.as
+    # ItemMenus/GiftMenu.as
+    ItemMenus/InventoryDataSetter.as
+    ItemMenus/InventoryIconSetter.as
+    ItemMenus/InventoryLists.as
+    ItemMenus/ItemMenu.as
+    # ItemMenus/ItemcardDataExtender.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(hudmenu
+    hudmenu.swf
+    hudmenu.xml
+    Vanilla/AnimatedLetter.as
+    # Vanilla/Components/BlinkOnDemandMeter.as
+    # Vanilla/Components/BlinkOnDemandPenaltyMeter.as
+    # Vanilla/Components/BlinkOnEmptyMeter.as
+    # Vanilla/Components/BlinkOnEmptyPenaltyMeter.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Components/Meter.as
+    # Vanilla/Components/UniformTimeMeter.as
+    Vanilla/HUDMenu.as
+    # Vanilla/Messages.as
+    # Vanilla/ObjectiveText.as
+    # Vanilla/QuestNotification.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/ButtonTextArtHolder.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/PlatformChangeUser.as
+    # Vanilla/Shared/Proxy.as
+    # Vanilla/ShoutMeter.as
+)
+
+Add_SWF(inventorymenu
+    inventorymenu.swf
+    inventorymenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    ItemMenus/BottomBar.as
+    ItemMenus/CategoryList.as
+    ItemMenus/InventoryDataSetter.as
+    ItemMenus/InventoryIconSetter.as
+    ItemMenus/InventoryLists.as
+    # ItemMenus/InventoryMenu.as
+    ItemMenus/ItemMenu.as
+    # ItemMenus/ItemcardDataExtender.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(kinectmenu
+    kinectmenu.swf
+    kinectmenu.xml
+    Vanilla/KinectMenu.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(levelupmenu
+    levelupmenu.swf
+    levelupmenu.xml
+    Vanilla/LevelUpMenu.as
+)
+
+Add_SWF(loadingmenu
+    loadingmenu.swf
+    loadingmenu.xml
+    # Vanilla/Components/Meter.as
+    Vanilla/LoadingMenu.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(loadwaitspinner
+    loadwaitspinner.swf
+    loadwaitspinner.xml
+    Vanilla/LoadWaitSpinner.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(lockpickingmenu
+    lockpickingmenu.swf
+    lockpickingmenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Components/Meter.as
+    Vanilla/LockpickingMenu.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+)
+
+Add_SWF(magicmenu
+    magicmenu.swf
+    magicmenu.xml
+    # Common/skyui/defines/Actor.as
+    Common/skyui/defines/Armor.as
+    Common/skyui/defines/Form.as
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    Common/skyui/defines/Item.as
+    # Common/skyui/defines/Magic.as
+    Common/skyui/defines/Material.as
+    Common/skyui/defines/Weapon.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    ItemMenus/BottomBar.as
+    ItemMenus/CategoryList.as
+    ItemMenus/InventoryLists.as
+    ItemMenus/ItemMenu.as
+    # ItemMenus/ItemcardDataExtender.as
+    ItemMenus/MagicDataSetter.as
+    ItemMenus/MagicIconSetter.as
+    # ItemMenus/MagicMenu.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(map
+    map.swf
+    map.xml
+    # Common/skyui/defines/Input.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    MapMenu/Map/LocalMap.as
+    MapMenu/Map/LocationFinder.as
+    MapMenu/Map/LocationListEntry.as
+    MapMenu/Map/MapMarker.as
+    MapMenu/Map/MapMenu.as
+    MapMenu/Map/MarkerDescription.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(messagebox
+    messagebox.swf
+    messagebox.xml
+    Vanilla/MessageBox.as
+    # Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(modmanager
+    modmanager.swf
+    modmanager.xml
+    # Vanilla/BethesdaNetLogin.as
+    # Vanilla/BottomButtons.as
+    # Vanilla/Components/BSUIComponent.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/ListEntryBase.as
+    Vanilla/ModAccountSettingsList.as
+    Vanilla/ModCategoryList.as
+    # Vanilla/ModDetailsOptionsList.as
+    Vanilla/ModDetailsPage.as
+    Vanilla/ModDetailsRating.as
+    # Vanilla/ModLibraryList.as
+    Vanilla/ModLibraryPage.as
+    Vanilla/ModLibrary_ListEntry.as
+    Vanilla/ModListEntry.as
+    Vanilla/ModManager.as
+    Vanilla/ModSearchPage.as
+    # Vanilla/ModUtils.as
+    Vanilla/Shared/BSScrollingList.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+)
+
+Add_SWF(quest_journal
+    quest_journal.swf
+    quest_journal.xml
+    # Common/skyui/defines/Input.as
+    PauseMenu/InputMappingArt.as
+    PauseMenu/InputMappingList.as
+    PauseMenu/JournalBottomBar.as
+    PauseMenu/JournalSaveLoadList.as
+    PauseMenu/ObjectiveScrollingList.as
+    PauseMenu/OptionsList.as
+    # PauseMenu/QuestCenteredList.as
+    PauseMenu/Quest_Journal.as
+    PauseMenu/QuestsPage.as
+    PauseMenu/SaveLoadPanel.as
+    PauseMenu/SettingsOptionItem.as
+    PauseMenu/StatsList.as
+    PauseMenu/StatsPage.as
+    PauseMenu/SystemPage.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/BSScrollingList.as
+    Vanilla/Shared/ButtonTextArtHolder.as
+    Vanilla/Shared/CenteredScrollingList.as
+    Vanilla/Shared/GlobalFunc.as
+    Vanilla/Shared/ListFilterer.as
+)
 
 Add_SWF(racesex_menu
     racesex_menu.swf
-    Vanilla/racesex_menu.xml
+    racesex_menu.xml
+    ItemMenus/CategoryList.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/FilteredList.as
+    # Vanilla/RaceNarrowPanel.as
     Vanilla/RaceSexPanels.as
-    Vanilla/RaceWidePanel.as
+    # Vanilla/RaceWidePanel.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/CenteredList.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    # Vanilla/Shared/VerticalCenteredList.as
 )
 
-Add_SWF(trainingmenu    trainingmenu.swf    Vanilla/trainingmenu.xml)
-Add_SWF(tutorialmenu    tutorialmenu.swf    Vanilla/tutorialmenu.xml)
-Add_SWF(levelupmenu     levelupmenu.swf     Vanilla/levelupmenu.xml)
-Add_SWF(kinectmenu      kinectmenu.swf      Vanilla/kinectmenu.xml)
-Add_SWF(fadermenu       fadermenu.swf       Vanilla/fadermenu.xml)
-Add_SWF(bethesdanetlogin bethesdanetlogin.swf Vanilla/bethesdanetlogin.xml)
-Add_SWF(creationclubmenu creationclubmenu.swf Vanilla/creationclubmenu.xml)
-Add_SWF(creditsmenu     creditsmenu.swf     Vanilla/creditsmenu.xml)
+Add_SWF(sharedcomponents
+    sharedcomponents.swf
+    sharedcomponents.xml
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+)
+
+Add_SWF(skyui_bottombar
+    skyui/bottombar.swf
+    skyui/bottombar.xml
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    ItemMenus/BottomBar.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(skyui_buttonart
+    skyui/buttonart.swf
+    skyui/buttonart.xml
+)
+
+Add_SWF(skyui_configpanel
+    skyui/configpanel.swf
+    skyui/configpanel.xml
+    # Common/skyui/defines/Input.as
+    # ModConfigPanel/ColorDialog.as
+    ModConfigPanel/ConfigPanel.as
+    # ModConfigPanel/MenuDialog.as
+    ModConfigPanel/MessageDialog.as
+    ModConfigPanel/ModListPanel.as
+    ModConfigPanel/MultiColumnScrollingList.as
+    # ModConfigPanel/OptionDialog.as
+    ModConfigPanel/OptionsListEntry.as
+    # ModConfigPanel/SliderDialog.as
+    # ModConfigPanel/TextInputDialog.as
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/ModListEntry.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(skyui_icons_category_celtic
+    skyui/icons_category_celtic.swf
+    skyui/icons_category_celtic.xml
+)
+
+Add_SWF(skyui_icons_category_curved
+    skyui/icons_category_curved.swf
+    skyui/icons_category_curved.xml
+)
+
+Add_SWF(skyui_icons_category_psychosteve
+    skyui/icons_category_psychosteve.swf
+    skyui/icons_category_psychosteve.xml
+)
+
+Add_SWF(skyui_icons_category_straight
+    skyui/icons_category_straight.swf
+    skyui/icons_category_straight.xml
+)
+
+Add_SWF(skyui_icons_item_psychosteve
+    skyui/icons_item_psychosteve.swf
+    skyui/icons_item_psychosteve.xml
+)
+
+Add_SWF(skyui_inventorylists
+    skyui/inventorylists.swf
+    skyui/inventorylists.xml
+    # Common/skyui/defines/Input.as
+    # Common/skyui/filter/ItemTypeFilter.as
+    Common/skyui/filter/NameFilter.as
+    # Common/skyui/filter/SortFilter.as
+    ItemMenus/CategoryList.as
+    ItemMenus/CategoryListEntry.as
+    # ItemMenus/InventoryListEntry.as
+    ItemMenus/InventoryLists.as
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/GlobalFunc.as
+)
+
+Add_SWF(skyui_itemcard
+    skyui/itemcard.swf
+    skyui/itemcard.xml
+    # Common/skyui/defines/Input.as
+    # Common/skyui/defines/Inventory.as
+    ItemMenus/ItemCard.as
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Components/Meter.as
+    Vanilla/Shared/BSScrollingList.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/CenteredScrollingList.as
+    Vanilla/Shared/GlobalFunc.as
+    Vanilla/Shared/ListFilterer.as
+)
+
+Add_SWF(skyui_mapmarkerart
+    skyui/mapmarkerart.swf
+    skyui/mapmarkerart.xml
+)
+
+Add_SWF(skyui_mcm_splash
+    skyui/mcm_splash.swf
+    skyui/mcm_splash.xml
+)
+
+Add_SWF(skyui_skyui_splash
+    skyui/skyui_splash.swf
+    skyui/skyui_splash.xml
+    # ModConfigPanel/ParticleEmitter.as
+    # ModConfigPanel/SkyUISplash.as
+    ModConfigPanel/SnowEffect.as
+)
+
+Add_SWF(sleepwaitmenu
+    sleepwaitmenu.swf
+    sleepwaitmenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    Vanilla/SleepWaitMenu.as
+)
+
+Add_SWF(startmenu
+    startmenu.swf
+    startmenu.xml
+    PauseMenu/SaveLoadPanel.as
+    # Vanilla/BethesdaNetLogin.as
+    # Vanilla/BottomButtons.as
+    Vanilla/CharacterSelectHintButtons.as
+    Vanilla/MainSaveLoadList.as
+    Vanilla/Shared/BSScrollingList.as
+    # Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/CenteredScrollingList.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/ListFilterer.as
+    # Vanilla/Shared/Proxy.as
+    # Vanilla/StartMenu.as
+)
+
+Add_SWF(statsmenu
+    statsmenu.swf
+    statsmenu.xml
+    Vanilla/AnimatedSkillText.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Components/Meter.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    Vanilla/StatsMenu.as
+)
 
 Add_SWF(streaminginstall
     streaminginstall.swf
-    Vanilla/streaminginstall.xml
+    streaminginstall.xml
+    # Vanilla/Shared/GlobalFunc.as
     Vanilla/StreamingInstall.as
 )
 
-Add_SWF(book            book.swf            Vanilla/book.xml)
-Add_SWF(cursormenu      cursormenu.swf      Vanilla/cursormenu.xml)
-Add_SWF(safezone        safezone.swf        Vanilla/safezone.xml)
-Add_SWF(sharedcomponents sharedcomponents.swf Vanilla/sharedcomponents.xml)
-Add_SWF(textentry       textentry.swf       Vanilla/textentry.xml)
-Add_SWF(titles          titles.swf          Vanilla/titles.xml)
+Add_SWF(textentry
+    textentry.swf
+    textentry.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/Proxy.as
+    # Vanilla/TextEntryField.as
+)
+
+Add_SWF(titles
+    titles.swf
+    titles.xml
+)
+
+Add_SWF(trainingmenu
+    trainingmenu.swf
+    trainingmenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Components/Meter.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    Vanilla/TrainingMenu.as
+)
+
+Add_SWF(tutorialmenu
+    tutorialmenu.swf
+    tutorialmenu.xml
+    # Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/ButtonMapping.as
+    # Vanilla/Shared/ButtonTextArtHolder.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
+    Vanilla/TutorialMenu.as
+)
 
 Add_SWF(tweenmenu
     tweenmenu.swf
-    Vanilla/tweenmenu.xml
+    tweenmenu.xml
     TweenMenu/TweenMenu.as
+    # Vanilla/Components/CrossPlatformButtons.as
+    # Vanilla/Components/Meter.as
+    # Vanilla/Shared/ButtonChange.as
+    # Vanilla/Shared/GlobalFunc.as
+    # Vanilla/Shared/Proxy.as
 )
 
-Add_SWF(widgetoverlay   widgetoverlay.swf   Vanilla/widgetoverlay.xml)
+Add_SWF(widgetoverlay
+    widgetoverlay.swf
+    widgetoverlay.xml
+    # Vanilla/Shared/GlobalFunc.as
+    Vanilla/WidgetOverlay/Graph.as
+    Vanilla/WidgetOverlay/OverlayButton.as
+    Vanilla/WidgetOverlay/OverlayButtonBar.as
+    Vanilla/WidgetOverlay/TextureWidget.as
+)

@@ -1,0 +1,3 @@
+on(construct){
+   trackMode = "scrollToCursor";
+}
