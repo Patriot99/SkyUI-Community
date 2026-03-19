@@ -371,7 +371,7 @@ else()
 
     set(_BSA_FILE       "${CMAKE_BINARY_DIR}/SkyUI_SE.bsa")
     set(_ESP_FILE       "${CMAKE_CURRENT_SOURCE_DIR}/data/SkyUI_SE.esp")
-    set(_ZIP_OUTPUT     "${CMAKE_BINARY_DIR}/SkyUI_SE-${PROJECT_VERSION}.zip")
+    set(_ZIP_OUTPUT     "${CMAKE_CURRENT_SOURCE_DIR}/release/SkyUI_SE-${PROJECT_VERSION}.zip")
     set(_STAGING_DIR    "${CMAKE_BINARY_DIR}/_Release")
     set(_PACKAGE_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.cmake")
 
