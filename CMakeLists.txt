@@ -125,7 +125,7 @@ SkyUI_AS_GlobalAssemble_Init(
 set(AS_TARGETS            "")
 set(SWF_COMPILED_OUTPUTS  "")
 
-# Load all SWF target definitions from a single file (calls SkyUI_AS_Add for each)
+# Load all SWF target definitions from a single file (calls Add_AS for each)
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/SWFSources.cmake")
 
 SkyUI_AS_GlobalAssemble_Finalize()

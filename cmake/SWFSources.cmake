@@ -3,7 +3,7 @@
 # Identical files are commented out.
 
 macro(Add_SWF _TARGET_NAME _SWF_REL _XML_PATH)
-    SkyUI_AS_Add(
+    Add_AS(
         TARGET_NAME  AS_${_TARGET_NAME}
         SWF_REL      ${_SWF_REL}
         XML_PATH     ${_XML_PATH}

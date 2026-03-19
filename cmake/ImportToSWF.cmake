@@ -59,7 +59,7 @@ Step 1: Before the SWF loop, call once:
 
 Step 2: Inside the SWF loop, call per SWF:
 
-  SkyUI_AS_Add(
+  Add_AS(
       TARGET_NAME  AS_<name>
       SWF_REL      <relative/path.swf>
       SOURCES      <file> [...]
@@ -70,7 +70,7 @@ Step 3: After the loop, call once to finalize the global assemble target:
 
   SkyUI_AS_GlobalAssemble_Finalize()
 
-After SkyUI_AS_Add, ``${TARGET_NAME}_OUTPUT`` is set in the calling scope.
+After Add_AS, ``${TARGET_NAME}_OUTPUT`` is set in the calling scope.
 
 #]=======================================================================]
 
@@ -108,11 +108,11 @@ function(SkyUI_AS_GlobalAssemble_Init)
 endfunction()
 
 # ---------------------------------------------------------------------------
-# SkyUI_AS_Add
+# Add_AS
 # ---------------------------------------------------------------------------
 # Call once per SWF inside the discovery loop.
 # ---------------------------------------------------------------------------
-function(SkyUI_AS_Add)
+function(Add_AS)
     cmake_parse_arguments(ARG
         ""
         "TARGET_NAME;SWF_REL;SWF_BASE_DIR"
@@ -121,13 +121,13 @@ function(SkyUI_AS_Add)
     )
 
     if(NOT ARG_TARGET_NAME)
-        message(FATAL_ERROR "SkyUI_AS_Add: TARGET_NAME is required.")
+        message(FATAL_ERROR "Add_AS: TARGET_NAME is required.")
     endif()
     if(NOT ARG_SWF_REL)
-        message(FATAL_ERROR "SkyUI_AS_Add: SWF_REL is required.")
+        message(FATAL_ERROR "Add_AS: SWF_REL is required.")
     endif()
     if(NOT FFDEC_CLI)
-        message(FATAL_ERROR "SkyUI_AS_Add: FFDEC_CLI is not set.")
+        message(FATAL_ERROR "Add_AS: FFDEC_CLI is not set.")
     endif()
 
     if(NOT ARG_SWF_BASE_DIR)
@@ -140,7 +140,7 @@ function(SkyUI_AS_Add)
 
     if(NOT _AS_SOURCE_DIR OR NOT _GLOBAL_STAGING)
         message(FATAL_ERROR
-            "SkyUI_AS_Add: call SkyUI_AS_GlobalAssemble_Init() first.")
+            "Add_AS: call SkyUI_AS_GlobalAssemble_Init() first.")
     endif()
 
     # Prepend source dir to relative paths
