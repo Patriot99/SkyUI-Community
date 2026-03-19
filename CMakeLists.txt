@@ -80,7 +80,7 @@ list(APPEND CMAKE_MODULE_PATH
 include(Papyrus)         # BethesdaCMakeModules — upstream fallback
 include(BSArchive)       # BethesdaCMakeModules
 include(PapyrusCustom)   # cmake/PapyrusCustom.cmake — community compiler
-include(ActionScript)    # cmake/ActionScript.cmake
+include(ImportToSWF)    # cmake/ImportToSWF.cmake
 
 # ==============================================================================
 # § 3  FFDec CLI Detection
@@ -181,7 +181,7 @@ endif()
 # § 5  ActionScript / SWF Compilation
 # ==============================================================================
 #
-# Three-phase configure-time setup (see cmake/ActionScript.cmake):
+# Three-phase configure-time setup (see cmake/ImportToSWF.cmake):
 #   Phase 1 — Init global state
 #   Phase 2 — Per-SWF loop
 #   Phase 3 — Finalize global assemble target
@@ -212,6 +212,19 @@ file(GLOB_RECURSE _ALL_SWF_RELPATHS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data/interface"
     "${CMAKE_CURRENT_SOURCE_DIR}/data/interface/*.swf"
 )
+
+# Also discover SWFs from swf_xml folder
+file(GLOB_RECURSE _ALL_XML_RELPATHS
+    CONFIGURE_DEPENDS
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/swf_xml"
+    "${CMAKE_CURRENT_SOURCE_DIR}/swf_xml/*.xml"
+)
+
+foreach(XML_REL ${_ALL_XML_RELPATHS})
+    string(REPLACE ".xml" ".swf" SWF_REL "${XML_REL}")
+    list(APPEND _ALL_SWF_RELPATHS "${SWF_REL}")
+endforeach()
+list(REMOVE_DUPLICATES _ALL_SWF_RELPATHS)
 
 foreach(SWF_REL ${_ALL_SWF_RELPATHS})
     get_filename_component(SWF_NAME_WE  "${SWF_REL}" NAME_WE)

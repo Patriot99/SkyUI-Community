@@ -163,24 +163,47 @@ function(SkyUI_AS_Add)
 
     set(_SWF_INPUT  "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_SWF_BASE_DIR}/${ARG_SWF_REL}")
     set(_SWF_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/interface/${ARG_SWF_REL}")
+    
+    get_filename_component(_SWF_REL_DIR "${ARG_SWF_REL}" DIRECTORY)
+    get_filename_component(_SWF_REL_WE  "${ARG_SWF_REL}" NAME_WE)
+    if(_SWF_REL_DIR)
+        set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/swf_xml/${_SWF_REL_DIR}/${_SWF_REL_WE}.xml")
+    else()
+        set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/swf_xml/${_SWF_REL_WE}.xml")
+    endif()
 
-    add_custom_command(
-        OUTPUT "${_SWF_OUTPUT}"
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
-            "${_SWF_INPUT}" "${_SWF_OUTPUT}"
-        COMMAND "${FFDEC_CLI}"
-            -config autoDeobfuscate=false,decompile=false
-            -onerror abort
-            -importScript "${_SWF_OUTPUT}" "${_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
-        # Fine-grained: only this SWF's sources + the base SWF file.
-        # Changing quest_journal.as does NOT invalidate bartermenu.swf.
-        DEPENDS
-            "${_SWF_INPUT}"
-            ${ARG_SOURCES}
-            ${ARG_FRAME_SOURCES}
-        COMMENT "Injecting ActionScript into ${ARG_SWF_REL}"
-        VERBATIM
-    )
+    if(EXISTS "${_XML_SOURCE}")
+        add_custom_command(
+            OUTPUT "${_SWF_OUTPUT}"
+            COMMAND "${FFDEC_CLI}" -xml2swf "${_XML_SOURCE}" "${_SWF_OUTPUT}"
+            COMMAND "${FFDEC_CLI}"
+                -config autoDeobfuscate=false,decompile=false
+                -onerror abort
+                -importScript "${_SWF_OUTPUT}" "${_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
+            DEPENDS
+                "${_XML_SOURCE}"
+                ${ARG_SOURCES}
+                ${ARG_FRAME_SOURCES}
+            COMMENT "Building ${ARG_SWF_REL} from XML and injecting ActionScript"
+            VERBATIM
+        )
+    else()
+        add_custom_command(
+            OUTPUT "${_SWF_OUTPUT}"
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                "${_SWF_INPUT}" "${_SWF_OUTPUT}"
+            COMMAND "${FFDEC_CLI}"
+                -config autoDeobfuscate=false,decompile=false
+                -onerror abort
+                -importScript "${_SWF_OUTPUT}" "${_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
+            DEPENDS
+                "${_SWF_INPUT}"
+                ${ARG_SOURCES}
+                ${ARG_FRAME_SOURCES}
+            COMMENT "Injecting ActionScript into ${ARG_SWF_REL}"
+            VERBATIM
+        )
+    endif()
 
     add_custom_target("${ARG_TARGET_NAME}"
         DEPENDS "${_SWF_OUTPUT}"

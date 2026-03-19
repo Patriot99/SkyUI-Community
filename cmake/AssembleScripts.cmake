@@ -13,7 +13,7 @@
 #
 # Incremental behaviour:
 #   This script is only invoked when at least one .as source has changed
-#   (the stamp file in ActionScript.cmake gates it). Within that invocation,
+#   (the stamp file in ImportToSWF.cmake gates it). Within that invocation,
 #   file(COPY_FILE ... ONLY_IF_DIFFERENT) skips any files that are already
 #   byte-for-byte identical in the staging tree, so only truly changed files
 #   are written to disk. The staging tree is NEVER wiped on a clean run --
