@@ -1,51 +1,8 @@
 #[=======================================================================[.rst:
-ActionScript
-------------
+ImportToSWF
+-----------
 
-Two-phase ActionScript compilation: one global assemble, per-SWF inject.
-
-Architecture
-^^^^^^^^^^^^
-
-Phase 1 — Global Assemble (one cmake -P process for all SWFs)
-  A single ``cmake/AssembleScripts.cmake`` invocation copies ALL ActionScript
-  sources from ALL SWFs into one shared staging tree:
-
-    ${CMAKE_BINARY_DIR}/_AS_staging/__Packages/
-
-  This target (``ActionScript_Assemble``) depends on every .as file across
-  the entire project. It runs once when any source changes.
-
-Phase 2 — Per-SWF Inject (parallel, fine-grained)
-  Each SWF has its own ``add_custom_command`` whose DEPENDS list contains
-  that SWF's specific .as source files plus the original .swf.
-
-  This means CMake rebuilds a SWF if and only if:
-    - one of its own .as sources changed, OR
-    - the base .swf changed
-
-  Changing Quest_Journal.as → only quest_journal.swf reinjects.
-  Other SWFs are untouched.
-
-  All inject steps are independent and run in parallel under Ninja.
-
-Why inject depends on sources directly, not on the assemble stamp
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  If inject depended on the global stamp, any .as change anywhere would
-  invalidate all 30 inject steps — the opposite of what we want.
-
-  Instead:
-    - The assemble target is an ORDER-ONLY dependency (via add_dependencies)
-      so it always runs before any inject, but does not cause inject to
-      re-run unless the inject's own DEPENDS are stale.
-    - The inject command lists its specific .as sources in DEPENDS so CMake
-      can track exactly which SWF is affected by a given file change.
-
-Shared classes
-^^^^^^^^^^^^^^
-  If two SWFs share a class (e.g. Common/skyui/defines/Input.as) and that
-  file appears in both their SOURCES lists, both DEPENDS lists contain it.
-  Changing it correctly invalidates both SWF inject steps.
+Generic ActionScript injection into SWF files.
 
 Usage
 ^^^^^
@@ -53,16 +10,16 @@ Usage
 Step 1: Before the SWF loop, call once:
 
   AS_GlobalAssemble_Init(
-      AS_SOURCE_DIR    <path>
-      ASSEMBLE_SCRIPT  <path/AssembleScripts.cmake>
+      AS_SOURCE_DIR <path>
   )
 
 Step 2: Inside the SWF loop, call per SWF:
 
   Add_AS(
-      TARGET_NAME  AS_<name>
-      SWF_REL      <relative/path.swf>
-      SOURCES      <file> [...]
+      TARGET_NAME <name>
+      SWF_INPUT   <absolute/path/to/base.swf>
+      SWF_OUTPUT  <absolute/path/to/output.swf>
+      SOURCES     <file> [...]
       [FRAME_SOURCES <file> [...]]
   )
 
@@ -70,39 +27,36 @@ Step 3: After the loop, call once to finalize the global assemble target:
 
   AS_GlobalAssemble_Finalize()
 
-After Add_AS, ``${TARGET_NAME}_OUTPUT`` is set in the calling scope.
-
 #]=======================================================================]
 
+if(NOT CMAKE_SCRIPT_MODE_FILE)
+
+# Capture the path to THIS file at include-time so functions called later
+# from CMakeLists.txt (like AS_GlobalAssemble_Finalize) know which script 
+# to invoke at build-time.
+set(_AS_IMPORT_MODULE_SCRIPT "${CMAKE_CURRENT_LIST_FILE}" CACHE INTERNAL "")
+
 # ---------------------------------------------------------------------------
-# Internal state (global properties, visible across function boundaries)
+# Internal state (global properties)
 # ---------------------------------------------------------------------------
 
 define_property(GLOBAL PROPERTY _AS_SOURCE_DIR)
-define_property(GLOBAL PROPERTY _AS_ASSEMBLE_SCRIPT)
 define_property(GLOBAL PROPERTY _AS_GLOBAL_STAGING)
-define_property(GLOBAL PROPERTY _AS_ALL_SOURCES)   # accumulates across calls
+define_property(GLOBAL PROPERTY _AS_ALL_SOURCES)
 define_property(GLOBAL PROPERTY _AS_ALL_FRAME_SOURCES)
 
 # ---------------------------------------------------------------------------
 # AS_GlobalAssemble_Init
 # ---------------------------------------------------------------------------
-# Call ONCE before the SWF discovery loop.
-# ---------------------------------------------------------------------------
 function(AS_GlobalAssemble_Init)
-    cmake_parse_arguments(ARG "" "AS_SOURCE_DIR;ASSEMBLE_SCRIPT" "" ${ARGN})
+    cmake_parse_arguments(ARG "" "AS_SOURCE_DIR" "" ${ARGN})
 
     if(NOT ARG_AS_SOURCE_DIR)
         message(FATAL_ERROR "AS_GlobalAssemble_Init: AS_SOURCE_DIR is required.")
     endif()
-    if(NOT ARG_ASSEMBLE_SCRIPT)
-        message(FATAL_ERROR "AS_GlobalAssemble_Init: ASSEMBLE_SCRIPT is required.")
-    endif()
 
     set_property(GLOBAL PROPERTY _AS_SOURCE_DIR      "${ARG_AS_SOURCE_DIR}")
-    set_property(GLOBAL PROPERTY _AS_ASSEMBLE_SCRIPT "${ARG_ASSEMBLE_SCRIPT}")
-    set_property(GLOBAL PROPERTY _AS_GLOBAL_STAGING
-        "${CMAKE_BINARY_DIR}/_AS_staging")
+    set_property(GLOBAL PROPERTY _AS_GLOBAL_STAGING  "${CMAKE_BINARY_DIR}/_AS_staging")
     set_property(GLOBAL PROPERTY _AS_ALL_SOURCES "")
     set_property(GLOBAL PROPERTY _AS_ALL_FRAME_SOURCES "")
 endfunction()
@@ -110,12 +64,10 @@ endfunction()
 # ---------------------------------------------------------------------------
 # Add_AS
 # ---------------------------------------------------------------------------
-# Call once per SWF inside the discovery loop.
-# ---------------------------------------------------------------------------
 function(Add_AS)
     cmake_parse_arguments(ARG
         ""
-        "TARGET_NAME;SWF_REL;SWF_BASE_DIR"
+        "TARGET_NAME;SWF_INPUT;SWF_OUTPUT"
         "SOURCES;FRAME_SOURCES"
         ${ARGN}
     )
@@ -123,24 +75,21 @@ function(Add_AS)
     if(NOT ARG_TARGET_NAME)
         message(FATAL_ERROR "Add_AS: TARGET_NAME is required.")
     endif()
-    if(NOT ARG_SWF_REL)
-        message(FATAL_ERROR "Add_AS: SWF_REL is required.")
+    if(NOT ARG_SWF_INPUT)
+        message(FATAL_ERROR "Add_AS: SWF_INPUT is required.")
+    endif()
+    if(NOT ARG_SWF_OUTPUT)
+        message(FATAL_ERROR "Add_AS: SWF_OUTPUT is required.")
     endif()
     if(NOT FFDEC_CLI)
         message(FATAL_ERROR "Add_AS: FFDEC_CLI is not set.")
     endif()
 
-    if(NOT ARG_SWF_BASE_DIR)
-        set(ARG_SWF_BASE_DIR "data/interface")
-    endif()
-
-    # Retrieve global state
     get_property(_AS_SOURCE_DIR   GLOBAL PROPERTY _AS_SOURCE_DIR)
     get_property(_GLOBAL_STAGING  GLOBAL PROPERTY _AS_GLOBAL_STAGING)
 
     if(NOT _AS_SOURCE_DIR OR NOT _GLOBAL_STAGING)
-        message(FATAL_ERROR
-            "Add_AS: call AS_GlobalAssemble_Init() first.")
+        message(FATAL_ERROR "Add_AS: call AS_GlobalAssemble_Init() first.")
     endif()
 
     # Prepend source dir to relative paths
@@ -164,126 +113,50 @@ function(Add_AS)
     endforeach()
     set(ARG_FRAME_SOURCES ${_REAL_FRAME_SOURCES})
 
-    # Accumulate sources into global lists
     set_property(GLOBAL APPEND PROPERTY _AS_ALL_SOURCES ${ARG_SOURCES})
     if(ARG_FRAME_SOURCES)
-        set_property(GLOBAL APPEND PROPERTY
-            _AS_ALL_FRAME_SOURCES ${ARG_FRAME_SOURCES})
+        set_property(GLOBAL APPEND PROPERTY _AS_ALL_FRAME_SOURCES ${ARG_FRAME_SOURCES})
     endif()
 
-    # ---- Inject step -------------------------------------------------------
-    # OUTPUT: compiled SWF in the build tree
-    # DEPENDS: this SWF's own .as sources + the original .swf
-    #
-    # NOTE: no dependency on the global stamp here. Instead, we use
-    # add_dependencies() (target-level) below to enforce ordering.
-    # This is the key to per-SWF incremental granularity.
-
-    set(_SWF_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/interface/${ARG_SWF_REL}")
-    
-    if(ARG_XML_PATH)
-        set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/swf/${ARG_XML_PATH}")
-    else()
-        get_filename_component(_SWF_REL_DIR "${ARG_SWF_REL}" DIRECTORY)
-        get_filename_component(_SWF_REL_WE  "${ARG_SWF_REL}" NAME_WE)
-        if(_SWF_REL_DIR)
-            set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/swf/${_SWF_REL_DIR}/${_SWF_REL_WE}.xml")
-        else()
-            set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/swf/${_SWF_REL_WE}.xml")
-        endif()
-    endif()
-
-    if(EXISTS "${_XML_SOURCE}")
-        # Build from XML source
-        set(_BUILD_COMMANDS
-            COMMAND "${FFDEC_CLI}" -xml2swf "${_XML_SOURCE}" "${_SWF_OUTPUT}"
-        )
-        
-        if(ARG_SOURCES OR ARG_FRAME_SOURCES)
-            list(APPEND _BUILD_COMMANDS
-                COMMAND "${FFDEC_CLI}"
-                    -config autoDeobfuscate=false,decompile=false
-                    -onerror abort
-                    -importScript "${_SWF_OUTPUT}" "${_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
-            )
-            set(_COMMENT "Building ${ARG_SWF_REL} from XML and injecting ActionScript")
-        else()
-            set(_COMMENT "Building ${ARG_SWF_REL} from XML")
-        endif()
-
-        add_custom_command(
-            OUTPUT "${_SWF_OUTPUT}"
-            ${_BUILD_COMMANDS}
-            DEPENDS
-                "${_XML_SOURCE}"
-                ${ARG_SOURCES}
-                ${ARG_FRAME_SOURCES}
-            COMMENT "${_COMMENT}"
-            VERBATIM
-        )
-    else()
-        # Fallback: copy existing SWF and inject
-        set(_SWF_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/data/interface/${ARG_SWF_REL}")
-        
-        add_custom_command(
-            OUTPUT "${_SWF_OUTPUT}"
-            COMMAND "${CMAKE_COMMAND}" -E copy_if_different
-                "${_SWF_INPUT}" "${_SWF_OUTPUT}"
-            COMMAND "${FFDEC_CLI}"
-                -config autoDeobfuscate=false,decompile=false
-                -onerror abort
-                -importScript "${_SWF_OUTPUT}" "${_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
-            DEPENDS
-                "${_SWF_INPUT}"
-                ${ARG_SOURCES}
-                ${ARG_FRAME_SOURCES}
-            COMMENT "Injecting ActionScript into ${ARG_SWF_REL}"
-            VERBATIM
-        )
-    endif()
+    add_custom_command(
+        OUTPUT "${ARG_SWF_OUTPUT}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${ARG_SWF_INPUT}" "${ARG_SWF_OUTPUT}"
+        COMMAND "${FFDEC_CLI}"
+            -config autoDeobfuscate=false,decompile=false
+            -onerror abort
+            -importScript "${ARG_SWF_OUTPUT}" "${ARG_SWF_OUTPUT}" "${_GLOBAL_STAGING}"
+        DEPENDS
+            "${ARG_SWF_INPUT}"
+            ${ARG_SOURCES}
+            ${ARG_FRAME_SOURCES}
+        COMMENT "Injecting ActionScript into ${ARG_TARGET_NAME}"
+        VERBATIM
+    )
 
     add_custom_target("${ARG_TARGET_NAME}"
-        DEPENDS "${_SWF_OUTPUT}"
+        DEPENDS "${ARG_SWF_OUTPUT}"
         SOURCES ${ARG_SOURCES} ${ARG_FRAME_SOURCES}
     )
 
-    # ORDER-ONLY: assemble must finish before inject runs, but a change to
-    # the assemble stamp does NOT force this inject to re-run.
     add_dependencies("${ARG_TARGET_NAME}" "ActionScript_Assemble")
 
-    # Filesystem-safe source group name
-    get_filename_component(_SWF_NAME_WE  "${ARG_SWF_REL}" NAME_WE)
-    get_filename_component(_SWF_DIR_PART "${ARG_SWF_REL}" DIRECTORY)
-    if(_SWF_DIR_PART)
-        string(REPLACE "/" "_" _VAR_PREFIX "${_SWF_DIR_PART}/${_SWF_NAME_WE}")
-    else()
-        set(_VAR_PREFIX "${_SWF_NAME_WE}")
-    endif()
-    source_group("ActionScript\\${_VAR_PREFIX}" FILES ${ARG_SOURCES} ${ARG_FRAME_SOURCES})
-
-    set("${ARG_TARGET_NAME}_OUTPUT" "${_SWF_OUTPUT}" PARENT_SCOPE)
+    set("${ARG_TARGET_NAME}_OUTPUT" "${ARG_SWF_OUTPUT}" PARENT_SCOPE)
 endfunction()
 
 # ---------------------------------------------------------------------------
 # AS_GlobalAssemble_Finalize
 # ---------------------------------------------------------------------------
-# Call ONCE after the SWF discovery loop.
-# Creates the ActionScript_Assemble target with all accumulated sources.
-# ---------------------------------------------------------------------------
 function(AS_GlobalAssemble_Finalize)
     get_property(_AS_SOURCE_DIR     GLOBAL PROPERTY _AS_SOURCE_DIR)
-    get_property(_ASSEMBLE_SCRIPT   GLOBAL PROPERTY _AS_ASSEMBLE_SCRIPT)
     get_property(_GLOBAL_STAGING    GLOBAL PROPERTY _AS_GLOBAL_STAGING)
     get_property(_ALL_SOURCES       GLOBAL PROPERTY _AS_ALL_SOURCES)
     get_property(_ALL_FRAME_SOURCES GLOBAL PROPERTY _AS_ALL_FRAME_SOURCES)
 
-    # Deduplicate: shared classes appear in multiple SWF source lists.
     list(REMOVE_DUPLICATES _ALL_SOURCES)
     if(_ALL_FRAME_SOURCES)
         list(REMOVE_DUPLICATES _ALL_FRAME_SOURCES)
     endif()
 
-    # Write source-list files at configure time for AssembleScripts.cmake
     set(_SOURCES_FILE "${_GLOBAL_STAGING}/all_sources.txt")
     list(JOIN _ALL_SOURCES "\n" _SOURCES_CONTENT)
     file(MAKE_DIRECTORY "${_GLOBAL_STAGING}")
@@ -300,7 +173,6 @@ function(AS_GlobalAssemble_Finalize)
 
     add_custom_command(
         OUTPUT "${_GLOBAL_STAMP}"
-        # Declare the staging tree so `cmake --build --target clean` removes it.
         BYPRODUCTS "${_GLOBAL_STAGING}/__Packages"
         COMMAND "${CMAKE_COMMAND}"
             "-DSTAGING_DIR=${_GLOBAL_STAGING}"
@@ -309,10 +181,9 @@ function(AS_GlobalAssemble_Finalize)
             "-DAS_SOURCE_DIR=${_AS_SOURCE_DIR}"
             "-DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}"
             "-DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}"
-            -P "${_ASSEMBLE_SCRIPT}"
+            -P "${_AS_IMPORT_MODULE_SCRIPT}"
         COMMAND "${CMAKE_COMMAND}" -E touch "${_GLOBAL_STAMP}"
-        # Depends on ALL sources: any .as change reruns assemble.
-        DEPENDS ${_ALL_SOURCES} ${_ALL_FRAME_SOURCES} "${_ASSEMBLE_SCRIPT}"
+        DEPENDS ${_ALL_SOURCES} ${_ALL_FRAME_SOURCES} "${_AS_IMPORT_MODULE_SCRIPT}"
         COMMENT "Assembling all ActionScript sources"
         VERBATIM
     )
@@ -321,3 +192,52 @@ function(AS_GlobalAssemble_Finalize)
         DEPENDS "${_GLOBAL_STAMP}"
     )
 endfunction()
+
+else() # CMAKE_SCRIPT_MODE_FILE
+
+# ---------------------------------------------------------------------------
+# Build-time Assembly Logic (merged from AssembleScripts.cmake)
+# ---------------------------------------------------------------------------
+
+file(MAKE_DIRECTORY "${STAGING_DIR}/__Packages")
+file(STRINGS "${SOURCES_FILE}" SOURCES)
+
+foreach(SRC ${SOURCES})
+    file(RELATIVE_PATH REL "${AS_SOURCE_DIR}" "${SRC}")
+    string(FIND "${REL}" "/" SLASH_POS)
+    if(SLASH_POS EQUAL -1)
+        continue()
+    endif()
+    math(EXPR AFTER "${SLASH_POS} + 1")
+    string(SUBSTRING "${REL}" ${AFTER} -1 CLASSPATH)
+
+    set(DST "${STAGING_DIR}/__Packages/${CLASSPATH}")
+    if(NOT EXISTS "${SRC}")
+        continue()
+    endif()
+
+    get_filename_component(DST_DIR "${DST}" DIRECTORY)
+    file(MAKE_DIRECTORY "${DST_DIR}")
+    file(COPY_FILE "${SRC}" "${DST}" ONLY_IF_DIFFERENT)
+
+    # Patch version constants in SkyUISplash.as
+    get_filename_component(DST_NAME "${DST}" NAME)
+    if(DST_NAME STREQUAL "SkyUISplash.as" AND DEFINED PROJECT_VERSION_MAJOR AND DEFINED PROJECT_VERSION_MINOR)
+        file(READ "${DST}" _SPLASH_CONTENT)
+        string(REGEX REPLACE "(SKYUI_VERSION_MAJOR[ \t]*=[ \t]*)[0-9]+" "\\1${PROJECT_VERSION_MAJOR}" _SPLASH_CONTENT "${_SPLASH_CONTENT}")
+        string(REGEX REPLACE "(SKYUI_VERSION_MINOR[ \t]*=[ \t]*)[0-9]+" "\\1${PROJECT_VERSION_MINOR}" _SPLASH_CONTENT "${_SPLASH_CONTENT}")
+        file(WRITE "${DST}" "${_SPLASH_CONTENT}")
+    endif()
+endforeach()
+
+if(DEFINED FRAME_SOURCES_FILE AND EXISTS "${FRAME_SOURCES_FILE}")
+    file(STRINGS "${FRAME_SOURCES_FILE}" FRAME_SOURCES)
+    foreach(SRC ${FRAME_SOURCES})
+        if(EXISTS "${SRC}")
+            get_filename_component(FNAME "${SRC}" NAME)
+            file(COPY_FILE "${SRC}" "${STAGING_DIR}/${FNAME}" ONLY_IF_DIFFERENT)
+        endif()
+    endforeach()
+endif()
+
+endif()

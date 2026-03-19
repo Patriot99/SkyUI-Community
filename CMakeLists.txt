@@ -58,6 +58,7 @@ list(APPEND CMAKE_MODULE_PATH
 include(Papyrus)
 include(BSArchive)
 include(ImportToSWF)
+include(SWFXMLPatch)
 
 # ==============================================================================
 # § 3  FFDec CLI Detection
@@ -117,16 +118,13 @@ endif()
 
 set(AS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/actionscript")
 
-AS_GlobalAssemble_Init(
-    AS_SOURCE_DIR   "${AS_SOURCE_DIR}"
-    ASSEMBLE_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/cmake/AssembleScripts.cmake"
-)
+AS_GlobalAssemble_Init(AS_SOURCE_DIR "${AS_SOURCE_DIR}")
 
 set(AS_TARGETS            "")
 set(SWF_COMPILED_OUTPUTS  "")
 
 # Load all SWF target definitions from a single file (calls Add_AS for each)
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/SWFSources.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/source/swfsources.cmake")
 
 AS_GlobalAssemble_Finalize()
 
