@@ -13,9 +13,9 @@ project(
     LANGUAGES NONE
 )
 
-# ==============================================================================
-# § 1  Options & Core Paths
-# ==============================================================================
+# ---------------------------------------------------------------------------
+# Options & Core Paths
+# ---------------------------------------------------------------------------
 
 # SkyrimSE_PATH: absolute path to the game directory. 
 # Defaults to the standard Steam library location if not provided.
@@ -46,9 +46,9 @@ endif()
 
 message(STATUS "[Build] Build type : ${CMAKE_BUILD_TYPE}")
 
-# ==============================================================================
-# § 2  Module Paths
-# ==============================================================================
+# ---------------------------------------------------------------------------
+# Module Paths
+# ---------------------------------------------------------------------------
 
 list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
@@ -60,9 +60,9 @@ include(BSArchive)
 include(ImportToSWF)
 include(SWFXMLPatch)
 
-# ==============================================================================
-# § 3  FFDec CLI Detection
-# ==============================================================================
+# ---------------------------------------------------------------------------
+# FFDec CLI Detection
+# ---------------------------------------------------------------------------
 
 find_program(FFDEC_CLI
     NAMES ffdec-cli ffdec-cli.exe
@@ -80,12 +80,9 @@ else()
         "[Build] FFDec CLI not found. ActionScript compilation will be skipped.")
 endif()
 
-# ==============================================================================
-# § 4  Papyrus Scripts
-# ==============================================================================
-#
-# CONFIGURE_DEPENDS: CMake re-runs configure automatically when .psc files
-# are added or removed.
+# ---------------------------------------------------------------------------
+# Papyrus Scripts
+# ---------------------------------------------------------------------------
 
 file(GLOB PAPYRUS_SOURCES
     CONFIGURE_DEPENDS
@@ -112,9 +109,9 @@ else()
     set(Papyrus_OUTPUT "")
 endif()
 
-# ==============================================================================
-# § 5  ActionScript / SWF Compilation
-# ==============================================================================
+# ---------------------------------------------------------------------------
+# ActionScript / SWF Compilation
+# ---------------------------------------------------------------------------
 
 set(AS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/actionscript")
 
@@ -130,16 +127,9 @@ AS_GlobalAssemble_Finalize()
 
 add_custom_target("ActionScript" DEPENDS ${AS_TARGETS})
 
-# ==============================================================================
-# § 6  Debug Mode -- Direct Deployment
-# ==============================================================================
-#
-# Deploy uses a single cmake -P process (cmake/Deploy.cmake) instead of one
-# cmake process per file, eliminating ~38 subprocess launches per build.
-#
-# File lists are written to disk at configure-time and read by the script at
-# build-time. This avoids the semicolon-as-separator ambiguity that occurs
-# when passing CMake lists via -D on MSBuild generators.
+# ---------------------------------------------------------------------------
+# Debug Mode -- Direct Deployment
+# ---------------------------------------------------------------------------
 
 if(IS_DEBUG_BUILD)
 
@@ -153,7 +143,6 @@ if(IS_DEBUG_BUILD)
     set(_ESP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/data/SkyUI_SE.esp")
 
     # Write list files at configure-time.
-    # One absolute path per line — read via file(STRINGS) in Deploy.cmake.
     list(JOIN Papyrus_OUTPUT        "\n" _PEX_CONTENT)
     list(JOIN SWF_COMPILED_OUTPUTS  "\n" _SWF_COMPILED_CONTENT)
 
@@ -184,9 +173,9 @@ if(IS_DEBUG_BUILD)
     )
     add_dependencies("deploy_debug" "Papyrus" "ActionScript")
 
-# ==============================================================================
-# § 7  Release Mode -- BSA + ZIP
-# ==============================================================================
+# ---------------------------------------------------------------------------
+# Release Mode -- BSA + ZIP
+# ---------------------------------------------------------------------------
 
 else()
 

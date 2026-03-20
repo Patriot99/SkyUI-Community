@@ -7,23 +7,24 @@ Generic ActionScript injection into SWF files.
 Usage
 ^^^^^
 
-Step 1: Before the SWF loop, call once:
+Step 1: Before the SWF loop, call once to initialize state:
 
   AS_GlobalAssemble_Init(
       AS_SOURCE_DIR <path>
   )
 
-Step 2: Inside the SWF loop, call per SWF:
+Step 2: Inside the SWF loop, call per SWF to define an injection target:
 
   Add_AS(
       TARGET_NAME <name>
+      SWF_REL     <relative/path.swf>
       SWF_INPUT   <absolute/path/to/base.swf>
       SWF_OUTPUT  <absolute/path/to/output.swf>
       SOURCES     <file> [...]
       [FRAME_SOURCES <file> [...]]
   )
 
-Step 3: After the loop, call once to finalize:
+Step 3: After the loop, call once to perform the global assembly:
 
   AS_GlobalAssemble_Finalize()
 
@@ -31,14 +32,14 @@ Step 3: After the loop, call once to finalize:
 
 if(NOT CMAKE_SCRIPT_MODE_FILE)
 
+# ---------------------------------------------------------------------------
+# State Management
+# ---------------------------------------------------------------------------
+
 # Capture the path to THIS file at include-time so functions called later
 # from CMakeLists.txt (like AS_GlobalAssemble_Finalize) know which script 
 # to invoke at build-time.
 set(_AS_IMPORT_MODULE_SCRIPT "${CMAKE_CURRENT_LIST_FILE}" CACHE INTERNAL "")
-
-# ---------------------------------------------------------------------------
-# Internal state (global properties)
-# ---------------------------------------------------------------------------
 
 define_property(GLOBAL PROPERTY _AS_SOURCE_DIR)
 define_property(GLOBAL PROPERTY _AS_GLOBAL_STAGING)
@@ -170,10 +171,7 @@ function(AS_GlobalAssemble_Finalize)
         file(WRITE "${_FRAME_SOURCES_FILE}" "${_FRAME_CONTENT}")
     endif()
 
-    # Build-time assembly logic
-    # Note: we are currently running at configure-time here.
-    # To keep it simple, we just run the logic now.
-    
+    # Build-time assembly logic (runs at configure-time for simplicity)
     execute_process(
         COMMAND "${CMAKE_COMMAND}"
             "--log-level=WARNING"
@@ -188,7 +186,7 @@ endfunction()
 else() # CMAKE_SCRIPT_MODE_FILE
 
 # ---------------------------------------------------------------------------
-# Build-time Assembly Logic (merged from AssembleScripts.cmake)
+# Build-time Assembly Logic
 # ---------------------------------------------------------------------------
 
 file(MAKE_DIRECTORY "${STAGING_DIR}/__Packages")
