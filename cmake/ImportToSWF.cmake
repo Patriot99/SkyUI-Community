@@ -23,7 +23,7 @@ Step 2: Inside the SWF loop, call per SWF:
       [FRAME_SOURCES <file> [...]]
   )
 
-Step 3: After the loop, call once to finalize the global assemble target:
+Step 3: After the loop, call once to finalize:
 
   AS_GlobalAssemble_Finalize()
 
@@ -141,8 +141,6 @@ function(Add_AS)
         SOURCES ${ARG_SOURCES} ${ARG_FRAME_SOURCES}
     )
 
-    add_dependencies("${ARG_TARGET_NAME}" "ActionScript_Assemble")
-
     set("${ARG_TARGET_NAME}_OUTPUT" "${ARG_SWF_OUTPUT}" PARENT_SCOPE)
 endfunction()
 
@@ -172,27 +170,18 @@ function(AS_GlobalAssemble_Finalize)
         file(WRITE "${_FRAME_SOURCES_FILE}" "${_FRAME_CONTENT}")
     endif()
 
-    set(_GLOBAL_STAMP "${_GLOBAL_STAGING}/.assembled.stamp")
-    add_custom_command(
-        OUTPUT "${_GLOBAL_STAMP}"
-        BYPRODUCTS "${_GLOBAL_STAGING}/__Packages"
-        COMMAND "${CMAKE_COMMAND}" -E echo "[Build] Assembling all ActionScript sources"
+    # Build-time assembly logic
+    # Note: we are currently running at configure-time here.
+    # To keep it simple, we just run the logic now.
+    
+    execute_process(
         COMMAND "${CMAKE_COMMAND}"
             "--log-level=WARNING"
             "-DSTAGING_DIR=${_GLOBAL_STAGING}"
             "-DSOURCES_FILE=${_SOURCES_FILE}"
             "-DFRAME_SOURCES_FILE=${_FRAME_SOURCES_FILE}"
             "-DAS_SOURCE_DIR=${_AS_SOURCE_DIR}"
-            "-DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}"
-            "-DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}"
-            "-DGLOBAL_STAMP=${_GLOBAL_STAMP}"
             -P "${_AS_IMPORT_MODULE_SCRIPT}"
-        DEPENDS ${_ALL_SOURCES} ${_ALL_FRAME_SOURCES} "${_AS_IMPORT_MODULE_SCRIPT}"
-        VERBATIM
-    )
-
-    add_custom_target("ActionScript_Assemble"
-        DEPENDS "${_GLOBAL_STAMP}"
     )
 endfunction()
 
@@ -232,10 +221,6 @@ if(DEFINED FRAME_SOURCES_FILE AND EXISTS "${FRAME_SOURCES_FILE}")
             file(COPY_FILE "${SRC}" "${STAGING_DIR}/${FNAME}" ONLY_IF_DIFFERENT)
         endif()
     endforeach()
-endif()
-
-if(DEFINED GLOBAL_STAMP)
-    file(TOUCH "${GLOBAL_STAMP}")
 endif()
 
 endif()
