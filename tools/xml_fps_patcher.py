@@ -187,7 +187,7 @@ def patch_xml(input_file, output_file, target_fps=120.0):
     with open(output_file, 'w', encoding='utf-8', newline='\n') as f: f.write(content)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Patch SkyUI XML for higher fps')
+    parser = argparse.ArgumentParser(description='Patch SkyUI XML for higher frame rates')
     parser.add_argument('--file', required=True, help='Path to XML file to patch in-place')
     parser.add_argument('--fps', type=float, default=120.0, help='Target frame rate')
     args = parser.parse_args()
