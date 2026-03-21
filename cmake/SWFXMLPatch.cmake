@@ -2,7 +2,7 @@
 SWFXMLPatch
 -----------
 
-Logic to rebuild a SWF from its XML source.
+Logic to rebuild a SWF from its XML source with 60fps patching.
 
 Usage
 ^^^^^
@@ -31,16 +31,30 @@ function(Add_XML_Base)
     endif()
 
     set(_XML_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/swf/${ARG_XML_PATH}")
+    set(_XML_PATCHED "${CMAKE_CURRENT_BINARY_DIR}/staging/xml/${ARG_XML_PATH}")
+    set(_PATCHER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/tools/xml_60fps_patcher.py")
 
     if(NOT EXISTS "${_XML_SOURCE}")
         message(FATAL_ERROR "Add_XML_Base: XML source not found: ${_XML_SOURCE}")
     endif()
 
+    # Step 1: Patch the XML into the staging folder
+    add_custom_command(
+        OUTPUT "${_XML_PATCHED}"
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "staging/xml"
+        COMMAND "${CMAKE_COMMAND}" -E copy "${_XML_SOURCE}" "${_XML_PATCHED}"
+        COMMAND "python" "${_PATCHER_SCRIPT}" "--file" "${_XML_PATCHED}"
+        DEPENDS "${_XML_SOURCE}" "${_PATCHER_SCRIPT}"
+        COMMENT "[Build] Patching 60fps: ${ARG_XML_PATH}"
+        VERBATIM
+    )
+
+    # Step 2: Rebuild SWF from patched XML
     add_custom_command(
         OUTPUT "${ARG_OUTPUT_SWF}"
         COMMAND "${CMAKE_COMMAND}" -E echo "[Build] ffdec -xml2swf ${ARG_XML_PATH}"
-        COMMAND "${FFDEC_CLI}" -xml2swf "${_XML_SOURCE}" "${ARG_OUTPUT_SWF}"
-        DEPENDS "${_XML_SOURCE}"
+        COMMAND "${FFDEC_CLI}" -xml2swf "${_XML_PATCHED}" "${ARG_OUTPUT_SWF}"
+        DEPENDS "${_XML_PATCHED}"
         VERBATIM
     )
 endfunction()
