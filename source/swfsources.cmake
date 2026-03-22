@@ -421,7 +421,6 @@ Add_SWF(skyui_configpanel
     ModConfigPanel/SliderDialog.as
     ModConfigPanel/TextInputDialog.as
     Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/ModListEntry.as
     Vanilla/Shared/ButtonChange.as
     Vanilla/Shared/GlobalFunc.as
 )
