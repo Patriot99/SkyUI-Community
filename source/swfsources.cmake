@@ -53,35 +53,11 @@ Add_SWF(bartermenu
     Vanilla/Shared/GlobalFunc.as
 )
 
-Add_SWF(bethesdanetlogin
-    bethesdanetlogin.swf
-    bethesdanetlogin.xml
-    Vanilla/BethesdaNetLogin.as
-    Vanilla/BottomButtons.as
-    Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/LoginCheckbox.as
-    Vanilla/Shared/ButtonChange.as
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/Shared/Proxy.as
-)
 
-Add_SWF(book
-    book.swf
-    book.xml
-    Vanilla/BookMenu.as
-    Vanilla/Shared/GlobalFunc.as
-)
 
-Add_SWF(bookmenu
-    bookmenu.swf
-    bookmenu.xml
-    ItemMenus/BottomBar.as
-    Vanilla/BookBottomBar.as
-    Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/Shared/ButtonChange.as
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/Shared/Proxy.as
-)
+
+
+
 
 Add_SWF(console
     console.swf
@@ -144,46 +120,9 @@ Add_SWF(craftingmenu
     Vanilla/Shared/GlobalFunc.as
 )
 
-Add_SWF(creationclubmenu
-    creationclubmenu.swf
-    creationclubmenu.xml
-    Vanilla/AutoResizeTextBacking.as
-    Vanilla/BethesdaNetLogin.as
-    Vanilla/BottomButtons.as
-    Vanilla/BuyNowButton.as
-    Vanilla/CCCarousel.as
-    Vanilla/CCCreditCost.as
-    Vanilla/CCHeader.as
-    Vanilla/CCListEntry.as
-    Vanilla/CCModDetails.as
-    Vanilla/CCPurchaseDialog.as
-    Vanilla/CCWallet.as
-    Vanilla/CarouselButton.as
-    Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/CreationClubMenu.as
-    Vanilla/CreationScreenshot.as
-    Vanilla/DialogCreditCost.as
-    Vanilla/FilterTabs.as
-    Vanilla/ListEntryBase.as
-    Vanilla/ModCategoryList.as
-    Vanilla/ModDetailsRating.as
-    Vanilla/ModListEntry.as
-    Vanilla/NavigationButton.as
-    Vanilla/Shared/ButtonChange.as
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/Shared/Proxy.as
-    Vanilla/WideCreditCost.as
-)
 
-Add_SWF(creditsmenu
-    creditsmenu.swf
-    creditsmenu.xml
-    Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/CreditsMenu.as
-    Vanilla/Shared/ButtonChange.as
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/Shared/Proxy.as
-)
+
+
 
 Add_SWF(dialoguemenu
     dialoguemenu.swf
@@ -321,12 +260,7 @@ Add_SWF(inventorymenu
     ItemMenus/ItemcardDataExtender.as
 )
 
-Add_SWF(kinectmenu
-    kinectmenu.swf
-    kinectmenu.xml
-    Vanilla/KinectMenu.as
-    Vanilla/Shared/GlobalFunc.as
-)
+
 
 Add_SWF(levelupmenu
     levelupmenu.swf
@@ -406,31 +340,7 @@ Add_SWF(messagebox
     Vanilla/Shared/GlobalFunc.as
 )
 
-Add_SWF(modmanager
-    modmanager.swf
-    modmanager.xml
-    Vanilla/BethesdaNetLogin.as
-    Vanilla/BottomButtons.as
-    Vanilla/Components/BSUIComponent.as
-    Vanilla/Components/CrossPlatformButtons.as
-    Vanilla/ListEntryBase.as
-    Vanilla/ModAccountSettingsList.as
-    Vanilla/ModCategoryList.as
-    Vanilla/ModDetailsOptionsList.as
-    Vanilla/ModDetailsPage.as
-    Vanilla/ModDetailsRating.as
-    Vanilla/ModLibraryList.as
-    Vanilla/ModLibraryPage.as
-    Vanilla/ModLibrary_ListEntry.as
-    Vanilla/ModListEntry.as
-    Vanilla/ModManager.as
-    Vanilla/ModSearchPage.as
-    Vanilla/ModUtils.as
-    Vanilla/Shared/BSScrollingList.as
-    Vanilla/Shared/ButtonChange.as
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/Shared/Proxy.as
-)
+
 
 Add_SWF(quest_journal
     quest_journal.swf
@@ -629,12 +539,7 @@ Add_SWF(statsmenu
     Vanilla/StatsMenu.as
 )
 
-Add_SWF(streaminginstall
-    streaminginstall.swf
-    streaminginstall.xml
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/StreamingInstall.as
-)
+
 
 Add_SWF(textentry
     textentry.swf
@@ -684,12 +589,4 @@ Add_SWF(tweenmenu
     Vanilla/Shared/Proxy.as
 )
 
-Add_SWF(widgetoverlay
-    widgetoverlay.swf
-    widgetoverlay.xml
-    Vanilla/Shared/GlobalFunc.as
-    Vanilla/WidgetOverlay/Graph.as
-    Vanilla/WidgetOverlay/OverlayButton.as
-    Vanilla/WidgetOverlay/OverlayButtonBar.as
-    Vanilla/WidgetOverlay/TextureWidget.as
-)
+

@@ -1,24 +1,11 @@
 {
     "bartermenu.xml": [],
-    "bethesdanetlogin.xml": [],
-    "book.xml": [],
     "bookmenu.xml": [
         "25"
     ],
     "console.xml": [],
     "containermenu.xml": [],
     "craftingmenu.xml": [],
-    "creationclubmenu.xml": [
-        "86",
-        "89",
-        "93",
-        "96",
-        "448"
-    ],
-    "creditsmenu.xml": [
-        "294",
-        "296"
-    ],
     "cursormenu.xml": [],
     "dialoguemenu.xml": [
         "236",
@@ -80,10 +67,7 @@
         "834"
     ],
     "inventorymenu.xml": [],
-    "kinectmenu.xml": [
-    ],
-    "levelupmenu.xml": [
-    ],
+    "levelupmenu.xml": [],
     "loadingmenu.xml": [
         "4",
         "14"
@@ -110,10 +94,6 @@
     ],
     "messagebox.xml": [
         "9"
-    ],
-    "modmanager.xml": [
-        "50",
-        "53"
     ],
     "quest_journal.xml": [
         "124",
@@ -159,9 +139,8 @@
         "110",
         "112",
         "117",
-        "118"   
+        "118"
     ],
-    "safezone.xml": [],
     "sharedcomponents.xml": [
         "193",
         "196",
@@ -199,7 +178,6 @@
         "96",
         "102"
     ],
-    "streaminginstall.xml": [],
     "textentry.xml": [
         "22",
         "26"
@@ -227,9 +205,6 @@
         "17",
         "29",
         "34"
-    ],
-    "widgetoverlay.xml": [
-        "12"
     ],
     "icons_effect_psychosteve.xml": [],
     "widgetloader.xml": [],
