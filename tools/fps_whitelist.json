@@ -1,0 +1,229 @@
+{
+    "bartermenu.xml": [],
+    "bethesdanetlogin.xml": [],
+    "book.xml": [],
+    "bookmenu.xml": [
+        "25"
+    ],
+    "console.xml": [],
+    "containermenu.xml": [],
+    "craftingmenu.xml": [],
+    "creationclubmenu.xml": [
+        "86",
+        "89",
+        "93",
+        "96",
+        "448"
+    ],
+    "creditsmenu.xml": [
+        "294",
+        "296"
+    ],
+    "cursormenu.xml": [],
+    "dialoguemenu.xml": [
+        "236",
+        "244"
+    ],
+    "fadermenu.xml": [],
+    "favoritesmenu.xml": [
+        "143",
+        "175",
+        "178",
+        "181",
+        "184",
+        "187"
+    ],
+    "giftmenu.xml": [],
+    "hudmenu.xml": [
+        "147",
+        "387",
+        "416",
+        "419",
+        "422",
+        "426",
+        "434",
+        "438",
+        "441",
+        "445",
+        "457",
+        "461",
+        "465",
+        "482",
+        "494",
+        "505",
+        "506",
+        "713",
+        "714",
+        "717",
+        "740",
+        "749",
+        "750",
+        "753",
+        "756",
+        "757",
+        "758",
+        "761",
+        "764",
+        "765",
+        "766",
+        "778",
+        "779",
+        "790",
+        "791",
+        "797",
+        "820",
+        "821",
+        "833",
+        "834"
+    ],
+    "inventorymenu.xml": [],
+    "kinectmenu.xml": [
+        "9",
+        "12",
+        "21",
+        "22"
+    ],
+    "levelupmenu.xml": [
+        "6",
+        "9",
+        "12"
+    ],
+    "loadingmenu.xml": [
+        "4",
+        "14"
+    ],
+    "loadwaitspinner.xml": [],
+    "lockpickingmenu.xml": [
+        "32",
+        "50",
+        "51"
+    ],
+    "magicmenu.xml": [],
+    "map.xml": [
+        "49"
+    ],
+    "messagebox.xml": [
+        "9"
+    ],
+    "modmanager.xml": [
+        "50",
+        "53"
+    ],
+    "quest_journal.xml": [
+        "281",
+        "293"
+    ],
+    "racesex_menu.xml": [
+        "3",
+        "5",
+        "7",
+        "8",
+        "12",
+        "76",
+        "79",
+        "82",
+        "112"
+    ],
+    "safezone.xml": [],
+    "sharedcomponents.xml": [
+        "193",
+        "196",
+        "203"
+    ],
+    "sleepwaitmenu.xml": [
+        "25",
+        "27",
+        "30",
+        "33"
+    ],
+    "startmenu.xml": [
+        "310",
+        "314",
+        "323",
+        "326",
+        "327",
+        "329",
+        "371"
+    ],
+    "statsmenu.xml": [
+        "14",
+        "46",
+        "63",
+        "64",
+        "68",
+        "69",
+        "74",
+        "75",
+        "96",
+        "102"
+    ],
+    "streaminginstall.xml": [],
+    "textentry.xml": [
+        "22",
+        "26"
+    ],
+    "titles.xml": [
+        "5",
+        "8",
+        "11",
+        "14"
+    ],
+    "trainingmenu.xml": [
+        "22",
+        "37"
+    ],
+    "tutorialmenu.xml": [
+        "363",
+        "366",
+        "369",
+        "370",
+        "372",
+        "381",
+        "383"
+    ],
+    "tweenmenu.xml": [
+        "17",
+        "29"
+    ],
+    "widgetoverlay.xml": [
+        "12"
+    ],
+    "icons_effect_psychosteve.xml": [],
+    "widgetloader.xml": [],
+    "activeeffects.xml": [
+        "5"
+    ],
+    "bottombar.xml": [
+        "6",
+        "25",
+        "26",
+        "30",
+        "31",
+        "36",
+        "37",
+        "42",
+        "43",
+        "68"
+    ],
+    "buttonart.xml": [],
+    "configpanel.xml": [
+        "55"
+    ],
+    "icons_category_celtic.xml": [],
+    "icons_category_curved.xml": [],
+    "icons_category_psychosteve.xml": [],
+    "icons_category_straight.xml": [],
+    "icons_item_psychosteve.xml": [],
+    "inventorylists.xml": [],
+    "itemcard.xml": [
+        "66",
+        "70",
+        "71",
+        "94",
+        "185",
+        "232"
+    ],
+    "mapmarkerart.xml": [],
+    "mcm_splash.xml": [],
+    "skyui_splash.xml": []
+}
