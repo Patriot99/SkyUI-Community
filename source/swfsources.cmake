@@ -125,6 +125,16 @@ Add_SWF(craftingmenu
     Vanilla/Shared/GlobalFunc.as
 )
 
+Add_SWF(creditsmenu
+    creditsmenu.swf
+    creditsmenu.xml
+    Vanilla/Components/CrossPlatformButtons.as
+    Vanilla/CreditsMenu.as
+    Vanilla/Shared/ButtonChange.as
+    Vanilla/Shared/GlobalFunc.as
+    Vanilla/Shared/Proxy.as
+)
+
 Add_SWF(dialoguemenu
     dialoguemenu.swf
     dialoguemenu.xml
