@@ -5,9 +5,8 @@
 ### Prerequisites
 
 - [CMake 4.2+](https://cmake.org/download/)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) (or another CMake-supported generator)
+- [Visual Studio 2026](https://visualstudio.microsoft.com/) (or another CMake-supported generator)
 - [Java](https://www.java.com/en/download/) (required by the bundled ffdec-cli)
-- [Python 3](https://www.python.org/downloads/) (required for FPS patching during build)
 - A clean Skyrim Special Edition installation with:
   - The [Creation Kit](https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/) installed and **run at least once** to unpack the base game script sources
   - The latest [SKSE64](https://skse.silverlock.org/) installed, including its script source files, overwriting the scripts included with the Creation Kit
