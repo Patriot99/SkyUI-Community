@@ -34,6 +34,9 @@ class SystemPage extends MovieClip
    var TopmostPanel;
    var VersionText;
    var _ShowModMenu;
+   var _skyrimVersion;
+   var _skyrimVersionBuild;
+   var _skyrimVersionMinor;
    var bDefaultsButtonVisible;
    var bIsRemoteDevice;
    var bMenuClosing;
@@ -180,6 +183,7 @@ class SystemPage extends MovieClip
       {
          this.currentState = SystemPage.MAIN_STATE;
          gfx.io.GameDelegate.call("SetVersionText",[this.VersionText]);
+         this.ParseVersion();
          gfx.io.GameDelegate.call("ShouldShowKinectTunerOption",[],this,"SetShouldShowKinectTunerOption");
          this.UpdatePermissions();
          this.BottomBar_mc.SetButtonVisibility(1,false,50);
@@ -621,7 +625,7 @@ class SystemPage extends MovieClip
                }
                else
                {
-               gfx.io.GameDelegate.call("PlaySound",["UIMenuCancel"]);
+                  gfx.io.GameDelegate.call("PlaySound",["UIMenuCancel"]);
                }
                return;
             case 9:
@@ -783,7 +787,7 @@ class SystemPage extends MovieClip
       switch(this.SettingsList.selectedIndex)
       {
          case 0:
-            _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$SaveGameMissingCreationsCheck",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
+               _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$SaveGameMissingCreationsCheck",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
             gfx.io.GameDelegate.call("RequestGameplayOptions",[_loc2_.entryList]);
             break;
          case 1:
@@ -1366,12 +1370,14 @@ class SystemPage extends MovieClip
       if(this._ShowModMenu)
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[3],this.CategoryList.entryList[5],this.CategoryList.entryList[9],false]);
+         this.CategoryList.entryList[3].disabled = !this.IsVersionAtLeast(1, 6, 1130);
          this.CategoryList.entryList[6].disabled = false;
          this.CategoryList.entryList[7].disabled = false;
       }
       else
       {
          gfx.io.GameDelegate.call("SetSaveDisabled",[this.CategoryList.entryList[0],this.CategoryList.entryList[1],this.CategoryList.entryList[2],this.CategoryList.entryList[3],this.CategoryList.entryList[4],this.CategoryList.entryList[8],false]);
+         this.CategoryList.entryList[3].disabled = !this.IsVersionAtLeast(1, 6, 1130);
          this.CategoryList.entryList[5].disabled = false;
          this.CategoryList.entryList[6].disabled = false;
       }
@@ -1380,5 +1386,24 @@ class SystemPage extends MovieClip
    function IsPlatformSony()
    {
       return this.iPlatform == SystemPage.CONTROLLER_ORBIS || this.iPlatform == SystemPage.CONTROLLER_PROSPERO;
+   }
+   function ParseVersion()
+   {
+      var clean = this.VersionText.text.split(" ")[0];
+      var parts = clean.split(".");
+
+      this._skyrimVersion = parseInt(parts[0]);
+      this._skyrimVersionMinor = parseInt(parts[1]);
+      this._skyrimVersionBuild = parseInt(parts[2]);
+   }
+   function IsVersionAtLeast(major, minor, build)
+   {
+      if(this._skyrimVersion > major) return true;
+      if(this._skyrimVersion < major) return false;
+
+      if(this._skyrimVersionMinor > minor) return true;
+      if(this._skyrimVersionMinor < minor) return false;
+
+      return this._skyrimVersionBuild >= build;
    }
 }
