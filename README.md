@@ -83,4 +83,4 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## Credits
 
-- [JPEXS Free Flash Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) by Jindra Petřík — used for ActionScript compilation into SWF files
+- [JPEXS Free Flash Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) by Jindra Petřík — used for ActionScript and XML compilation into SWF files
