@@ -248,7 +248,6 @@ class StartMenu extends MovieClip
       var _loc14_ = 10;
       var _loc16_ = 11;
       var _loc4_ = StartMenu.NEW_INDEX;
-
       if(this.MainList.entryList.length > 0)
       {
          _loc4_ = this.MainList.centeredEntry.index;
@@ -858,7 +857,11 @@ class StartMenu extends MovieClip
    }
    function StartState(strStateName)
    {
-      UpdateBnetStatus(true, true);
+      if (skse.version.releaseIdx < 70)
+      {
+         this._CClubAllowedByBnet = false;
+         this._ModsAllowedByBnet  = false;
+      }
 
       gfx.io.GameDelegate.call("StartState",[strStateName]);
       this.ShouldProcessInputs = false;
@@ -1145,6 +1148,7 @@ class StartMenu extends MovieClip
          cclubUp = false;
          modsUp = false;
       }
+
       this._CClubAllowedByBnet = cclubUp;
       this._ModsAllowedByBnet = modsUp;
       this.MainList.GetClipByIndex(StartMenu.CREATION_CLUB_INDEX).alpha = !(this._UserCanAccessCreationClub && this._CClubAllowedByBnet) ? StartMenu.DISABLED_GREY_OUT_ALPHA : 100;
