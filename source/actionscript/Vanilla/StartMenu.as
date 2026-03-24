@@ -692,9 +692,8 @@ class StartMenu extends MovieClip
                return;
                break;
             case StartMenu.SKY10_UPSELL_INDEX:
-               if (skse.version.releaseIdx >= 70){
-                  gfx.io.GameDelegate.call("Sky10DLCPressed",[]);
-               }
+               gfx.io.GameDelegate.call("Sky10DLCPressed",[]);
+         
                return;
             case StartMenu.CREATION_CLUB_INDEX:
                if(this._CClubAllowedByBnet)
