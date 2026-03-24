@@ -272,19 +272,19 @@ class StartMenu extends MovieClip
       {
          this.MainList.entryList.push({text:"$DOWNLOADABLE CONTENT",index:StartMenu.DLC_INDEX,disabled:false});
       }
-      if(arguments[_loc9_])
+      if(arguments[_loc9_] && skse.version.releaseIdx >= 70)
       {
          this.MainList.entryList.push({text:"$CREATION CLUB",disabled:false,index:StartMenu.CREATION_CLUB_INDEX});
       }
       this.ShowSky10UpsellBanner(false);
-      if(arguments[_loc7_] == true)
+      if(arguments[_loc7_] == true && skse.version.releaseIdx >= 70)
       {
          this.ShowSky10UpsellBanner(true);
       }
       if(!arguments[_loc14_])
       {
       }
-      if(arguments[_loc8_])
+      if(arguments[_loc8_] && skse.version.releaseIdx >= 70)
       {
          this.MainList.entryList.push({text:"$MOD MANAGER",disabled:false,index:StartMenu.MOD_INDEX});
       }
@@ -293,7 +293,7 @@ class StartMenu extends MovieClip
       {
          this.MainList.entryList.push({text:"$QUIT",index:StartMenu.QUIT_INDEX,disabled:false});
       }
-      if(arguments[_loc12_])
+      if(arguments[_loc12_] && skse.version.releaseIdx >= 70)
       {
          this.MainList.entryList.push({text:"$HELP",index:StartMenu.HELP_INDEX,disabled:false});
       }
@@ -693,6 +693,7 @@ class StartMenu extends MovieClip
                break;
             case StartMenu.SKY10_UPSELL_INDEX:
                gfx.io.GameDelegate.call("Sky10DLCPressed",[]);
+         
                return;
             case StartMenu.CREATION_CLUB_INDEX:
                if(this._CClubAllowedByBnet)
@@ -855,6 +856,12 @@ class StartMenu extends MovieClip
    }
    function StartState(strStateName)
    {
+      if (skse.version.releaseIdx < 70)
+      {
+         this._CClubAllowedByBnet = false;
+         this._ModsAllowedByBnet  = false;
+      }
+
       gfx.io.GameDelegate.call("StartState",[strStateName]);
       this.ShouldProcessInputs = false;
       if(strStateName == StartMenu.LOGIN_STATE)
@@ -1120,16 +1127,31 @@ class StartMenu extends MovieClip
    }
    function SetMotd(motdText)
    {
+      if (skse.version.releaseIdx < 70){
+         motdText = "";
+      }
       this._Motd_tf.text = motdText;
       this._MessageOfTheDay_mc._visible = this._Motd_tf.text.length > 1;
    }
    function SetCreationClubAccess(canAccess)
-   {
+   {     
+      if (skse.version.releaseIdx < 70)
+      {
+         canAccess = false;
+      } 
+
       this._UserCanAccessCreationClub = canAccess;
       this.MainList.GetClipByIndex(StartMenu.CREATION_CLUB_INDEX).alpha = !(this._UserCanAccessCreationClub && this._CClubAllowedByBnet) ? StartMenu.DISABLED_GREY_OUT_ALPHA : 100;
    }
+   
    function UpdateBnetStatus(cclubUp, modsUp)
-   {
+   {      
+      if (skse.version.releaseIdx < 70)
+      {
+         cclubUp = false;
+         modsUp = false;
+      }
+
       this._CClubAllowedByBnet = cclubUp;
       this._ModsAllowedByBnet = modsUp;
       this.MainList.GetClipByIndex(StartMenu.CREATION_CLUB_INDEX).alpha = !(this._UserCanAccessCreationClub && this._CClubAllowedByBnet) ? StartMenu.DISABLED_GREY_OUT_ALPHA : 100;
