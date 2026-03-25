@@ -332,9 +332,6 @@ Add_SWF(magicmenu
 Add_SWF(map
     map.swf
     map.xml
-    Common/skyui/defines/Input.as
-    Common/skyui/filter/NameFilter.as
-    Common/skyui/filter/SortFilter.as
     MapMenu/Map/LocalMap.as
     MapMenu/Map/LocationFinder.as
     MapMenu/Map/LocationListEntry.as
