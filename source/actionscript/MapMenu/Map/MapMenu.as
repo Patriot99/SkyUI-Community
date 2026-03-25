@@ -131,6 +131,7 @@ class Map.MapMenu
             
             _loc2_.Index = this.NextCreateIndex; 
             _loc2_.label = markerName;
+            _loc2_.textField._visible = false; 
             _loc2_.visible = false;
 
             if (this.LocationFinderPanel != undefined && iconType > 0 && iconType < 60)
