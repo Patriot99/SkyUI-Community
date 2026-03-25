@@ -72,6 +72,7 @@ class Map.MapMenu
       }
       Shared.GlobalFunc.SetLockFunction();
       MovieClip(_root.Bottom).Lock("B");
+      _root.Bottom._y += Stage.safeRect.y + 12;
    }
    function onMouseDown()
    {
