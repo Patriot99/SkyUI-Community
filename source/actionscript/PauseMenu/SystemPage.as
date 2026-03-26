@@ -794,49 +794,86 @@ class SystemPage extends MovieClip
    }
    function onSettingsCategoryPress()
    {
-      var _loc2_ = this.OptionsListsPanel.OptionsLists.List_mc;
+      var list = this.OptionsListsPanel.OptionsLists.List_mc;
+      var entries = [];
+
       switch(this.SettingsList.selectedIndex)
       {
          case 0:
+            entries = [
+               {text:"$Invert Y",movieType:2},
+               {text:"$Look Sensitivity",movieType:0},
+               {text:"$Vibration",movieType:2},
+               {text:"$360 Controller",movieType:2},
+               {text:"$Survival Mode",movieType:2},
+               {text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},
+               {text:"$Show Floating Markers",movieType:2},
+               {text:"$Save on Rest",movieType:2},
+               {text:"$Save on Wait",movieType:2},
+               {text:"$Save on Travel",movieType:2},
+               {text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},
+               {text:"$Use Kinect Commands",movieType:2}
+            ];
+
             if(this.IsVersionAtLeast(1, 6, 659))
             {
-               _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$SaveGameMissingCreationsCheck",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
+               entries.splice(4, 0, {text:"$SaveGameMissingCreationsCheck",movieType:2});
             }
-            else
-            {
-               _loc2_.entryList = [{text:"$Invert Y",movieType:2},{text:"$Look Sensitivity",movieType:0},{text:"$Vibration",movieType:2},{text:"$360 Controller",movieType:2},{text:"$Survival Mode",movieType:2},{text:"$Difficulty",movieType:1,options:["$Very Easy","$Easy","$Normal","$Hard","$Very Hard","$Legendary"]},{text:"$Show Floating Markers",movieType:2},{text:"$Save on Rest",movieType:2},{text:"$Save on Wait",movieType:2},{text:"$Save on Travel",movieType:2},{text:"$Save on Pause",movieType:1,options:["$5 Mins","$10 Mins","$15 Mins","$30 Mins","$45 Mins","$60 Mins","$Disabled"]},{text:"$Use Kinect Commands",movieType:2}];
-            }
-            gfx.io.GameDelegate.call("RequestGameplayOptions",[_loc2_.entryList]);
+
+            gfx.io.GameDelegate.call("RequestGameplayOptions", [entries]);
             break;
+
          case 1:
-            _loc2_.entryList = [{text:"$Brightness",movieType:0},{text:"$HUD Opacity",movieType:0},{text:"$Actor Fade",movieType:0},{text:"$Item Fade",movieType:0},{text:"$Object Fade",movieType:0},{text:"$Grass Fade",movieType:0},{text:"$Shadow Fade",movieType:0},{text:"$Light Fade",movieType:0},{text:"$Specularity Fade",movieType:0},{text:"$Tree LOD Fade",movieType:0},{text:"$Crosshair",movieType:2},{text:"$Dialogue Subtitles",movieType:2},{text:"$General Subtitles",movieType:2},{text:"$DDOF Intensity",movieType:0}];
-            gfx.io.GameDelegate.call("RequestDisplayOptions",[_loc2_.entryList]);
+            entries = [
+               {text:"$Brightness",movieType:0},
+               {text:"$HUD Opacity",movieType:0},
+               {text:"$Actor Fade",movieType:0},
+               {text:"$Item Fade",movieType:0},
+               {text:"$Object Fade",movieType:0},
+               {text:"$Grass Fade",movieType:0},
+               {text:"$Shadow Fade",movieType:0},
+               {text:"$Light Fade",movieType:0},
+               {text:"$Specularity Fade",movieType:0},
+               {text:"$Tree LOD Fade",movieType:0},
+               {text:"$Crosshair",movieType:2},
+               {text:"$Dialogue Subtitles",movieType:2},
+               {text:"$General Subtitles",movieType:2},
+               {text:"$DDOF Intensity",movieType:0}
+            ];
+
+            gfx.io.GameDelegate.call("RequestDisplayOptions", [entries]);
             break;
+
          case 2:
-            _loc2_.entryList = [{text:"$Master",movieType:0}];
-            gfx.io.GameDelegate.call("RequestAudioOptions",[_loc2_.entryList]);
-            for(var _loc4_ in _loc2_.entryList)
+            entries = [{text:"$Master",movieType:0}];
+
+            gfx.io.GameDelegate.call("RequestAudioOptions", [entries]);
+
+            for(var i = 0; i < entries.length; i++)
             {
-               _loc2_.entryList[_loc4_].movieType = 0;
+               entries[i].movieType = 0;
             }
+            break;
       }
-      var _loc3_ = 0;
-      while(_loc3_ < _loc2_.entryList.length)
+
+      var filtered = [];
+      for(var j = 0; j < entries.length; j++)
       {
-         if(_loc2_.entryList[_loc3_].ID == undefined)
+         if(entries[j].ID != undefined)
          {
-            _loc2_.entryList.splice(_loc3_,1);
-         }
-         else
-         {
-            _loc3_ = _loc3_ + 1;
+            filtered.push(entries[j]);
          }
       }
+
+      list.entryList = filtered;
+
       if(this.iPlatform != 0)
       {
-         _loc2_.selectedIndex = 0;
+         list.selectedIndex = 0;
       }
-      _loc2_.InvalidateData();
+
+      list.InvalidateData();
+
       this.SettingsPanel.bCloseToMainState = false;
       this.EndState();
       this.StartState(SystemPage.OPTIONS_LISTS_STATE);
