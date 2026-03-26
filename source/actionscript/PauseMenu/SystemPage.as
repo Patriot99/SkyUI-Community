@@ -817,7 +817,7 @@ class SystemPage extends MovieClip
                {text:"$Use Kinect Commands", movieType:2}
             ];
             // Insert "$SaveGameMissingCreationsCheck" only for Skyrim versions 1.6.659+.
-            // Backward compatibility: versions below 1.6.659 require a hardcoded index order in the options list.
+            // Backward compatibility: the engine requires a hard-coded indexing order in the parameter list for "RequestGameplayOptions" (it differs for versions before and after 1.6.659).
             // Do NOT test this by simply changing the version number in condition, as it may break menu indexing.
             if(this.IsVersionAtLeast(1, 6, 659))
             {
