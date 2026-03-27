@@ -272,19 +272,19 @@ class StartMenu extends MovieClip
       {
          this.MainList.entryList.push({text:"$DOWNLOADABLE CONTENT",index:StartMenu.DLC_INDEX,disabled:false});
       }
-      if(arguments[_loc9_] && skse.version.releaseIdx >= 70)
+      if(arguments[_loc9_] && skse.version.releaseIdx > 69)
       {
          this.MainList.entryList.push({text:"$CREATION CLUB",disabled:false,index:StartMenu.CREATION_CLUB_INDEX});
       }
       this.ShowSky10UpsellBanner(false);
-      if(arguments[_loc7_] == true && skse.version.releaseIdx >= 70)
+      if(arguments[_loc7_] == true && skse.version.releaseIdx > 69)
       {
          this.ShowSky10UpsellBanner(true);
       }
       if(!arguments[_loc14_])
       {
       }
-      if(arguments[_loc8_] && skse.version.releaseIdx >= 70)
+      if(arguments[_loc8_] && skse.version.releaseIdx > 69)
       {
          this.MainList.entryList.push({text:"$MOD MANAGER",disabled:false,index:StartMenu.MOD_INDEX});
       }
@@ -293,7 +293,7 @@ class StartMenu extends MovieClip
       {
          this.MainList.entryList.push({text:"$QUIT",index:StartMenu.QUIT_INDEX,disabled:false});
       }
-      if(arguments[_loc12_] && skse.version.releaseIdx >= 70)
+      if(arguments[_loc12_] && skse.version.releaseIdx > 69)
       {
          this.MainList.entryList.push({text:"$HELP",index:StartMenu.HELP_INDEX,disabled:false});
       }
@@ -308,7 +308,7 @@ class StartMenu extends MovieClip
       }
       this.MainList.selectedIndex = 0;
       this.MainList.InvalidateData();
-      this._NeedsLoginScreen = !arguments[_loc11_] && skse.version.releaseIdx >= 70;
+      this._NeedsLoginScreen = !arguments[_loc11_] && skse.version.releaseIdx > 69;
       if(this.currentState == undefined)
       {
          if(arguments[_loc13_])
