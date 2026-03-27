@@ -62,6 +62,30 @@ class AnimatedLetter extends MovieClip
          {
             _loc2_ = AnimatedLetter.SpaceWidth;
          }
+         else if(_loc3_ == "M" || _loc3_ == "W")
+         {
+            _loc2_ -= 10;
+         }
+         else if(_loc3_ == "G" || _loc3_ == "O" || _loc3_ == "Q")
+         {
+            _loc2_ -= 8;
+         }
+         else if(_loc3_ == "A" || _loc3_ == "U")
+         {
+            _loc2_ -= 6;
+         }
+         else if(_loc3_ == "L")
+         {
+            _loc2_ -= 3;
+         }
+         else if(_loc3_ == "T")
+         {
+            _loc2_ -= 1;
+         }
+         else if(_loc3_ == "I" || _loc3_ == "J")
+         {
+            _loc2_ += 1;
+         }
          else
          {
             _loc2_ -= 5;
