@@ -1500,6 +1500,6 @@ class SystemPage extends MovieClip
    }
    function IsVersionAtLeast1126()
    {
-      return skse.version.releaseIdx >= 80;
+      return skse.version.releaseIdx >= 70;
    }
 }
