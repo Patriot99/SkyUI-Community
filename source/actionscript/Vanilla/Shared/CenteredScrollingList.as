@@ -317,4 +317,10 @@ class Shared.CenteredScrollingList extends Shared.BSScrollingList
          super.onItemPress(aiKeyboardOrMouse);
       }
    }
+
+   /* @extension */
+   function setInteractive(abInteractive:Boolean) {
+      this.bDisableInput = !abInteractive;
+      this.disableSelection = !abInteractive;
+   }
 }
